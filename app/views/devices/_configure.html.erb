@@ -1,0 +1,205 @@
+<script>
+  show_loading();
+</script>
+
+<div>
+  <div class="div-device-title col-lg-12">
+    <h1><i class="fa fa-fw fa-cog" style="color:palegoldenrod;"></i>&nbsp;Configure Devices</h1>
+    <br/>
+  </div>
+  <!-- <div class="row col-lg-12" style="min-width:1120px"> -->
+  <div class="row col-lg-12">
+    <div class="col-lg-4 table_nav1" style="display:inline-block;">
+      <div class="col-lg-5" style="margin-top:5px;">
+        <% if @devices.nil? || @devices.blank? %>
+            <span>Viewing 0 to 0 of 0 </span>
+        <% else %>
+          <span>
+            Viewing 
+            <% if @page_number == 1 %> 
+              <%= 1 %>
+            <% else %>
+              <%= 1 + (@page_number.to_i - 1) * @rows.to_i %>
+            <% end %>
+            to 
+            <% if @rows.to_i*@page_number.to_i > @devices.count %>
+              <%= @devices.count %> 
+            <% else %>
+              <%= @rows.to_i*@page_number.to_i %> 
+            <% end %>
+            of <%=@devices.count%> 
+          </span>
+        <% end %>&nbsp;&nbsp;
+      </div>
+      <div class="col-lg-7">
+        Displaying&nbsp;&nbsp;
+        <div class="ui selection dropdown rows" tabindex="0" style="overflow:visible;padding:0 0!important;height:28px;" id="select_configure_rows">
+          <div class="default text" style="margin:6px;" name="configure_rows" id="configure_rows">
+            <% if !@rows.nil? %>
+              <%= @rows %>
+            <% else %>
+              Select
+            <% end %>
+          </div>
+          <!-- <input type="hidden" name="hidden-field"> -->
+          <div class="menu" tabindex="-1" style="position:fixed;margin-right: -16px;">
+            <div data-value="5" class="item">5</div>
+            <div data-value="10" class="item">10</div>
+            <div data-value="20" class="item">20</div>
+            <div data-value="50" class="item">50</div>
+          </div>
+        </div>
+        &nbsp;&nbsp;per page
+        <%#= form_tag('/devices/setrows', method: :post, :id=>'form_device_setrows', :style=>'display:none') do -%>
+          <%#= hidden_field_tag "device_rows" %>
+        <%# end -%>
+      </div>
+    </div>
+
+    <div class="col-lg-4 table_nav2" style="text-align:right;margin-top:-1px;display:inline-block">
+      <% sal = will_paginate @devices, :previous_label => '<', :next_label => '>'  %>
+      <%= sal %>
+    </div>
+
+    <% if !sal.nil? %>
+      <div class="col-lg-4 table_nav3"  style="text-align:right;margin-top:-3px;display:inline-block;">
+    <% else %>
+      <div class="col-lg-offset-4 col-lg-4 table_nav3" style="text-align:right;margin-top:-3px;display:inline-block;">
+    <% end %>
+      <%#= form_tag('/devices/filter', method: :post, :id=>'form_filter_devices', :style=>'display:inline-block') do -%>
+      <%= simple_form_for :search, :id=>'form_filter_devices', :method=>'get', :html=>{:style=>'display:inline-block'}, :url=>'/devices/configure', :remote=>true do |f| %>
+        <%= text_field_tag "search", nil, :style=>'width:180px;height:33px;padding-left:11px;', :value=>@filter_word, :autocomplete=>:off %>
+        <%= button_tag(type: "submit", class:'btn btn-info btn-td', :style=>'padding: 6px 8px;marign-left:-3px;position:relative;left:-3px;') do %>
+          <i class="fa fa-fw fa-search"></i>
+        <% end %>          
+      <% end -%>
+
+      <% if hp_device(current_user.username) || is_adminuser(current_user.username) %>
+        <%= link_to new_device_path, :class=>'btn btn-info btn-td a_loading', :style=>'padding: 6px 8px;marign-left:-3px;position:relative;left:-3px;' do %>
+          <i class="fa fa-fw fa-gear">+</i>
+        <% end %>
+      <% end %>
+    </div>
+
+  </div>
+</div>
+
+<div class="row">
+  <table class="listing" id="table_configured">
+    <thead>
+      <tr>
+        <%= form_tag('/devices/configure', :id=>'form_sort_devices' ) do %>
+          <%= hidden_field_tag "name_sort", nil, :value=>@name_sort %>
+          <%= hidden_field_tag "devicetype_sort", nil, :value=>@devicetype_sort %>
+          <%= hidden_field_tag "location_sort", nil, :value=>@location_sort %>
+          <%= hidden_field_tag "publicip_sort", nil, :value=>@publicip_sort %>
+          <%= hidden_field_tag "privateip_sort", nil, :value=>@privateip_sort %>
+          <%= hidden_field_tag "note_sort", nil, :value=>@note_sort %>
+          <%= hidden_field_tag "addons_sort", nil, :value=>@addons_sort %>
+          <%= hidden_field_tag "osname_sort", nil, :value=>@osname_sort %>
+          <%= hidden_field_tag "osram_sort", nil, :value=>@osram_sort %>
+          <%= hidden_field_tag "ospro_sort", nil, :value=>@ospro_sort %>
+          <%= hidden_field_tag "publicip_sort", nil, :value=>@publicip_sort %>
+          <%= hidden_field_tag "status_sort", nil, :value=>@status_sort %>
+          <%= hidden_field_tag "reloaded_sort", nil, :value=>@reloaded_sort %>
+          <%= hidden_field_tag "created_sort", nil, :value=>@created_sort %>
+        <% end %>
+        <th></th>
+        <th>Name<%= raw(get_sortdirection(@thd[0]))%></th>
+        <th>Device Type<%= raw(get_sortdirection(@thd[1]))%></th>
+        <th style="width:112px;">Location<%= raw(get_sortdirection(@thd[2]))%></th>
+        <th>Public IP<%= raw(get_sortdirection(@thd[3]))%></th>
+        <th>Private IP<%= raw(get_sortdirection(@thd[4]))%></th>
+        <th>Note<%= raw(get_sortdirection(@thd[5]))%></th>
+        <th>Addons<%= raw(get_sortdirection(@thd[6]))%></th>
+        <th>Status<%= raw(get_sortdirection(@thd[7]))%></th>
+        <th>Reloaded<%= raw(get_sortdirection(@thd[8]))%></th>
+        <th style="width:230px;">OS Name<%= raw(get_sortdirection(@thd[9]))%></th>
+        <th>OS RAM<%= raw(get_sortdirection(@thd[10]))%></th>
+        <th>OS Processor<%= raw(get_sortdirection(@thd[11]))%></th>
+        <th>Created at<%= raw(get_sortdirection(@thd[12]))%></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% if @devices.blank? || @devices.nil? %>
+        <td colspan="19" height="38px" style="text-align:center">No Requests</td>
+      <% else %>
+        <% @devices.each do |device| %>
+          <tr>
+            <td><i class="fa fa-fw fa-gear" style="font-size:18px;"></i></td>
+            <td class="td-clickable" style="text-align:left;"><%= raw(get_colorspan(device.detail, device.name)) %></td>
+            <td class="td-clickable" style="text-align:center;"><%= raw(get_colorspan(device.detail, device.device_type)) %></td>
+            <td class="td-clickable" style="text-align:center;"><%= raw(getflag_floc(device.location)) %><%= raw(get_colorspan(device.detail, device.location)) %></td>
+            <td class="td-clickable" style="text-align:center;"><%= raw(get_colorspan(device.detail, device.public_ip)) %></td>
+            <td class="td-clickable" style="text-align:center;"><%= raw(get_colorspan(device.detail, device.private_ip)) %></td>
+            <td class="td-clickable" style="text-align:center;"><%= raw(get_colorspan(device.detail, device.device_note)) %></td>
+            <td class="td-clickable" style="text-align:center;"><%= raw(get_colorspan(device.detail, device.addons)) %></td>
+            <td class="td-clickable" style="text-align:center;"><%= raw(get_colorspan(device.detail, device.general_status)) %></td>
+            <td class="td-clickable" style="text-align:center;"><%= raw(get_colorspan(device.detail, device.general_reloaded)) %></td>
+            <td class="td-clickable"><%= raw(get_colorspan(device.detail, device.osname)) %></td>
+            <td class="td-clickable" style="text-align:center;"><%= raw(get_colorspan(device.detail, device.osram)) %></td>
+            <td class="td-clickable" style="text-align:center;"><%= raw(get_colorspan(device.detail, device.osprocessor)) %></td>
+            <td class="td-clickable" style="text-align:center;"><%= raw(get_colorspan(device.detail, device.created_at.strftime('%Y-%m-%d %H:%M:%S'))) %></td>
+          </tr>
+          <tr class="req_list" id="cdlist_<%=device.name%>" style="display:none;border:none;">
+            <td style="border:none;"></td>
+            <td style="border:none" colspan="15" style="padding-left:20px;">
+              <div id="respond_drequest_<%=device.id%>">
+                <%= render 'respond_drequest', device: device %>
+              </div>
+            </td>
+          </tr>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<script>
+  _fix();
+
+  $(function() {
+    $('.pagination a').attr('data-remote', 'true');
+  });
+
+  $('#select_configure_rows').dropdown();
+  $('#li_device').attr('class', 'treeview active');
+  $('#ul_device').css('display', 'block');
+
+  $('#ul_device').find('li').eq(1).css('background-color','#b1b1b1');
+  $('#ul_device').find('li').eq(1).find('a').css('color','#000');
+
+  var headertext = [],
+  headers = document.querySelectorAll('#table_configured th'),
+  tablerows = document.querySelectorAll('#table_configured th'),
+  table_body = document.querySelector('#table_configured tbody');
+
+  for (var i = 0; i < headers.length; i++) {
+    var current = headers[i];
+
+    headertext.push(current.textContent.replace(/\r?\n|\r/,""));
+    // console.log(current.textContent);
+  }
+
+  for (var i = 0, row; row = table_body.rows[i]; i++) { 
+    for(var j = 3, col; col = row.cells[j]; j++) {
+      if ( headertext[j] && ( i%2 == 0 ))  {
+        col.setAttribute('data-th', headertext[j]);
+      }
+
+      if ( i%2 == 1 ) {
+        col.setAttribute('style', 'border:none;');  
+      }
+      col.setAttribute('style', 'text-align:left;');
+      // console.log(col);
+      // console.log(headertext[j]);
+    }
+
+    if ( i%2 == 1 ) {
+      col = row.cells[0];
+      col.setAttribute('data-th', 'Detail');  
+    }
+
+  }
+</script>

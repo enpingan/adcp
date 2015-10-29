@@ -1,0 +1,20 @@
+<div class="page-div">
+  <br/>
+  <h1 style="color:transparent!important;">
+    &nbsp;&nbsp;<i class="fa fa-fw fa-cog" style="color:transparent;"><span style="font-size:24px;top:6px;left:-4px;position:relative;">+</span></i>&nbsp;New Device
+  </h1>
+  <br/>
+  <%= render 'form' %>
+
+  <%#= link_to 'Back', devices_path %>
+</div>
+
+<script>
+  $('#li_device').attr('class', 'treeview active');
+  $('#ul_device').css('display', 'block');
+
+  $('#ul_device').find('li').eq(0).css('background-color','#b1b1b1');
+  $('#ul_device').find('li').eq(0).find('a').css('color','#000');
+
+  hide_loading();
+</script>

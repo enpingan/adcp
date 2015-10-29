@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  comment: MyString
+  ticket_id: MyString
+  ticket_owner: MyString
+
+two:
+  comment: MyString
+  ticket_id: MyString
+  ticket_owner: MyString

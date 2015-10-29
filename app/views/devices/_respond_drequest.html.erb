@@ -1,0 +1,66 @@
+<% if Dnote.where(:device_name=>device.name).blank? %>
+  No Request
+<% else %>
+  <% @dnotes.each do |n| %>
+    <% if n.device_name == device.name %>
+      <div class="col-lg-12 show-border-div" id="ddnote_<%=n.id%>" style="border:3px solid rgb(42, 42, 42);">
+        <div class="col-lg-3" style="color:palegoldenrod;font-size:16px;padding:0 0;">
+          <br/>
+          Request Order ID : #&nbsp;<%= n.id %>
+        </div>
+
+        <div class="col-lg-7" style="color:palegoldenrod;font-size:13px;">
+          Content of requesting Order: <%= n.request_order %><br/>
+          Device Status: <%= n.device_status %><br/>
+          Received: <%= time_ago_in_words(n.updated_at) %><br/>
+        </div>
+        <div class="col-lg-2">
+          <% if n.is_checked == "Allow" %>
+            <%= label_tag(nil, :style=>'padding:3px 4px;font-weight:normal', :id=>'btn_tdclosedev_' + device.name.to_s) do %>
+              <i class="fa fa-fw fa-check-circle" style="font-size:16px;color:rgb(110, 146, 110);">&nbsp;Allowed</i>
+            <% end %>
+            <br/>
+            <%#= link_to(customers_path, :class=>'btn btn-default btn-td', :style=>'color:black;') do %>
+            <%#= form_tag('/devices/delete_log', method: :post, :class=>'form-configure', :id=>'form_rmlog_'+n.id.to_s) do |f| -%>
+            <%= simple_form_for :delete_log, :id=>'form_rmlog_'+n.id.to_s, :method=>'get', :html=>{:class=>'form-configure'}, :remote=>true do |f| %>
+              <%= hidden_field_tag "dnote_id", nil, :value=>n.id%>
+              <%= hidden_field_tag "device_id", nil, :value=>n.device_id%>
+              <%= button_tag(type:"submit", :class=>'form-control', :style=>'text-align:left;border:none;background-color:transparent;padding:3px 4px;font-weight:normal', :id=>'label_rmlog_'+ n.id.to_s, :name=>'delete_log') do %>
+                <i class="fa fa-fw fa-trash-o" style="font-size:16px;color:rgb(190, 190, 190);">&nbsp;Delete</i>
+              <% end %>
+            <% end -%>
+          <% end %>
+          <% if n.is_checked == "Deny" %>
+            <%= label_tag(nil, :style=>'padding:3px 4px;font-weight:normal', :id=>'btn_tdclosedev_' + device.name.to_s) do %>
+              <i class="fa fa-fw fa-times-circle" style="font-size:16px;color:rgb(160, 120, 62);">&nbsp;Denied</i>
+            <% end %>
+            <br/>
+            <%#= form_tag('/devices/delete_log', method: :post, :class=>'form-configure', :id=>'form_rmlog_'+n.id.to_s) do |f| -%>
+            <%= simple_form_for :delete_log, :id=>'form_rmlog_'+n.id.to_s, :method=>'get', :html=>{:class=>'form-configure'}, :remote=>true do |f| %>
+              <%= hidden_field_tag "dnote_id", nil, :value=>n.id%>
+              <%= hidden_field_tag "device_id", nil, :value=>n.device_id%>
+              <%= button_tag(type:"submit", :class=>'form-control', :style=>'text-align:left;border:none;background-color:transparent;padding:3px 4px;font-weight:normal', :id=>'label_rmlog_'+ n.id.to_s, :name=>'delete_log') do %>
+                <i class="fa fa-fw fa-trash-o" style="font-size:16px;color:rgb(190, 190, 190);">&nbsp;Delete</i>
+              <% end %>
+            <% end -%>
+          <% end %>
+          <%#= form_tag('/devices/saction', method: :post, :class=>'form-configure', :id=>'form_saction_'+n.id.to_s) do |f| -%>
+          <%= simple_form_for :saction, :id=>'form_saction_'+n.id.to_s, :method=>'get', :html=>{:class=>'form-configure'}, :remote=>true do |f| %>
+            <%= hidden_field :dnote_id, nil, :required=>true, :value=>n.id.to_s %> 
+            <%= hidden_field :device_id, nil, :required=>true, :value=>device.id.to_s %> 
+
+            <% if n.is_checked == "0" %>
+              <%= button_tag(type:"submit", :class=>'btn btn-success btn-td btn-tdclosedev conf_allow', :name=>'request_order', :value=>'Allow', :style=>'padding:3px 4px;font-weight:normal', :id=>'btn_tdclosedev_' + device.name.to_s) do %>
+                <i class="fa fa-fw fa-check-circle" style="font-size:16px;color:white"></i>&nbsp;Allow
+              <% end %>
+              <br/>
+              <%= button_tag(type:"submit", :class=>'btn btn-warning btn-td btn-tdclosedev btn-confdev conf_deny', :name=>'request_order', :value=>'Deny', :style=>'padding:3px 4px;font-weight:normal;margin-top:5px;', :id=>'btn_tdclosedev_' + device.name.to_s) do %>
+                <i class="fa fa-fw fa-times-circle" style="font-size:16px;color:white"></i>&nbsp;Deny
+              <% end %>
+            <% end %>
+          <% end -%>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>

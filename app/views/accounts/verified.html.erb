@@ -1,0 +1,166 @@
+<div class="page-div">
+  <!-- <p id="notice"><%= notice %></p> -->
+  <br/>
+  
+  <div class="col-md-12">
+    <div class="col-md-12">
+      <h1>Current Accounts</h1>
+      <br/>
+    </div>
+
+    <div class="col-md-4">
+      <% if @accounts.nil? || @accounts.blank? %>
+        <span>Viewing 0 to 0 of 0 </span>
+      <% else %>
+        <span>
+          Viewing 
+          <% if @page_number == 1 %> 
+            <%= 1 %>
+          <% else %>
+            <%= 1 + (@page_number.to_i - 1) * @rows.to_i %>
+          <% end %>
+          to 
+          <% if @rows.to_i*@page_number.to_i > @accounts.count %>
+            <%= @accounts.count %> 
+          <% else %>
+            <%= @rows.to_i*@page_number.to_i %> 
+          <% end %>
+          of <%=@accounts.count%> 
+        </span>
+      <% end %>&nbsp;&nbsp;
+      Displaying&nbsp;&nbsp;
+      <div class="ui selection dropdown rows" tabindex="0" style="overflow:visible;padding:0 0!important;height:28px;" id="select_account_rows">
+        <div class="default text" style="margin:6px;">
+          <% if !@rows.nil? %>
+            <%= @rows %>
+          <% else %>
+            Select
+          <% end %>
+        </div>
+        <!-- <input type="hidden" name="hidden-field"> -->
+        <div class="menu" tabindex="-1" style="position:fixed;margin-right: -16px;">
+          <div data-value="5" class="item">5</div>
+          <div data-value="10" class="item">10</div>
+          <div data-value="20" class="item">20</div>
+          <div data-value="50" class="item">50</div>
+        </div>
+      </div>
+      &nbsp;&nbsp;per page
+      <%= form_tag('/accounts/setrows', method: :post, :id=>'form_account_setrows', :style=>'display:none') do -%>
+        <%= hidden_field_tag "account_rows" %>
+      <% end -%>
+    </div>
+    <div class="col-md-5" style="text-align:right;margin-top:-1px;">
+      <% if !@accounts.blank? || @accounts.nil? %>
+        <% sal = will_paginate @accounts, :previous_label => '<', :next_label => '>' %>
+        <%= sal %>
+      <% end %>
+    </div>
+
+    <% if !sal.nil? %>
+      <div class="col-md-3"  style="text-align:right;margin-top:-3px;">
+    <% else %>
+      <div class="col-md-offset-5 col-md-3"  style="text-align:right;margin-top:-3px;">
+    <% end %>
+      <%= form_tag('/accounts/filter', method: :post, :id=>'form_filter_accounts') do -%>
+        <%= text_field_tag "_string", nil, :style=>'width:180px;height:33px;padding-left:11px;', :value=>@filter_word %>
+        <%= button_tag(type: "submit", class:'btn btn-info btn-flat', :style=>'padding: 6px 8px;marign-left:-3px;position:relative;left:-3px;') do %>
+          <i class="fa fa-fw fa-search"></i>
+        <% end %>          
+      <% end -%>
+      <%= link_to new_account_path, :class=>'btn btn-info btn-flat' do %>
+        <i class="ion ion-person-add"></i>
+      <% end %>
+    </div>
+  </div>
+
+  <table class="listing" id="table_account">
+    <thead>
+      <tr>
+        <th></th>
+        <th></th>
+        <th>Account ID</th>
+        <th>Email addr</th>
+        <th>Username</th>
+        <th>Password</th>
+        <th>Read Ticket</th>
+        <th>Write Ticket</th>
+        <th>Delete Ticket</th>
+        <th>Saving Ticket</th>
+        <th>Create Device</th>
+        <th>Remove Device</th>
+        <th>Modify Device</th>
+        <% if is_adminuser(current_user.username) %>
+          <th colspan="3" style="text-align:center">Actions</th>
+        <% end %>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @accounts.each do |account| %>
+        <tr>
+          <td class="td-clickable">
+            &#9658;
+          </td>
+          <td class="td-clickable">
+            <% if get_devices(account.email_addr).count == 0 %>
+              <i class="glyphicon glyphicon-user" style="font-size:18px;"></i>
+            <% else %>
+              <i class="fa fa-laptop" style="color:green;font-size:18px;"><span style="font-size:8px;margin-top:4px;"><%= get_devices(account.email_addr).count %></span></i>
+            <% end %>
+          </td>
+          <td class="td-clickable"><%= account.id %></td>
+          <td class="td-clickable"><%= account.email_addr %></td>
+          <td class="td-clickable" style="text-align:center;"><%= account.ssl_name %></td>
+          <td class="td-clickable"><%= account.hs_pwd %></td>
+          <td class="td-clickable" style="text-align:center;"><%= raw(get_checkicon(account.is_rticket)) %></td>
+          <td class="td-clickable" style="text-align:center;"><%= raw(get_checkicon(account.is_wticket)) %></td>
+          <td class="td-clickable" style="text-align:center;"><%= raw(get_checkicon(account.is_dticket)) %></td>
+          <td class="td-clickable" style="text-align:center;"><%= raw(get_checkicon(account.is_sticket)) %></td>
+          <td class="td-clickable" style="text-align:center;"><%= raw(get_checkicon(account.is_cdevice)) %></td>
+          <td class="td-clickable" style="text-align:center;"><%= raw(get_checkicon(account.is_rdevice)) %></td>
+          <td class="td-clickable" style="text-align:center;"><%= raw(get_checkicon(account.is_mdevice)) %></td>
+          <% if is_adminuser(current_user.username) %>
+            <td><%= link_to 'Detail', account, :class=>'btn btn-info btn-flat' %></td>
+            <td><%= link_to 'Edit Permission', edit_account_path(account), :class=>'btn btn-success btn-flat' %></td>
+            <td><%= link_to 'Suspend', account, method: :delete, data: { confirm: 'Are you sure?' }, :class=>'btn btn-warning btn-flat' %></td>
+          <% end %>
+        </tr>
+        <tr id="servers_<%=account.id%>" style="display:none;border:none;">
+          <td style="border:none;"></td>
+          <td style="border:none" colspan="10" style="padding-left:20px;">
+            <div style="content-div">
+              <% if get_devices(account.email_addr).blank? %>
+                No Device
+              <% else %>
+                <% get_devices(account.email_addr).each do |d| %>
+                  <div class="col-md-12" style="padding:15px 0;">
+                    <div class="col-md-3">
+                      <%= image_tag('server1.png', size: "60") %>
+                    </div>
+                    <div class="col-md-3">
+                      Device Type : <%= d.device_type %><br/><br/>
+                      location : <%= d.location %>
+                    </div>
+                    <div class="col-md-3">
+                      Public IP : <%= d.public_ip %><br/><br/>
+                      Private IP : <%= d.private_ip %>
+                    </div>
+                    <div class="col-md-3">
+                      Processor : <%= d.osprocessor %><br/><br/>
+                      RAM : <%= d.osram %>
+                    </div>
+                  </div>
+                <% end %>
+              <% end %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<script>
+  $('#select_account_rows').dropdown();
+</script>

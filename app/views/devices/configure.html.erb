@@ -1,0 +1,59 @@
+<div class="page-div">
+
+  <% if !notice.nil? || !notice.blank? %>
+    <div class="div-notice col-lg-12">
+      <div class="col-lg-10">
+        <%= notice %>
+      </div>
+      <div class="col-lg-2" style="text-align:right;">
+        <span class="span-close" style="cursor:pointer;"><i class="glyphicon glyphicon-remove" style="position:relative;top:2px;"></i></span>
+      </div>
+    </div>
+  <% end %>
+
+  <br/>
+
+  <% if hp_device(current_user.username) || is_adminuser(current_user.username) || !@device_count.nil? %>
+    <div id="configure">
+      <%= render 'configure' %>
+    </div>
+  <% else %>
+    <section class="content">
+      <div class="col-lg-offset-3 col-lg-6" style="text-align:center;margin-top:265px;">
+        <div class="avatar" style="margin-top:-3px;margin-bottom:3px;">
+          <%= image_tag('favicon.png', size: "30", :class=>'image-logo') %>
+        </div>
+        <div class="small-box bg-yellow">
+          <div class="inner">
+            <h2 style="color:rgb(74, 82, 79);">Sorry, Access Denied!</h2>
+          </div>
+          <a href="/" class="small-box-footer">
+            <!-- <i class="fa fa-arrow-circle-left"></i>&nbsp;&nbsp;Back -->
+          </a>
+        </div>
+
+        <div class="box box-info" style="border-top-color: #C5964D">
+          <div class="box-header" style="text-align:center;">
+            <br/>
+            <!-- <i class="fa fa-fw fa-tag" style="color: rgba(255, 255, 214, 0.78);"></i> -->
+            <h3 class="box-title">To upgrade your account, please contact <span style="color:yellow;">support@cyberadvance.com</span>.</h3>
+          </div>
+          <div class="box-body" style="padding-left:32px;">
+            
+          </div>
+          <div class="box-footer clearfix">
+            <%= link_to('/', :class=>'btn btn-default btn-td', :style=>'color:black') do %>
+              <i class="fa fa-fw fa-arrow-circle-left"></i>&nbsp;Back
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </section>
+  <% end %>
+
+  <br>
+</div>
+
+<script>
+  hide_loading();
+</script>

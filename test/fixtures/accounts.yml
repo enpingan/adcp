@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  email_addr: MyString
+  ssl_name: MyString
+  hs_pwd: MyString
+  is_ticket: false
+  is_device: false
+
+two:
+  email_addr: MyString
+  ssl_name: MyString
+  hs_pwd: MyString
+  is_ticket: false
+  is_device: false

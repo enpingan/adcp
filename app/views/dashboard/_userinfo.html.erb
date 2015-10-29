@@ -1,0 +1,205 @@
+<div class="row col-lg-12">
+  
+</div>
+
+<div class="row">
+  <table class="listing" id="table_userinfo">
+    <thead>
+      <tr>
+        <th></th>
+        <th><%= @gokey == "visitor" ? 'Last Visited at' : 'Username' %></th>
+        <th style="text-align:center;">IP Address</th>
+        <th><%= @gokey == "visitor" ? 'Visit Count' : 'Sign In Count' %></th>
+        <th style="text-align:center;">City Name</th>
+        <th style="text-align:center;">Continent</th>
+        <th style="text-align:center;">Country Name</th>
+        <th style="text-align:center;">Region Name</th>
+        <th style="text-align:center;">Postal</th>
+        <th style="text-align:center;">Registered Country</th>
+        <th style="text-align:center;">Represented Country</th>
+        <th style="text-align:center;">Domain</th>
+        <th style="text-align:center;">User Type</th>
+        <!-- 
+        Proxy : 
+        Country Code : ip_info.country.iso_code
+        Country Name : ip_info.country.names.en 
+        Region Code : ip_info.subdivisions[0].iso_code
+        Region Name : ip_info.subdivisions[0].names.en
+        City Name : ip_info.city.names.en
+        Date and Time : Time.now.strftime('%Y-%m-%d %H:%M:%S')
+        Latitude : ip_info.location.latitude
+        Longitude : ip_info.location.longitude
+        Metro Code : ip_info.location.metro_code
+        Area Code : 
+        Time Zone : ip_info.location.time_zone
+        Continent Code : ip_info.continent.code, ip_info.continent.names.en
+        Postal Code : ip_info.postal.code
+        ISP name : ip_info.traits.isp
+        Organization name : ip_info.traits.autonomous_system_organization
+        Domain : ip_info.traits.domain
+        AS Number : ip_info.traits.autonomous_system_number
+        Netspeed : 
+        User Type : ip_info.traits.user_type
+        Accuracy Radius : ip_info.location.accuracy_radius
+        Country Confidence Factor : ip_info.country.confidence
+        City Confidence Factor : ip_info.city.confidence
+        Region Confidence Factor : ip_info.subdivisions[0].confidence
+        Postal Confidence Factor : ip_info.postal.confidence *
+        Error : 
+        -->
+      </tr>
+    </thead>
+
+    <tbody>
+      <% if @users.blank? || @users.nil? %>
+        <td colspan="16" height="38px" style="text-align:center">No Visiting History</td>
+      <% else %>
+        <% @users.each do |user| %>
+          <% if @gokey == "visitor" %>
+            <% ip_info = get_ip_info(user.ip_address ) %>
+          <% else %>
+            <% if current_user.username == user.username %>
+              <% ip_info = get_ip_info(user.current_sign_in_ip ) %>
+            <% else %>
+              <% ip_info = get_ip_info(user.last_sign_in_ip) %>
+            <% end %>
+          <% end %>
+          <tr class="real-tr">
+            <td class="td-clickable" style="color:transparent;" data='<%= user.id %>'>
+              <i class="fa fa-fw fa-angle-right" style="font-size:18px;color:white;"></i>
+              <%#= form_tag('/dashboard/show_userinfo', :id=>'form_userinfo_'+user.id.to_s) do %>
+                <%#= hidden_field_tag :id, nil, :value=>user.id %>
+              <%# end %>
+            </td>
+            <td class="td-clickable"><%= @gokey == "visitor" ? user.updated_at.strftime('%Y-%m-%d %H:%M:%S') : user.username %></td>
+            <td class="td-clickable"><%= @gokey == "visitor" ? user.ip_address : current_user.username == user.username ? user.current_sign_in_ip : user.last_sign_in_ip %></td>
+            <td class="td-clickable"><%= @gokey == "visitor" ? user.visit_count : user.sign_in_count %></td>
+            <% if ip_info.code.nil? %>
+              <td class="td-clickable"><%= ip_info.city.blank? ? '---' : processblank(ip_info.city.names.en) %></td>
+              <td class="td-clickable"><i class="fa fa-fw fa-globe"></i>&nbsp;<%= processblank(ip_info.continent.names.en) %></td>
+              <td class="td-clickable"><%= raw(processblank(get_countryname(ip_info.country.names.en))) %></td>
+              <td class="td-clickable"><%= ip_info.subdivisions.blank? ? '---' : processblank(ip_info.subdivisions[0].names.en) %></td>
+              <td class="td-clickable"><%= ip_info.postal.blank? ? '---' : processblank(ip_info.postal.code) %></td>
+              <td class="td-clickable"><%= raw(processblank(get_countryname(ip_info.registered_country.names.en))) %></td>
+              <td class="td-clickable"><%= raw(processblank(get_countryname(ip_info.country.names.en))) %></td>
+              <td class="td-clickable"><%= processblank(ip_info.traits.domain) %></td>
+              <td class="td-clickable"><%= processblank(ip_info.traits.user_type) %></td>
+            <% else %>
+              <td class="td-clickable"> --- </td>
+              <td class="td-clickable"> --- </td>
+              <td class="td-clickable"> --- </td>
+              <td class="td-clickable"> --- </td>
+              <td class="td-clickable"> --- </td>
+              <td class="td-clickable"> --- </td>
+              <td class="td-clickable"> --- </td>
+              <td class="td-clickable"> --- </td>
+              <td class="td-clickable"> --- </td>
+            <% end %>
+          </tr>
+          <tr class="sub-tr" id="userinfo_<%=user.id %>" style="display:none;border:none">
+            <td></td>
+            <td colspan="12">
+              <% if ip_info.code.nil? %>
+                <div class="col-lg-12" style="padding:0 0;">
+                  <div class="col-lg-4" style="line-height: 2.5em;">
+                    Country Code : <%= processblank(ip_info.country.iso_code) %><br/>
+                    Country Name : <%= processblank(raw(get_countryname(ip_info.country.names.en) ) ) %><br/>
+                    Region Code : <%= ip_info.subdivisions.blank? ? '---' : processblank(ip_info.subdivisions[0].iso_code) %><br/>
+                    Region Name : <%= ip_info.subdivisions.blank? ? '---' : processblank(ip_info.subdivisions[0].names.en) %><br/>
+                    City Name : <i class="fa fa-fw fa-building-o"></i>&nbsp;<%= ip_info.city.blank? ? '---' : processblank(ip_info.city.names.en) %><br/>
+                    Date and Time : <i class="fa fa-fw fa-clock-o"></i>&nbsp;<%= @gokey == "visitor" ? user.updated_at.strftime('%Y-%m-%d %H:%M:%S') : current_user.username == user.username ? user.current_sign_in_at.strftime('%Y-%m-%d %H:%M:%S') : user.last_sign_in_at.strftime('%Y-%m-%d %H:%M:%S') %><br/>
+                    Latitude : <%= processblank(ip_info.location.latitude) %><br/>
+                    Longitude : <%= processblank(ip_info.location.longitude) %><br/>
+                  </div>
+                  <div class="col-lg-4" style="line-height: 2.5em;">
+                    Metro Code : <%= processblank(ip_info.location.metro_code) %><br/>
+                    Time Zone : <%= processblank(ip_info.location.time_zone) %><br/>
+                    Continent Code : <%= processblank(ip_info.continent.code) %><%#= ip_info.continent.names.en %><br/>
+                    Postal Code : <%= ip_info.postal.blank? ? '---' : processblank(ip_info.postal.code) %><br/>
+                    ISP name : <%= processblank(ip_info.traits.isp) %><br/>
+                    Organization name : <%= processblank(ip_info.traits.autonomous_system_organization) %><br/>
+                    Domain : <%= processblank(ip_info.traits.domain) %><br/>
+                    AS Number : <%= processblank(ip_info.traits.autonomous_system_number) %><br/>
+                  </div>
+                  <div class="col-lg-4" style="line-height: 2.5em;">
+                    User Type : <%= processblank(ip_info.traits.user_type) %><br/>
+                    Accuracy Radius : <%= processblank(ip_info.location.accuracy_radius) %><br/>
+                    Country Confidence Factor : <%= processblank(ip_info.country.confidence) %><br/>
+                    City Confidence Factor : <%= ip_info.city.blank? ? '---' : processblank(ip_info.city.confidence) %><br/>
+                    Region Confidence Factor : <%= ip_info.subdivisions.blank? ? '---' : processblank(ip_info.subdivisions[0].confidence) %><br/>
+                    Postal Confidence Factor : <%= ip_info.postal.blank? ? '---' : processblank(ip_info.postal.confidence) %><br/>
+                    Proxy : <%= processblank(ip_info.traits.is_anonymous_proxy) %><br/>
+                    Error : <%= '---' %><br/>
+                  </div>
+                </div>
+              <% else %>
+                Reserved IP
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<script>
+  _fix();
+
+  $(function() {
+    $('.pagination a').attr('data-remote', 'true');
+  });
+
+  $('#select_userinfo_rows').dropdown();
+
+  var tmp = $.trim($('#vhistory_title').text());
+  var findex = 5;
+
+  tmp = tmp.substring(19, tmp.length );
+  switch ( tmp ) {
+    case 'Administrator':
+      findex = 0;
+      break;
+    case 'Customer':
+      findex = 1;
+      break;
+    case 'Visitor':
+      findex = 2;
+      break;
+    default:
+      findex = 3;
+      break;
+  }
+
+  $('#li_vhistory').attr('class', 'treeview active');
+  $('#ul_vhistory').css('display', 'block');
+
+  $('#ul_vhistory').find('li').eq(findex).css('background-color','#b1b1b1');
+  $('#ul_vhistory').find('li').eq(findex).find('a').css('color','#000');
+
+  var headertext = [],
+  headers = document.querySelectorAll('#table_userinfo th'),
+  tablerows = document.querySelectorAll('#table_userinfo th'),
+  table_body = document.querySelector('#table_userinfo tbody');
+
+  for (var i = 0; i < headers.length; i++) {
+    var current = headers[i];
+
+    headertext.push(current.textContent.replace(/\r?\n|\r/,""));
+    // console.log(current.textContent);
+  }
+
+  for (var i = 0, row; row = table_body.rows[i]; i++) { 
+    for(var j = 1, col; col = row.cells[j]; j++) {
+      if ( headertext[j] && i % 2 == 0 ) {
+        col.setAttribute('data-th', headertext[j]);
+      }
+
+      // col.setAttribute('style', 'text-align:left;');  
+    }
+
+  }
+
+  hide_loading();
+
+</script>

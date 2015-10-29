@@ -1,0 +1,295 @@
+<script>
+  show_loading();
+</script>
+
+<div class="row col-lg-12">
+  <div class="col-lg-4 table_nav1" style="display:inline-block;">
+    <div class="col-lg-5" style="margin-top:5px;">
+      <% if @sadmins.nil? || @sadmins.blank? %>
+        <span>Viewing 0 to 0 of 0 </span>
+      <% else %>
+        <span>
+          Viewing 
+          <% if @page_number == 1 %> 
+            <%= 1 %>
+          <% else %>
+            <%= 1 + (@page_number.to_i - 1) * @rows.to_i %>
+          <% end %>
+          to 
+          <% if @rows.to_i*@page_number.to_i > @sadmins.count %>
+            <%= @sadmins.count %> 
+          <% else %>
+            <%= @rows.to_i*@page_number.to_i %> 
+          <% end %>
+          of <%=@sadmins.count%> 
+        </span>
+      <% end %>
+    </div>
+    <div class="col-lg-7">
+      Displaying&nbsp;&nbsp;
+      <div class="ui selection dropdown rows" tabindex="0" style="overflow:visible;padding:0 0!important;height:28px;" id="select_sadmin_rows">
+        <div class="default text" style="margin:6px;">
+          <% if !@rows.nil? %>
+            <%= @rows %>
+          <% else %>
+            Select
+          <% end %>
+        </div>
+        <!-- <input type="hidden" name="hidden-field"> -->
+        <div class="menu" tabindex="-1" style="position:fixed;margin-right: -16px;">
+          <div data-value="5" class="item">5</div>
+          <div data-value="10" class="item">10</div>
+          <div data-value="20" class="item">20</div>
+          <div data-value="50" class="item">50</div>
+        </div>
+      </div>
+      &nbsp;&nbsp;per page
+      <%#= form_tag('/sadmins/setrows', method: :post, :id=>'form_sadmin_setrows', :style=>'display:none') do -%>
+        <%= hidden_field_tag "sadmin_rows" %>
+      <%# end -%>
+    </div>
+  </div>
+
+  <div class="col-lg-4 table_nav2" style="text-align:right;display:inline-block;">
+    <% if !@sadmins.blank? || @sadmins.nil? %>
+      <% sal = will_paginate @sadmins, :previous_label => '<', :next_label => '>' %>
+      <%= sal %>
+    <% end %>
+  </div>
+
+  <% if !sal.nil? %>
+    <div class="col-lg-4 table_nav3" style="text-align:right;display:inline-block;">
+  <% else %>
+    <div class="col-lg-offset-4 col-lg-4 table_nav3" style="text-align:right;display:inline-block;">
+  <% end %>
+    <%#= form_tag('/sadmins/filter', method: :post, :id=>'form_filter_sadmins') do -%>
+    <%= simple_form_for :search, :id=>'form_filter_sadmins', :method=>'get', :html=>{:style=>'display:inline-block'}, :remote=>true do |f| %>
+      <%= text_field_tag "search", nil, :style=>'width:180px;height:33px;padding-left:11px;', :value=>@filter_word %>
+      <%= button_tag(type: "submit", class:'btn btn-info btn-td', :style=>'padding: 6px 8px;marign-left:-3px;position:relative;left:-3px;') do %>
+        <i class="fa fa-fw fa-search"></i>
+      <% end %>          
+    <% end -%>
+  </div>
+</div>
+
+<div class="row">
+  <table class="listing" id="table_sadmin">
+    <thead>
+      <tr>
+        <%= form_tag(sadmins_url, :id=>'form_sort_sadmin' ) do %>
+          <%= hidden_field_tag "id_sort", nil, :value=>@id_sort %>
+          <%= hidden_field_tag "username_sort", nil, :value=>@username_sort %>
+          <%= hidden_field_tag "sadmin_rows", nil, :value=>@rows %>
+        <% end %>
+        <th></th>
+        <th></th>
+        <th>ID<%= raw(get_sortdirection(@thd[0])) %></th>
+        <th>Username<%= raw(get_sortdirection(@thd[1])) %></th>
+        <th>Password</th>
+        <th>Create Account</th>
+        <th>Modify Account</th>
+        <th>Delete Account</th>
+        <th>Create Customer</th>
+        <th>Modify Customer</th>
+        <th>Remove Customer</th>
+        <th>Create Device</th>
+        <th>Modify Device</th>
+        <th>Remove Device</th>
+        <th>Create Ticket</th>
+        <th>Modify Ticket</th>
+        <th>Remove Ticket</th>
+        <% if is_adminuser(current_user.username) || hp_account(current_user.username) %>
+          <th colspan="3" style="text-align:center">Actions</th>
+        <% end %>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% if @sadmins.blank? || @sadmins.nil? %>
+        <td colspan="19" height="38px" style="text-align:center">No Suspended Adminstrators</td>
+      <% else %>
+        <% @sadmins.each do |sadmin| %>
+          <tr>
+            <td class="td-clickable">
+              <!-- &#9658; -->
+              <i class="fa fa-fw fa-angle-right" style="font-size:18px;"></i>
+            </td>
+            <td class="td-clickable">
+              <% if get_devices(sadmin.email).count == 0 %>
+                <i class="fa fa-fw fa-user" style="font-size:18px;"></i>
+              <% else %>
+                <i class="fa fa-laptop" style="color:palegoldenrod;font-size:18px;"><span style="font-size:8px;margin-top:4px;"><%= get_devices(sadmin.email).count %></span></i>
+              <% end %>
+            </td>
+            <td class="td-clickable"><%= sadmin.id %></td>
+            <td class="td-clickable" style="text-align:center;"><%= sadmin.username %></td>
+            <td class="td-clickable"><%= sadmin.password %></td>
+            
+            <td class="td-clickable" style="text-align:center;"><%= raw(get_checkicon(sadmin.is_caccount)) %></td>
+            <td class="td-clickable" style="text-align:center;"><%= raw(get_checkicon(sadmin.is_maccount)) %></td>
+            <td class="td-clickable" style="text-align:center;"><%= raw(get_checkicon(sadmin.is_daccount)) %></td>
+
+            <td class="td-clickable" style="text-align:center;"><%= raw(get_checkicon(sadmin.is_ccustomer)) %></td>
+            <td class="td-clickable" style="text-align:center;"><%= raw(get_checkicon(sadmin.is_mcustomer)) %></td>
+            <td class="td-clickable" style="text-align:center;"><%= raw(get_checkicon(sadmin.is_rcustomer)) %></td>
+
+            <td class="td-clickable" style="text-align:center;"><%= raw(get_checkicon(sadmin.is_cdevice)) %></td>
+            <td class="td-clickable" style="text-align:center;"><%= raw(get_checkicon(sadmin.is_mdevice)) %></td>
+            <td class="td-clickable" style="text-align:center;"><%= raw(get_checkicon(sadmin.is_rdevice)) %></td>
+
+            <td class="td-clickable" style="text-align:center;"><%= raw(get_checkicon(sadmin.is_cticket)) %></td>
+            <td class="td-clickable" style="text-align:center;"><%= raw(get_checkicon(sadmin.is_rticket)) %></td>
+            <td class="td-clickable" style="text-align:center;"><%= raw(get_checkicon(sadmin.is_dticket)) %></td>
+            
+            <% if is_adminuser(current_user.username) || hp_account(current_user.username)%>
+              <td>
+                <!-- fa fa-fw fa-eye
+                fa fa-fw fa-minus-square
+                fa fa-fw fa-level-down
+                fa fa-fw fa-certificate
+                 -->
+                <%= link_to(sadmin, :class=>'btn btn-default btn-td a_loading', :style=>'padding:3px 4px;', "data-toggle"=>"tooltip", "title"=>"Register") do %>
+                  <i class="fa fa-fw fa-thumbs-o-up" style="font-size:16px;color:purple"></i> <!-- Detail -->
+                <% end %>
+              </td>
+              <td>
+                <%= link_to(edit_sadmin_path(sadmin), :class=>'btn btn-default btn-td a_loading', :style=>'padding:3px 4px;', "data-toggle"=>"tooltip", "title"=>"Edit") do %>
+                  <i class="fa fa-fw fa-pencil" style="font-size:16px;color:green;"></i><!-- Edit Permission -->
+                <% end %>
+              </td>
+              <td class="td-clickable">
+                <%= button_tag(:class=>'btn btn-default btn-td', :style=>'padding:3px 4px;', "data-toggle"=>"tooltip", "title"=>"Remove") do %>
+                  <i class="fa fa-fw fa-level-down" style="font-size:16px;color:#e08e0b"></i><!-- Suspend -->
+                <% end %>
+              </td>
+            <% end %>
+          </tr>
+          <tr class="sub-tr" id="sservers_<%=sadmin.id%>" style="display:none;border:none;">
+            <td class="hidden_"></td>
+            <td class="hidden_" colspan="16" style="padding-left:20px;">
+              <div style="content-div">
+                <% if get_devices(sadmin.username).blank? %>
+                  <div class="col-lg-12" style="padding:15px 0;">
+                    <div class="col-lg-3">
+                      <i class="fa fa-fw fa-asterisk" style="color:palegoldenrod;font-size:14px;margin:-2px 0;"></i>&nbsp;Account Type: <%= raw(get_usertype(sadmin.account_type)) %><br/><br/>
+                      <i class="fa fa-fw fa-envelope" style="color:palegoldenrod;font-size:14px;margin:-2px 0;"></i>&nbsp;Email Address: <%= sadmin.pemail %><br/><br/>
+                      <i class="fa fa-fw fa-phone" style="color:palegoldenrod;font-size:18px;margin:-2px 0;"></i>&nbsp;Mobile Number: <%= sadmin.number %><br/><br/>
+                    </div>
+                    <div class="col-lg-3">
+                      <i class="fa fa-fw fa-font" style="color:palegoldenrod;font-size:14px;margin:-2px 0;"></i>&nbsp;First Name: <%= sadmin.first_name %><br/><br/>
+                      <i class="fa fa-fw fa-bold" style="color:palegoldenrod;font-size:14px;margin:-2px 0;"></i>&nbsp;Last Name: <%= sadmin.last_name %><br/><br/>
+                    </div>
+                    <div class="col-lg-3">
+                      <i class="fa fa-fw fa-building-o" style="color:palegoldenrod;font-size:14px;margin:-2px 0;"></i>&nbsp;City: <%= sadmin.city %><br/><br/>
+                      <i class="fa fa-fw fa-home" style="color:palegoldenrod;font-size:14px;margin:-2px 0;"></i>&nbsp;State: <%= sadmin.state %><br/><br/>
+                      <i class="fa fa-fw fa-flag" style="color:palegoldenrod;font-size:14px;margin:-2px 0;"></i>&nbsp;Country: <%= raw(get_countryname(sadmin.country)) %><br/><br/>
+                    </div>
+                    <div class="col-lg-3" style="text-align:center;display:none;" id="cd_sadmin_<%=sadmin.id%>">
+                      <div class="sub-comment" style="background-color:rgba(84, 130, 143, 0.4);padding:10px;color:palegoldenrod;">
+                        <%= simple_form_for :delete_sadmin, :id=>'form_delete_sadmins', :method=>'get', :html=>{:style=>'display:inline-block'}, :remote=>true do |f| %>
+                          <%= hidden_field_tag "sadmin_id", nil, :value=>sadmin.id %>
+                          <!-- <div class="triangle-right">
+                          </div> -->
+                          <i class="fa fa-fw fa-exclamation-triangle" style="font-size:16px;color:palegoldenrod;"></i>&nbsp;Are you sure removing this account?<br/><br/>
+                          <%#= link_to(sadmin, method: :delete, :class=>'btn btn-warning btn-td', :style=>'padding:3px 4px;') do %>
+                          <%= button_tag(type:"submit", :class=>'btn btn-warning btn-td', :style=>'padding:3px 4px;color:palegoldenrod;') do %>
+                            <i class="fa fa-fw fa-check-circle" style="font-size:16px;color:palegoldenrod;"></i>Yes<!-- Suspend -->
+                          <% end %>&nbsp;&nbsp;&nbsp;&nbsp;
+                          <%= label_tag(nil, :class=>'btn btn-info btn-td btn-tdclosea', :style=>'padding:3px 4px;color:palegoldenrod;font-weight:normal', :id=>'btn_tdclosea_'+sadmin.id.to_s) do %>
+                            <i class="fa fa-fw fa-times-circle" style="font-size:16px;color:palegoldenrod;"></i>&nbsp;No
+                          <% end %>
+                        <% end %>
+                      </div>
+                    </div>
+                  </div>
+                <% else %>
+                  <% get_devices(sadmin.username).each do |d| %>
+                    <div class="col-lg-12" style="padding:15px 0;">
+                      <div class="col-lg-3">
+                        <%= image_tag('server1.png', size: "60") %>
+                      </div>
+                      <div class="col-lg-3">
+                        Device Type : <%= d.device_type %><br/><br/>
+                        location : <%= d.location %>
+                      </div>
+                      <div class="col-lg-3">
+                        Public IP : <%= d.public_ip %><br/><br/>
+                        Private IP : <%= d.private_ip %>
+                      </div>
+                      <div class="col-lg-3">
+                        Processor : <%= d.osprocessor %><br/><br/>
+                        RAM : <%= d.osram %>
+                      </div>
+                    </div>
+                  <% end %>
+                <% end %>
+              </div>
+            </td>
+            <td class="hidden_" id="sadmin_mm" colspan="3" style="padding-left:20px;">
+              <%= label_tag(nil, :class=>'btn btn-warning btn-td btn-ssc-sadmin', :style=>'padding:3px 4px;', :id=>'btn_ssc_' + sadmin.id.to_s) do %>
+                <i class="fa fa-fw fa-exclamation-triangle" style="font-size:16px;color:white"></i>Remove<!-- Suspend -->
+              <% end %>
+              <span class="span_br"><br/><br/></span>
+              <%= label_tag(nil, :class=>'btn btn-info btn-td btn-tdclose btn-tdclosesa', :style=>'padding:3px 4px;font-weight:normal', :id=>'btn_tdclosesa_'+sadmin.id.to_s) do %>
+                <i class="fa fa-fw fa-times-circle" style="font-size:16px;color:white"></i>&nbsp;Close
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<script>
+  _fix();
+  
+  $(function() {
+    $('.pagination a').attr('data-remote', 'true');
+  });
+
+  $('#select_sadmin_rows').dropdown();
+
+  $('#li_admin').attr('class', 'treeview active');
+  $('#ul_admin').css('display', 'block');
+
+  $('#ul_admin').find('li').eq(2).css('background-color','#b1b1b1');
+  $('#ul_admin').find('li').eq(2).find('a').css('color','#000');
+
+  var headertext = [],
+  headers = document.querySelectorAll('#table_sadmin th'),
+  tablerows = document.querySelectorAll('#table_sadmin th'),
+  table_body = document.querySelector('#table_sadmin tbody');
+
+  for (var i = 0; i < headers.length; i++) {
+    var current = headers[i];
+
+    headertext.push(current.textContent.replace(/\r?\n|\r/,""));
+    // console.log(current.textContent);
+  }
+
+  for (var i = 0, row; row = table_body.rows[i]; i++) { 
+    for(var j = 1, col; col = row.cells[j]; j++) {
+      if ( headertext[j] && ( i%2 == 0 ) && j != 17) {
+        col.setAttribute('data-th', headertext[j]);
+      }
+
+      if ( i%2 == 1 ) {
+        col.setAttribute('style', 'border:none;');
+      }
+
+      if ( j != 3 && j > 15 && j < 5) {
+        col.setAttribute('style', 'text-align:left;');  
+      }
+    }
+
+    if ( i%2 == 1 ) {
+      col = row.cells[0];
+      col.setAttribute('data-th', 'Personal Info');  
+    }
+
+  }
+
+  hide_loading();
+
+</script>

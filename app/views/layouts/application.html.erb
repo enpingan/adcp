@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<!-- <html> -->
+
+<head>
+  <title>CyberAdvance</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <link rel="shortcut icon" type="image/png" href="<%= image_path "favicon.png" %>" />
+  <%= csrf_meta_tags %>
+  <meta charset="UTF-8">
+  <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+</head>
+
+<div id="loading_canvas" style="color:palegoldenrod;">
+  <%= image_tag('logo1.png', width:'50%', :class=>'image-logo') %>
+  <br/>
+  &nbsp;&nbsp;&nbsp;Loading...
+  <br/>
+  <%= image_tag('ajax-loader.gif', :class=>'image-logo', :style=>'margin-top:20px;margin-left:9px;') %>
+</div>
+
+<% if user_signed_in? %>
+  <body style="background-size:100% 100%;">
+  <%= render 'layouts/header' %>
+<% else %>
+  <body style="background-size:100% 100%;height:100vh!important;">
+<% end %>
+
+<%= yield %>
+
+<% if user_signed_in? %>
+  <%= render 'layouts/footer' %>
+<% end %>
+
+</body>
+</html>

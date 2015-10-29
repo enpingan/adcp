@@ -1,0 +1,221 @@
+<%= form_for(@ticket) do |f| %>
+  <% if @ticket.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@ticket.errors.count, "error") %> prohibited this ticket from being saved:</h2>
+
+      <ul>
+      <% @ticket.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="small-box bg-aqua" style="margin-bottom:0px;">
+    <div class="inner">
+      <h3>
+        <%= @ticket.id.nil? ? raw('New Ticket') : raw('Edit Ticket') %>
+      </h3>
+      <p>
+        <%= @ticket.id.nil? ? raw('<i class="fa fa-fw fa-exclamation-triangle"></i>&nbsp;All fields are required.') : raw('Ticket ID: &nbsp;#&nbsp;') + @ticket.id.to_s %>
+      </p>
+    </div>
+    <div class="icon">
+      <i class="fa fa-fw fa-ticket"></i>
+    </div>
+    <a href="/tickets" class="small-box-footer">
+      <i class="fa fa-arrow-circle-left"></i>&nbsp;Back 
+    </a>
+  </div>
+
+  <div class="box box-info col-lg-12" style="border:none;padding:0 0;margin-bottom:24px;">
+    <div class="box-header" style="background-color:rgba(0, 0, 0, 0.19);padding:5px 0;">
+      <i class="fa fa-fw fa-paperclip" style="color: rgba(255, 255, 214, 0.78);"></i>
+
+      <h3 class="box-title">Ticket Info</h3>
+
+    </div>
+    <div class="box-body row" style="margin: 0 0;">
+      <div class="col-lg-6 field">
+        <label><span style="color:red">*</span>&nbsp;Subject:</label><br/>
+        <div class="ui selection dropdown devices" tabindex="0" style="overflow:visible;padding:0 0!important;width:100%!important;height:32px;" id="select_ticket_subject">
+          <div class="default text" style="margin:7px;">
+            <% if !@ticket.subject.nil? %>
+              <i class="fa fa-fw fa-tag" style="font-size:12px;color:orange;"></i>&nbsp;&nbsp;<%= @ticket.subject %>
+            <% else %>
+              Select
+            <% end %>
+          </div>
+          <!-- <input type="hidden" name="hidden-field"> -->
+          <div class="menu" tabindex="-1" style="position:fixed;margin-right: -16px;">
+            <div class="item" data-value="API Question"><i class="fa fa-fw fa-tag" style="font-size:12px;color:orange;"></i>&nbsp;&nbsp;API Question</div>
+            <div class="item" data-value="Accounting Request"><i class="fa fa-fw fa-tag" style="font-size:12px;color:orange;"></i>&nbsp;&nbsp;Accounting Request</div>
+            <div class="item" data-value="CDNLayer Question"><i class="fa fa-fw fa-tag" style="font-size:12px;color:orange;"></i>&nbsp;&nbsp;CDNLayer Question</div>
+            <div class="item" data-value="Colocation Service Request"><i class="fa fa-fw fa-tag" style="font-size:12px;color:orange;"></i>&nbsp;&nbsp;Colocation Service Request</div>
+            <div class="item" data-value="DNS Request"><i class="fa fa-fw fa-tag" style="font-size:12px;color:orange;"></i>&nbsp;&nbsp;DNS Request</div>
+            <div class="item" data-value="DOS/Abuse Issue"><i class="fa fa-fw fa-tag" style="font-size:12px;color:orange;"></i>&nbsp;&nbsp;DOS/Abuse Issue</div>
+            <div class="item" data-value="Hardware Firewall Question"><i class="fa fa-fw fa-tag" style="font-size:12px;color:orange;"></i>&nbsp;&nbsp;Hardware Firewall Question</div>
+            <div class="item" data-value="Hardware Issue"><i class="fa fa-fw fa-tag" style="font-size:12px;color:orange;"></i>&nbsp;&nbsp;Hardware Issue</div>
+            <div class="item" data-value="Hardware Load Balancer Question"><i class="fa fa-fw fa-tag" style="font-size:12px;color:orange;"></i>&nbsp;&nbsp;Hardware Load Balancer Question</div>
+            <div class="item" data-value="Licensing Question"><i class="fa fa-fw fa-tag" style="font-size:12px;color:orange;"></i>&nbsp;&nbsp;Licensing Question</div>
+            <div class="item" data-value="Mail Server Issue"><i class="fa fa-fw fa-tag" style="font-size:12px;color:orange;"></i>&nbsp;&nbsp;Mail Server Issue</div>
+            <div class="item" data-value="OS Reload Question"><i class="fa fa-fw fa-tag" style="font-size:12px;color:orange;"></i>&nbsp;&nbsp;OS Reload Question</div>
+            <div class="item" data-value="Portal Information Question"><i class="fa fa-fw fa-tag" style="font-size:12px;color:orange;"></i>&nbsp;&nbsp;Portal Information Question</div>
+            <div class="item" data-value="Private Network Question"><i class="fa fa-fw fa-tag" style="font-size:12px;color:orange;"></i>&nbsp;&nbsp;Private Network Question</div>
+            <div class="item" data-value="Public Network Question"><i class="fa fa-fw fa-tag" style="font-size:12px;color:orange;"></i>&nbsp;&nbsp;Public Network Question</div>
+            <div class="item" data-value="Reboots and Console Access"><i class="fa fa-fw fa-tag" style="font-size:12px;color:orange;"></i>&nbsp;&nbsp;Reboots and Console Access</div>
+            <div class="item" data-value="Sales Request"><i class="fa fa-fw fa-tag" style="font-size:12px;color:orange;"></i>&nbsp;&nbsp;Sales Request</div>
+            <div class="item" data-value="Security Issue"><i class="fa fa-fw fa-tag" style="font-size:12px;color:orange;"></i>&nbsp;&nbsp;Security Issue</div>
+            <div class="item" data-value="Storage Question"><i class="fa fa-fw fa-tag" style="font-size:12px;color:orange;"></i>&nbsp;&nbsp;Storage Question</div>
+            <div class="item" data-value="Transcoding Question"><i class="fa fa-fw fa-tag" style="font-size:12px;color:orange;"></i>&nbsp;&nbsp;Transcoding Question</div>
+            <div class="item" data-value="Vyatta Question"><i class="fa fa-fw fa-tag" style="font-size:12px;color:orange;"></i>&nbsp;&nbsp;Vyatta Question</div>
+            <div class="item" data-value="Other: Administrative"><i class="fa fa-fw fa-tag" style="font-size:12px;color:orange;"></i>&nbsp;&nbsp;Other: Administrative</div>
+          </div>
+        </div>
+        <br/><br/>
+        <%= f.hidden_field :subject, :class=>'form-control tform-control', :required=>true %>
+        <label><span style="color:red">*</span>&nbsp;Title:</label><br/>
+        <%= f.text_field :ticket_group, :class=>'form-control tform-control', :required=>true, :autocomplete=>:off %>  <br/>
+        <%= f.label :updated, :style=>'margin-top:4px'  %><br>
+        <%= f.text_field :updated, :class=>'form-control tform-control', :readonly=>true, :value=>Time.now, :autocomplete=>:off %>
+      </div>
+      <div class="field col-lg-6">
+        <label><span style="color:red">*</span>&nbsp;Assign To:</label><br/>
+        <div class="ui selection search dropdown devices" tabindex="0" style="overflow:visible;padding:0 0!important;width:100%!important;height:32px;" id="select_ticket_owner">
+          <div class="default text" style="margin:7px;">
+            <% if !@ticket.owner.nil? %>
+              <i class="fa fa-fw fa-envelope-o" style="font-size:12px;color:white;"></i>&nbsp;&nbsp;<%= @ticket.owner %>
+            <% else %>
+              Select
+            <% end %>
+          </div>
+
+          <div class="menu" tabindex="-1" style="position:fixed;margin-right: -16px;">
+            <% if is_adminuser(current_user.username) || hp_ticket(current_user.username) %>
+              <% if !@customers.blank? %>
+                <% @customers.each do |a| %>
+                  <div class="item" data-value="<%= a.username %>"><i class="fa fa-fw fa-envelope-o" style="font-size:12px;color:white;"></i>&nbsp;&nbsp;<%= a.username %></div>
+                <% end %>
+              <% end %>
+            <% else %>
+              <div class="item" data-value="<%= current_user.username %>"><i class="fa fa-fw fa-envelope-o" style="font-size:12px;color:white;"></i>&nbsp;&nbsp;<%= current_user.username %></div>
+            <% end %>
+          </div>
+        </div>
+        <br/><br/>
+        <%= f.hidden_field :owner, :class=>'form-control tform-control', :required=>true %>
+        <label><span style="color:red">*</span>&nbsp;Device:</label><br/>
+
+        <div class="ui selection search dropdown devices" tabindex="0" style="overflow:visible;padding:0 0!important;width:100%!important;height:32px;" id="select_ticket_name">
+          <div class="default text" style="margin:7px;">
+            <% if !@ticket.device.nil? %>
+              <i class="fa fa-fw fa-cogs" style="font-size:12px;color:#00acd6;"></i>&nbsp;&nbsp;<%= @ticket.device %>
+            <% else %>
+              Select
+            <% end %>
+          </div>
+
+          <div class="menu" tabindex="-1" style="position:fixed;margin-right: -16px;">
+            <% if is_adminuser(current_user.username) || hp_ticket(current_user.username) %>
+              <% if !@customers.blank? && !@devices.blank? %>
+                <% @customers.each do |a| %>
+                  <% get_devicecount(a.username).times do |d| %>
+                    <div class="item" data-value="<%= get_devices(a.username)[d].name %>"><i class="fa fa-fw fa-cogs" style="font-size:12px;color:#00acd6;"></i>&nbsp;&nbsp;<%= get_devices(a.username)[d].name %></div>
+                  <% end %>
+                <% end %>
+              <% end %>
+            <% else %>
+              <% if !@customers.blank? && !@devices.blank? %>
+                <div class="item" data-value="<%= get_devices(current_user.username)[0].name %>"><i class="fa fa-fw fa-cogs" style="font-size:12px;color:#00acd6;"></i>&nbsp;&nbsp;<%= get_devices(current_user.username)[0].name %></div>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+        <br/><br/>
+        <%= f.hidden_field :device, :class=>'form-control tform-control', :required=>true %>
+        <%#= f.label :user_id, "User ID" %><br>
+        <%#= f.hidden_field :user_id, :class=>'form-control tform-control', :required=>true, get_userid(ticket.owner) %> <br>
+      </div>
+      <div class="col-lg-12 actions">
+        <label><span style="color:red">*</span>&nbsp;Detail:</label><br/>
+        <%= f.text_area :detail, :class=>"form-control tform-control", :rows=>'6', :required => true%>
+      </div>
+      <%= f.hidden_field :is_read, :class=>'form-control tform-control', :value=>true %>
+    </div>
+    <div class="box-footer clearfix" style="text-align:center;">
+      <% if hp_ticket(current_user.username) || is_adminuser(current_user.username) %>
+        <%= button_tag(type:"submit", :class=>"btn btn-info btn-td a_loading") do %>
+          <i class="fa fa-fw fa-tag"></i>&nbsp;
+          <% if @ticket.id.nil? %>
+            Create 
+          <% else %>
+            Update 
+          <% end %>
+          Ticket
+        <% end %>
+      <% end %>
+      <%= link_to(tickets_path, :class=>'btn btn-default btn-td a_loading', :style=>'color:black') do %>
+        <i class="fa fa-fw fa-arrow-circle-left"></i>&nbsp;Back
+      <% end %>
+    </div>
+  </div>
+<% end %>
+
+<% if !@ticket.id.nil? %>
+  <div class="box box-info col-lg-12" style="border:none;padding:0 0;">
+    <div class="box-header" style="background-color:rgba(0, 0, 0, 0.19);padding:5px 0;">
+      <i class="fa fa-fw fa-comments" style="color: rgba(255, 255, 214, 0.78);"></i>
+
+      <h3 class="box-title">Comments</h3>
+
+    </div>
+    <div class="box-body" style="overflow:hidden;" id="add_comment">
+      <%= render 'add_comment' %>
+    </div>
+    <div class="box-footer clearfix">
+      
+    </div>
+  </div>
+<% end %>
+
+<script>
+
+  $('#select_ticket_subject').dropdown();
+  $('#select_ticket_owner').dropdown();
+  $('#select_ticket_name').dropdown();
+
+  $('#li_ticket').attr('class', 'active');
+
+  $('.new_ticket').keypress(function(e) {
+    var code = (e.keyCode ? e.keyCode : e.which);
+    // console.log(code);
+    if (code == 13) {
+      return false;
+      // e.preventDefault();
+      // show_loading();
+    }
+  });
+
+  $('.edit_ticket').keypress(function(e) {
+    var code = (e.keyCode ? e.keyCode : e.which);
+    // console.log(code);
+    if (code == 13) {
+      return false;
+      // e.preventDefault();
+      // show_loading();
+    }
+  });
+
+  $('#select_ticket_owner div.text').bind("DOMSubtreeModified",function(){
+    tmp = $.trim($(this).text());
+    $('#ticket_owner').val(tmp);
+  });
+
+  $('#select_ticket_name div.text').bind("DOMSubtreeModified",function(){
+    tmp = $.trim($(this).text());
+    $('#ticket_device').val(tmp);
+  });
+
+  hide_loading();
+  
+</script>

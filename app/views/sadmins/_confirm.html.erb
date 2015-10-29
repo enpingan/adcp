@@ -1,0 +1,43 @@
+<% if @retry == "retry" %>
+  <div class="col-lg-offset-4 col-lg-4" id="div_sadmin">
+<% else %>
+  <div class="col-lg-offset-4 col-lg-4" id="div_sadmin" style="display:none;">
+<% end %>
+  <br/><br/>
+  <span>
+    <i class="fa fa-fw fa-exclamation-triangle" style="font-size:16px;color:palegoldenrod"></i>&nbsp;&nbsp;
+    <% if @retry == "retry" %>
+      Invalid username or password. Please try again.
+    <% else %>
+      <% if @retry == "np" %>
+        This account has not permission to modify account info.&nbsp;&nbsp; Please try again by correct user.
+      <% else %>
+        Please confirm your account info to update.
+      <% end %>
+    <% end %>
+  </span><br/><br/>
+
+  <%#= form_tag('/sadmins/cadmin', method: :post, :id=>'cform_uid_sadmin') do -%>
+  <%#= simple_form_for :search, :id=>'form_confirm_sadmins', :method=>'get', :remote=>true do |f| %>
+    <div class="field">
+      <label><span style="color:red">*</span>&nbsp;Username:</label><br/>
+      <div class="inner-addon left-addon">
+        <i class="fa fa-fw fa-user" style="color:#5bc0de;font-size:18px;margin:-2px 0;"></i>
+        <%= text_field :username, "hid", :class=>'form-control tform-control', :required=>true, :style=>'padding-left:35px;', :autocomplete=>:off, :value=>current_user.username %>
+      </div>
+    </div>
+    <div class="field">
+      <label><span style="color:red">*</span>&nbsp;Password:</label><br/>
+      <div class="inner-addon left-addon">
+        <i class="fa fa-fw fa-key" style="color:#5bc0de;font-size:18px;margin:-2px 0;"></i>
+        <%= password_field :password, "hid", :class=>'form-control tform-control', :required=>true, :style=>'padding-left:35px;' %>
+      </div>
+    </div>
+    <br/>
+    <div class="field" style="text-align:center;">
+      <%= button_tag(type:"submit", class:'btn btn-success btn-td', :style=>'padding: 6px 8px;marign-left:-3px;position:relative;left:-3px;', :id=>'cbtn_uid_sadmin') do %>
+        <i class="fa fa-fw fa-check-circle"></i> Confirm&nbsp;&nbsp;
+      <% end %> 
+    </div>
+  <%# end %>
+</div>

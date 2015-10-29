@@ -1,0 +1,23 @@
+<div class="page-div">
+  <br/>
+  <h1 style="color:transparent!important;">
+    <i class="fa fa-fw fa-user"></i><i class="fa fa-fw fa-shopping-cart" style="position:relative;top:8px;left:-12px;font-size:18px;"></i>Editing Customer
+  </h1>
+  <br/>
+  
+  <% if @retry.nil? %>
+    <%= render 'form' %>
+  <% else %>
+    <%= render 'retry_form' %>
+  <% end %>
+
+  <%#= link_to 'Show', @account %> 
+  <%#= link_to 'Back', accounts_path %>
+</div>
+
+<script>
+  $('#li_customer').attr('class', 'treeview active');
+  $('#ul_customer').css('display', 'block');
+  $('#ul_customer').find('li').eq(3).css('background-color','#b1b1b1');
+  $('#ul_customer').find('li').eq(3).find('a').css('color','#000');
+</script>

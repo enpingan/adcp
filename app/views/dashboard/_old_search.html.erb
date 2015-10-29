@@ -1,0 +1,287 @@
+<!-- Right side column. Contains the navbar and content of the page -->
+<!-- Content Header (Page header) -->
+<div class="page-div">
+<section class="content">
+  <h1>
+    Search Results
+    <!-- <small>Control panel</small> -->
+  </h1>
+  <br/>
+  <!-- Small boxes (Stat box) -->
+  <% if @area == "all" || @area == "username" || @area = "email" %>
+    <div class="show-border-div col-md-12" style="min-width:1300px;">
+      <div class="col-md-12"  style="min-width:1290px;">
+        <h3>Administrators</h3>
+      </div>
+
+      <table class="listing" id="table_sverified">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Verified ID</th>
+          <th>Username</th>
+          <th>Password</th>
+          <th>Create Account</th>
+          <th>Modify Account</th>
+          <th>Delete Account</th>
+          <th>Create Customer</th>
+          <th>Modify Customer</th>
+          <th>Remove Customer</th>
+          <th>Create Device</th>
+          <th>Modify Device</th>
+          <th>Remove Device</th>
+          <th>Create Ticket</th>
+          <th>Modify Ticket</th>
+          <th>Remove Ticket</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% if @admins.blank? %>
+          <td colspan="16" style="text-align:center">No Administrators</td>
+        <% else %>
+          <% @admins.each do |verified| %>
+            <tr>
+              <td class="td-clickable">
+                <% if get_devices(verified.email).count == 0 %>
+                  <i class="glyphicon glyphicon-user" style="font-size:18px;"></i>
+                <% else %>
+                  <i class="fa fa-laptop" style="color:palegoldenrod;font-size:18px;"><span style="font-size:8px;margin-top:4px;"><%= get_devices(verified.email).count %></span></i>
+                <% end %>
+              </td>
+              <td class="td-clickable"><%= verified.id %></td>
+              <td class="td-clickable" style="text-align:center;"><%= verified.username %></td>
+              <td class="td-clickable"><%= verified.password %></td>
+              
+              <td class="td-clickable" style="text-align:center;"><%= raw(get_checkicon(verified.is_caccount)) %></td>
+              <td class="td-clickable" style="text-align:center;"><%= raw(get_checkicon(verified.is_maccount)) %></td>
+              <td class="td-clickable" style="text-align:center;"><%= raw(get_checkicon(verified.is_daccount)) %></td>
+
+              <td class="td-clickable" style="text-align:center;"><%= raw(get_checkicon(verified.is_ccustomer)) %></td>
+              <td class="td-clickable" style="text-align:center;"><%= raw(get_checkicon(verified.is_mcustomer)) %></td>
+              <td class="td-clickable" style="text-align:center;"><%= raw(get_checkicon(verified.is_dcustomer)) %></td>
+
+              <td class="td-clickable" style="text-align:center;"><%= raw(get_checkicon(verified.is_cdevice)) %></td>
+              <td class="td-clickable" style="text-align:center;"><%= raw(get_checkicon(verified.is_mdevice)) %></td>
+              <td class="td-clickable" style="text-align:center;"><%= raw(get_checkicon(verified.is_rdevice)) %></td>
+
+              <td class="td-clickable" style="text-align:center;"><%= raw(get_checkicon(verified.is_cticket)) %></td>
+              <td class="td-clickable" style="text-align:center;"><%= raw(get_checkicon(verified.is_rticket)) %></td>
+              <td class="td-clickable" style="text-align:center;"><%= raw(get_checkicon(verified.is_dticket)) %></td>
+              
+            </tr>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+    </div>
+  <% end %>
+
+  <% if @area == "all" %>
+    <div class="show-border-div col-md-12" style="min-width:1300px;">
+      <div class="col-md-12"  style="min-width:1024px;">
+        <h3>Customers</h3>
+      </div>
+
+      <table class="listing" id="table_scustomer">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Customer ID</th>
+
+          <th>Username</th>
+          <th>Password</th>
+          <th>Read Ticket</th>
+          <th>Write Ticket</th>
+          <th>Delete Ticket</th>
+          <th>Saving Ticket</th>
+          <th>Create Device</th>
+          <th>Remove Device</th>
+          <th>Modify Device</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% if @customers.blank? %>
+          <td colspan="16" style="text-align:center">No Customers</td>
+        <% else %>
+          <% @customers.each do |customer| %>
+            <tr>
+              <td class="td-clickable">
+                <% if get_devices(customer.username).count == 0 %>
+                  <i class="fa fa-fw fa-user" style="font-size:18px;"></i>
+                <% else %>
+                  <i class="fa fa-laptop" style="color:palegoldenrod;font-size:18px;"><span style="font-size:8px;margin-top:4px;"><%= get_devices(customer.username).count %></span></i>
+                <% end %>
+              </td>
+              <td class="td-clickable"><%= customer.id %></td>
+              <td class="td-clickable" style="text-align:center;"><%= customer.username %></td>
+              <td class="td-clickable"><%= customer.password %></td>
+              
+              <td class="td-clickable" style="text-align:center;"><%= raw(get_checkicon(customer.is_rticket)) %></td>
+              <td class="td-clickable" style="text-align:center;"><%= raw(get_checkicon(customer.is_wticket)) %></td>
+              <td class="td-clickable" style="text-align:center;"><%= raw(get_checkicon(customer.is_dticket)) %></td>
+              <td class="td-clickable" style="text-align:center;"><%= raw(get_checkicon(customer.is_sticket)) %></td>
+
+              <td class="td-clickable" style="text-align:center;"><%= raw(get_checkicon(customer.is_cdevice)) %></td>
+              <td class="td-clickable" style="text-align:center;"><%= raw(get_checkicon(customer.is_rdevice)) %></td>
+              <td class="td-clickable" style="text-align:center;"><%= raw(get_checkicon(customer.is_mdevice)) %></td>
+            </tr>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <% end %>
+
+  <% if @area == "all" || @area == "username" || @area = "public_ip" || @area == "private_ip" %>
+    <div class="show-border-div col-md-12" style="min-width:1300px;">
+      <div class="col-md-12" style="min-width:1024px;">
+        <h3>Devices</h3>
+      </div>
+      <table class="listing" id="table_sdevice">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Name</th>
+            <th>Device Type</th>
+            <th>Location</th>
+            <th>Public IP</th>
+            <th>Private IP</th>
+            <th>Note</th>
+            <th>Addons</th>
+            <!-- <th>Status</th>
+            <th>Reloaded</th> -->
+            <th>OS Name</th>
+            <th>OS RAM</th>
+            <th>OS Processor</th>
+            
+          </tr>
+        </thead>
+
+        <tbody>
+          <% if @devices.blank? %>
+            <td colspan="16" style="text-align:center">No Devices</td>
+          <% else %>
+            <% @devices.each do |device| %>
+              <tr>
+                <td><i class="fa fa-fw fa-gear" style="font-size:18px;"></i></td>
+                <td class="td-clickable" style="text-align:center;"><%= raw(get_colorspan(device.detail, device.name)) %></td>
+                <td class="td-clickable" style="text-align:center;"><%= raw(get_colorspan(device.detail, device.device_type)) %></td>
+                <td class="td-clickable" style="text-align:center;"><%= raw(get_colorspan(device.detail, device.location)) %></td>
+                <td class="td-clickable" style="text-align:center;"><%= raw(get_colorspan(device.detail, device.public_ip)) %></td>
+                <td class="td-clickable" style="text-align:center;"><%= raw(get_colorspan(device.detail, device.private_ip)) %></td>
+                <td class="td-clickable" style="text-align:center;"><%= raw(get_colorspan(device.detail, device.device_note)) %></td>
+                <td class="td-clickable" style="text-align:center;"><%= raw(get_colorspan(device.detail, device.addons)) %></td>
+                <!-- <td><%= device.general_status %></td>
+                <td><%= device.general_reloaded %></td> -->
+                <td class="td-clickable"><%= raw(get_colorspan(device.detail, device.osname)) %></td>
+                <td class="td-clickable" style="text-align:center;"><%= raw(get_colorspan(device.detail, device.osram)) %></td>
+                <td class="td-clickable" style="text-align:center;"><%= raw(get_colorspan(device.detail, device.osprocessor)) %></td>
+              </tr>
+            <% end %>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+
+  <% if @area == "all" || @area == "username" %>
+    <div class="show-border-div col-md-12" style="min-width:1300px;">
+      <div class="col-md-12">
+        <h3>Tickets</h3>
+      </div>
+      <table class="table-responsive listing" id="table_sticket">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Ticket ID</th>
+            <th>Group</th>
+            <th>Subject</th>
+            <th>Owner</th>
+            <th>Last replied</th>
+            <th>Device</th>
+            <th>Updated</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% if @tickets.blank? %>
+            <td colspan="16" style="text-align:center">No Tickets</td>
+          <% else %>
+            <% @tickets.each do |ticket| %>
+              <tr>
+                <td class="td-clickable">
+                  <% form_id = 'show_ticket_' + ticket.id.to_s %>
+                  <%= form_tag(ticket, method: :get, :id=>form_id) do -%>
+
+                    <% if ticket.is_read %>
+                      <i class="fa fa-fw fa-tag" style="color:#f39c12"></i>
+                    <% else %>
+                      <i class="fa fa-fw fa-tag"></i>
+                    <% end %>
+
+                    <%= submit_tag 'Reply', :class=>'btn btn-primary btn-reply', :style=>'display:none' %>
+                  <% end -%>
+                </td>
+                <td class="td-clickable">
+                  <%= raw(get_colorspan_ticket(ticket.is_read, processblank(ticket.id))) %>
+                </td>
+                <td class="td-clickable">
+                  <%= raw(get_colorspan_ticket(ticket.is_read, processblank(ticket.ticket_group))) %>
+                </td>
+                <td class="td-clickable">
+                  <%= raw(get_colorspan_ticket(ticket.is_read, processblank(ticket.subject))) %>
+                </td>
+                <td class="td-clickable">
+                  <%= raw(get_colorspan_ticket(ticket.is_read, processblank(ticket.owner))) %>
+                </td>
+                <td class="td-clickable">
+                  <%#= raw(get_colorspan_ticket(ticket.is_read, processblank(ticket.last_replied))) %>
+                  <% if Comment.where(:ticket_id=>ticket.id).last.nil? %>
+                    <%= raw(get_colorspan_ticket(ticket.is_read, "---")) %>
+                  <% else %>
+                    <%= raw(get_colorspan_ticket(ticket.is_read, Comment.where(:ticket_id=>ticket.id).last.ticket_owner).split('@').first) %>
+                  <% end %>
+                </td>
+                <td class="td-clickable">
+                  <%= raw(get_colorspan_ticket(ticket.is_read, processblank(ticket.device))) %>
+                </td>
+                <td class="td-clickable">
+                  <%= raw(get_colorspan_ticket(ticket.is_read, processblank(ticket.updated_at))) %>
+                </td>
+
+              </tr>
+            <% end %>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+
+</section>
+
+</div>
+
+<script>
+  $(document).on('click', '#table_sdevice', function(e) { 
+    window.location.href = "/devices";
+  });
+
+  $(document).on('click', '#table_sticket', function(e) { 
+    window.location.href = "/tickets";
+  });
+
+  $(document).on('click', '#table_customer', function(e) { 
+    window.location.href = "/customers";
+  });
+
+  $(document).on('click', '#table_scustomer', function(e) { 
+    window.location.href = "/scustomers";
+  });
+
+  $(document).on('click', '#table_sverified', function(e) { 
+    window.location.href = "/verifieds";
+  });
+
+</script>

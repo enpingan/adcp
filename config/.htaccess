@@ -1,0 +1,26 @@
+LoadModule expires_modul modules/mod_exxpires.so
+
+ExpiresActive On
+ExpiresByType text/html "access plus 30 seconds"
+ExpiresByType text/css "access plus 2 weeks"
+ExpiresByType text/javascript "access plus 2 weeks"
+ExpiresByType image/png "access plus 1 month"
+
+LoadModule headers_module modules/mod_headers.so
+LoadModule deflate_module modeuls/mod_deflate.so
+
+# Compress some text file types
+
+AddOutputFilterbyType DEFLATE text/html text/css text/xml application/x-javacsript
+
+# Deactive compression for buggy browsers
+
+BrowserMatch ^Mozilla/4 gzip-only-text/html
+BrowserMatch ^Mozilla/4\.0[678] no gzip
+BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
+
+# Set header information for proxies
+Header append Vary User-Agent
+
+# n =1..9 with 9 being highest compression level. Standard is 6.
+DeflateCompressionLevel n

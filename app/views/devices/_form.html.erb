@@ -1,0 +1,447 @@
+
+<%= form_for(@device) do |f| %>
+  <% if @device.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@device.errors.count, "error") %> prohibited this device from being saved:</h2>
+
+      <ul>
+      <% @device.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="search-div">
+    <div class="small-box bg-yellow" style="margin-bottom:0px;">
+      <div class="inner">
+        <h3>
+          <%= @device.id.nil? ? raw('New Device') : raw('Device information') %>
+        </h3>
+        <p>
+          <%= @device.id.nil? ? raw('<i class="fa fa-fw fa-exclamation-triangle"></i>&nbsp;All fields are required.') : raw('Device ID: #') + @device.id.to_s %>
+        </p>
+      </div>
+      <div class="icon">
+        <i class="fa fa-fw fa-cog"></i>
+      </div>
+      <a href="/devices" class="small-box-footer a_loading">
+        <i class="fa fa-arrow-circle-left"></i>&nbsp;Back 
+      </a>
+    </div>
+    <div class="box box-danger" style="border:none">
+      <div class="box-header" style="background-color:rgba(0, 0, 0, 0.19);padding:5px 0;">
+        <div class="pull-right box-tools">
+          
+        </div>
+        <i class="fa fa-fw fa-shield" style="color:rgb(228, 217, 113);"></i>
+
+        <h3 class="box-title">Basic Info</h3>
+      </div><!-- /.box-header -->
+      <div class="box-body" style="padding: 0 16px;">
+        <div class="row">
+          <br/>
+          <div id="search_verified">
+            <div class="col-lg-2 devform_title1">
+              <%= image_tag('server1.png', size: "120") %>
+            </div>
+
+            <div class="col-lg-4 field">
+              <%#= f.label :public_ip, "Public IP: " %>
+              <label><span style="color:red">*</span>&nbsp;Public IP:</label><br/>
+              <%= f.text_field :public_ip, :class=>'form-control tform-control', :placeholder=>'ex : 192.168.0.25', :required=>true, :autocomplete=>:off %><br/>
+              <%#= f.label :private_ip, "Private IP: " %>
+              <label><span style="color:red">*</span>&nbsp;Private IP:</label><br/>
+              <%= f.text_field :private_ip, :class=>'form-control tform-control', :placeholder=>'ex : 192.168.0.25' , :required=>true, :autocomplete=>:off %>
+            </div>
+
+            <div class="col-lg-6 field">
+              <!-- <%#= f.label :private_ip, "Assign To: " %><br> -->
+              <label><span style="color:red">*</span>&nbsp;Assign To:</label><br/>
+
+              <div class="ui selection search dropdown devices" tabindex="0" style="overflow:visible;padding:0 0!important;width:100%!important;height:32px;" id="select_device_mailaddr">
+                <div class="default text" style="margin:7px;">
+                  <% if !@device.owner.nil? %>
+                    <i class="fa fa-fw fa-user" style="color:#f56954;font-size:14px;"></i>&nbsp;&nbsp;<%= @device.owner %>
+                  <% else %>
+                    Select Owner
+                  <% end %>
+                </div>
+
+                <div class="menu" tabindex="-1" style="position:fixed;margin-right: -16px;">
+                  <% if is_adminuser(current_user.username) || hp_device(current_user.username) %>
+                    <% if !@customers.blank? %>
+                      <% @customers.each do |a| %>
+                        <div data-value="<%=a.username%>" data-count="<%= get_devicecount(a.username) %>"class="item">
+                          <% if get_devicecount(a.username) == 0 %>
+                            <i class="fa fa-fw fa-user" style="color:white;font-size:14px;"></i>&nbsp;&nbsp;<%=a.username%>
+                          <% else %>
+                            <i class="fa fa-fw fa-gear" style="color:white;font-size:14px;"></i><span style="margin-top:4px;"><%= get_devicecount(a.username) %></span>&nbsp;&nbsp;<%=a.username%>
+                          <% end %>
+                        </div>
+                      <% end %>
+                    <% end %>
+                  <% else %>
+                    <div data-value="<%=current_user.email%>" class="item"><i class="fa fa-fw fa-user" style="color:#f56954;font-size:14px;"></i>&nbsp;&nbsp;<%=current_user.username%></div>
+                  <% end %>
+                </div>
+              </div>
+              <%= f.hidden_field :owner, :class=>'form-control tform-control', :required=>true %> 
+              <br/><br/>
+
+              <!-- <%#= f.label :name, "Device Name: " %><br/> -->
+              <label><span style="color:red">*</span>&nbsp;Device name:</label><br/>
+              <%# if !@customers.blank? || @device.id.nil? %>
+              <% if @device.id.nil? %>
+                <%= f.text_field :name, :class=>'form-control tform-control', :value=>'', :required=>true, :style=>'margin-top:2px;', :autocomplete=>:off %>
+              <% else %>
+                <%= f.text_field :name, :class=>'form-control tform-control', :required=>true, :style=>'margin-top:2px;', :autocomplete=>:off  %>
+              <% end %>
+              <br/>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="box box-info col-lg-6" style="border:none;padding:0 0;">
+    <div class="box-header" style="background-color:rgba(0, 0, 0, 0.19);padding:5px 0;">
+      <i class="fa fa-fw fa-user" style="color: rgba(255, 255, 214, 0.78);"></i>
+
+      <h3 class="box-title">Device user</h3>
+
+    </div>
+    <div class="box-body" style="overflow:hidden;">
+      <div class="col-lg-12 field">
+        <label><span style="color:red">*</span>&nbsp;Username:</label><br/>
+        <% if @device.id.nil? %>
+          <%= text_field :username, :dev, :class=>'form-control tform-control', :autocomplete=>:off %>
+        <% else %>
+          <%= text_field :username, :dev, :class=>'form-control tform-control', :autocomplete=>:off, :value=>!get_duser(@device.name).blank? ? get_duser(@device.name)[0].username : '' %>
+        <% end %>
+      </div>
+      <div class="col-lg-12 field">
+        <label><span style="color:red">*</span>&nbsp;Password:</label><br/>
+        <% if @device.id.nil? %>
+          <%= text_field :password, :dev, :class=>'form-control tform-control', :autocomplete=>:off %>
+        <% else %>
+          <%= text_field :password, :dev, :class=>'form-control tform-control', :autocomplete=>:off, :value=>!get_duser(@device.name).blank? ? get_duser(@device.name)[0].password : ''%>
+        <% end %>
+      </div>
+    </div>
+    <div class="box-footer clearfix">
+      <div class="col-lg-offset-6 col-lg-6" style="text-align:right">
+        <% if @device.id.nil? %>
+          <%= label_tag(nil, :class=>'btn btn-success btn-td', :id=>'btn_add_duser', :style=>'color:white;') do %>
+            <i class="fa fa-fw fa-plus-circle"></i> Add 
+          <% end %>
+        <% else %>
+          <%= label_tag(nil, :class=>'btn btn-success btn-td', :id=>'btn_add_duser', :style=>'color:white;') do %>
+            <i class="fa fa-fw fa-pencil"></i> Modify
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="box-header" style="background-color:rgba(0, 0, 0, 0.19);padding:5px 0;">
+      <i class="fa fa-fw fa-comments" style="color: rgba(255, 255, 214, 0.78);"></i>
+
+      <h3 class="box-title">Notes</h3>
+
+    </div>
+    <div class="box-body" style="overflow:hidden;">
+      <div class="col-lg-12 field">
+        <!-- <%#= f.label :device_note, "Note: " %><br> -->
+        <label><span style="color:red">*</span>&nbsp;Note:</label><br/>
+        <%= f.text_field :device_note, :class=>'form-control tform-control', :required=>true, :autocomplete=>:off %>
+      </div>
+      <div class="col-lg-12 field">
+        <!-- <%#= f.label :addons, "Add-ons: " %><br> -->
+        <label><span style="color:red">*</span>&nbsp;Add-ons:</label><br/>
+        <%= f.text_field :addons, :class=>'form-control tform-control', :required=>true, :autocomplete=>:off %>
+      </div>    
+    </div>
+    <div class="box-footer clearfix">
+      <div class="col-lg-offset-6 col-lg-6" style="text-align:right">
+        <%= label_tag(nil, :class=>'btn btn-success', :id=>'btn_add_duser', :style=>'color:transparent;background-color:transparent;', :disabled=>true) do %>
+          <i class="fa fa-fw fa-pencil"></i> Modify
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="box box-info col-lg-6" style="border:none;padding:0 0;">
+    <div class="box-header" style="background-color:rgba(0, 0, 0, 0.19);padding:5px 0;">
+      <i class="fa fa-fw fa-windows" style="color: rgba(255, 255, 214, 0.78);"></i>
+
+      <h3 class="box-title">OS Information</h3>
+
+    </div>
+    <div class="box-body row" style="margin: 0 0;">
+      <div class="col-lg-12 field devform_title1" style="margin-bottom:16px;">
+        <h3>System Configuration</h3>
+        <br/>
+        <%= image_tag('os1.png', size: "273 87") %>
+      </div>
+      
+      <div class="col-lg-12 field">
+        <label><span style="color:red">*</span>&nbsp;OS Name:</label><br/>
+        <div class="ui selection dropdown devices" tabindex="0" style="overflow:visible;padding:0 0!important;width:100%!important;height:32px;" id="select_device_osname">
+          <div class="default text" style="margin:7px;">
+            <% if !@device.osname.nil? %>
+              <i class="fa fa-fw fa-desktop" style="color:#93EAFF;font-size:12px;"></i>&nbsp;&nbsp;<%= @device.osname %>
+            <% else %>
+              Server OS
+            <% end %>
+          </div>
+          <!-- <input type="hidden" name="hidden-field"> -->
+          <div class="menu" tabindex="-1" style="position:fixed;margin-right: -16px;">
+            <%
+              (1..52).each do |i| 
+                concat raw('<div class="item" data-value="'+ t('osname_'+ i.to_s)+ '"><i class="fa fa-fw fa-desktop" style="color:#93EAFF;font-size:12px;"></i>&nbsp;&nbsp;'+ t('osname_'+ i.to_s) + '</div>' )
+              end 
+            %>
+          </div>
+        </div>
+
+        <%= f.hidden_field :osname, :class=>'form-control tform-control', :required=>true %>
+        <!-- <%#= f.label :osram, "RAM" %><br> -->
+        <br/><br/><label><span style="color:red">*</span>&nbsp;RAM:</label><br/>
+
+        <div class="ui selection dropdown devices" tabindex="0" style="overflow:visible;padding:0 0!important;width:100%!important;height:32px;" id="select_device_osram">
+          <div class="default text" style="margin:7px;">
+            <% if !@device.osram.nil? %>
+              <i class="fa fa-fw fa-hdd-o" style="color:white;font-size:14px;"></i>&nbsp;&nbsp;<%= @device.osram %>
+            <% else %>
+              RAM Capacity
+            <% end %>
+          </div>
+          <!-- <input type="hidden" name="hidden-field"> -->
+          <div class="menu" tabindex="-1" style="position:fixed;margin-right: -16px;">
+            <%
+              (1..10).each do |i| 
+                concat raw('<div class="item" data-value="'+ t('ramsize_'+ i.to_s)+ '"><i class="fa fa-fw fa-hdd-o" style="color:white;font-size:14px;"></i>&nbsp;&nbsp;'+ t('ramsize_'+ i.to_s) + '</div>' )
+              end 
+            %>
+          </div>
+        </div>
+        <%= f.hidden_field :osram, :class=>'form-control tform-control', :required=>true %>
+
+        <!-- <%#= f.label :osprocessor, "Processor" %><br> -->
+        <br/><br/><label><span style="color:red">*</span>&nbsp;Processor:</label><br/>
+        <div class="ui selection dropdown devices" tabindex="0" style="overflow:visible;padding:0 0!important;width:100%!important;height:32px;" id="select_device_oscore">
+          <div class="default text" style="margin:7px;">
+            <% if !@device.osprocessor.nil? %>
+              <i class="fa fa-fw fa-tasks" style="color:#B0F0B0;font-size:14px;"></i>&nbsp;&nbsp;<%= @device.osprocessor %>
+            <% else %>
+              Processor
+            <% end %>
+          </div>
+          <!-- <input type="hidden" name="hidden-field"> -->
+          <div class="menu" tabindex="-1" style="position:fixed;margin-right: -16px;">
+            <%
+              (1..6).each do |i| 
+                concat raw('<div class="item" data-value="'+ t('core_'+ i.to_s)+ '"><i class="fa fa-fw fa-tasks" style="color:#B0F0B0;font-size:14px;"></i>&nbsp;&nbsp;'+ t('core_'+ i.to_s) + '</div>' )
+              end 
+            %>
+          </div>
+        </div>
+        <%= f.hidden_field :osprocessor, :class=>'form-control tform-control', :required=>true %>
+      </div>
+    </div>
+    <div class="box-footer clearfix">
+      <div class="col-lg-offset-6 col-lg-6" style="text-align:right">
+        <%= label_tag(nil, :class=>'btn btn-success', :id=>'btn_add_duser', :style=>'color:transparent;background-color:transparent;', :disabled=>true) do %>
+          <i class="fa fa-fw fa-pencil"></i> Modify
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="box box-info col-lg-12" style="border:none;padding:0 0;margin-bottom:80px;">
+    <div class="box-header" style="background-color:rgba(0, 0, 0, 0.19);padding:5px 0;">
+      <i class="fa fa-fw fa-paperclip" style="color: rgba(255, 255, 214, 0.78);"></i>
+
+      <h3 class="box-title">General Info</h3>
+
+    </div>
+    <div class="box-body row" style="margin: 0 0;">
+      <div class="col-lg-6 field">
+        <!-- <%#= f.label :device_type, "Device Type:" %><br> -->
+        <label><span style="color:red">*</span>&nbsp;Device type:</label><br/>
+
+        <div class="ui selection dropdown devices" tabindex="0" style="overflow:visible;padding:0 0!important;width:100%!important;height:32px;" id="select_device_type">
+          <div class="default text" style="margin:7px;">
+            <% if !@device.device_type.nil? %>
+              <i class="fa fa-fw fa-cogs" style="color:orange;font-size:12px;"></i>&nbsp;&nbsp;<%= @device.device_type %>
+            <% else %>
+              Select Device Type
+            <% end %>
+          </div>
+          <!-- <input type="hidden" name="hidden-field"> -->
+          <div class="menu" tabindex="-1" style="position:fixed;margin-right: -16px;">
+            <div class="item" data-value="Bare Metal Server"><i class="fa fa-fw fa-cogs" style="color:orange;font-size:12px;"></i>&nbsp;&nbsp;Bare Metal Server</div>
+            <div class="item" data-value="Virtual Server"><i class="fa fa-fw fa-cogs" style="color:orange;font-size:12px;"></i>&nbsp;&nbsp;Virtual Server</div>
+            <div class="item" data-value="Firewall(Dedicated)"><i class="fa fa-fw fa-cogs" style="color:orange;font-size:12px;"></i>&nbsp;&nbsp;Firewall(Dedicated)</div>
+            <div class="item" data-value="Gateway Member"><i class="fa fa-fw fa-cogs" style="color:orange;font-size:12px;"></i>&nbsp;&nbsp;Gateway Member</div>
+            <div class="item" data-value="NetScaler"><i class="fa fa-fw fa-cogs" style="color:orange;font-size:12px;"></i>&nbsp;&nbsp;NetScaler</div>
+            <div class="item" data-value="KVM/IP"><i class="fa fa-fw fa-cogs" style="color:orange;font-size:12px;"></i>&nbsp;&nbsp;KVM/IP</div>
+          </div>
+        </div>
+        <%= f.hidden_field :device_type, :class=>'form-control tform-control', :required=>true %>
+        <!-- <%#= f.label :location, "Location:" %><br> -->
+        <br/><br/><label><span style="color:red">*</span>&nbsp;Location:</label><br/>
+
+        <div class="ui selection dropdown devices" tabindex="0" style="overflow:visible;padding:0 0!important;width:100%!important;height:32px;" id="select_device_location">
+          <div class="default text" style="margin:7px;">
+            <% if !@device.location.nil? %>
+              <%= raw(getflag_floc(@device.location)) %>
+              <%= @device.location %>
+            <% else %>
+              Select Location
+            <% end %>
+          </div>
+          <!-- <input type="hidden" name="hidden-field"> -->
+          <div class="menu" tabindex="-1" style="position:fixed;margin-right: -16px;">
+            <div class="item" data-value="Amsterdam1"><i class="netherlands flag" style="font-size:20x;"></i>Amsterdam1</div>
+            <div class="item" data-value="Amsterdam2"><i class="netherlands flag" style="font-size:20x;"></i>Amsterdam2</div>
+            <div class="item" data-value="Frankfurt2"><i class="germany flag" style="font-size:20x;"></i>Frankfurt2</div>
+            <div class="item" data-value="HongKong2"><i class="hong kong flag"  style="font-size:20x;"></i>HongKong2</div>
+            <div class="item" data-value="Paris1"><i class="france flag"  style="font-size:20x;"></i>Paris1</div>
+            <div class="item" data-value="Washington1"><i class="united states flag"  style="font-size:20x;"></i>Washington1</div>
+          </div>
+        </div>
+        <%= f.hidden_field :location, :class=>'form-control tform-control', :required=>true %>
+      </div>
+
+      <div class="col-lg-6 field">
+        <!-- <%#= f.label :general_status, "Status:" %><br> -->
+        <label><span style="color:red">*</span>&nbsp;Status:</label><br/>
+
+        <div class="ui selection dropdown devices" tabindex="0" style="overflow:visible;padding:0 0!important;width:100%!important;height:32px;" id="select_device_gstatus">
+          <div class="default text" style="margin:7px;">
+            <% if !@device.general_status.nil? %>
+              <% if @device.general_status == "Active" %>
+                <i class="fa fa-fw fa-check-circle" style="color:rgb(139, 255, 139);font-size:12px;"></i>
+              <% else %>
+                <i class="fa fa-fw fa-ban" style="font-size:12px;"></i>
+              <% end %>
+              &nbsp;&nbsp;<%= @device.general_status %>
+            <% else %>
+              Select
+            <% end %>
+          </div>
+          <!-- <input type="hidden" name="hidden-field"> -->
+          <div class="menu" tabindex="-1" style="position:fixed;margin-right: -16px;">
+            <div class="item" data-value="Active"><i class="fa fa-fw fa-check-circle" style="color:rgb(139, 255, 139);font-size:12px;"></i>&nbsp;&nbsp;Active</div>
+            <div class="item" data-value="Deactive"><i class="fa fa-fw fa-ban" style="font-size:12px;"></i>&nbsp;&nbsp;Deactive</div>
+          </div>
+        </div>
+        <%= f.hidden_field :general_status, :class=>'form-control tform-control', :required=>true %>
+        <!-- <%#= f.label :general_reloaded, "Reloaded:" %><br> -->
+        <br/><br/><label><span style="color:red">*</span>&nbsp;Reloaded:</label><br/>
+
+        <div class="ui selection dropdown devices" tabindex="0" style="overflow:visible;padding:0 0!important;width:100%!important;height:32px;" id="select_device_greload">
+          <div class="default text" style="margin:7px;">
+            <% if !@device.general_reloaded.nil? %>
+              <% if @device.general_reloaded == "N/A" %>
+                <i class="fa fa-fw fa-ban" style="font-size:12px;"></i>
+              <% else %>
+                <i class="fa fa-fw fa-check-circle" style="color:rgb(139, 255, 139);font-size:12px;"></i>
+              <% end %>
+              &nbsp;&nbsp;<%= @device.general_reloaded %>
+            <% else %>
+              Select
+            <% end %>
+          </div>
+          <!-- <input type="hidden" name="hidden-field"> -->
+          <div class="menu" tabindex="-1" style="position:fixed;margin-right: -16px;">
+            <div class="item" data-value="N/A"><i class="fa fa-fw fa-ban" style="font-size:12px;"></i>&nbsp;&nbsp;N/A</div>
+            <div class="item" data-value="Reloadable"><i class="fa fa-fw fa-check-circle" style="color:rgb(139, 255, 139);font-size:12px;"></i>&nbsp;&nbsp;Reloadable</div>
+          </div>
+        </div>
+        <%= f.hidden_field :general_reloaded, :class=>'form-control tform-control', :required=>true %>
+        <%= f.hidden_field :detail, :class=>'form-control tform-control', :required=>true, :value=>false %>
+      </div>
+    </div>
+    <div class="box-footer clearfix" style="text-align:center;">
+      <% if hp_device(current_user.username) || is_adminuser(current_user.username) %>
+        <%= button_tag(type:'submit', :class=>'btn btn-info btn-td a_loading', :id=>'btn_device_submit') do %>
+          <i class="fa fa-fw fa-gear"></i>&nbsp;
+          <% if @device.id.nil? %>
+            Create 
+          <% else %>
+            Update 
+          <% end %>
+          Device
+        <% end %>
+      <% end %>
+      <%= link_to(devices_path, :class=>'btn btn-default btn-td a_loading', :style=>'color:black;') do %>
+        <i class="fa fa-fw fa-arrow-circle-left"></i>&nbsp;Back
+      <% end %>
+    </div>
+  </div>
+  
+<% end %>
+
+<script>
+  _fix();
+  
+  $('#select_device_mailaddr').dropdown();
+  $('#select_device_osname').dropdown();
+  $('#select_device_osram').dropdown();
+  $('#select_device_oscore').dropdown();
+  $('#select_device_type').dropdown();
+  $('#select_device_location').dropdown();
+  $('#select_device_gstatus').dropdown();
+  $('#select_device_greload').dropdown();
+
+  // $('#device_public_ip').ipAddress(4);
+  // $('#device_private_ip').ipAddress(4);
+
+  $('.new_device').keypress(function(e) {
+    var code = (e.keyCode ? e.keyCode : e.which);
+    // console.log(code);
+    if (code == 13) {
+      return false;
+    }
+  });
+
+  $('.edit_device').keypress(function(e) {
+    var code = (e.keyCode ? e.keyCode : e.which);
+    // console.log(code);
+    if (code == 13) {
+      return false;
+    }
+  });
+
+
+  $('#select_device_mailaddr div.text').bind("DOMSubtreeModified",function() {
+    var tmp = $.trim($(this).text()), dc;
+    tmp = $(this).attr('data-value');
+
+    // tmp = $(this).parent().find('div').eq(1).find('div').eq(0).attr('data-value').toLowerCase();
+    tmp = $(this).parent().find('div').eq(1).find('.item.active.selected').attr('data-value').toLowerCase();
+    dc = $(this).parent().find('div').eq(1).find('.item.active.selected').attr('data-count');
+
+    $('#device_owner').val(tmp);
+    // console.log(tmp, dc, tmp + "_device_" + dc);
+    $('#device_name').val(tmp + "_device_" + dc);
+    // tmp = $(this).attr('data-value').toLowerCase();
+    // if ( $(this).parent().find('div').eq(0).find('span').length > 0 ) {
+    //   dc = $(this).parent().find('div').find('span').text();  
+
+    //   if ( dc.length > 0 && dc.length != 3 ) {
+    //     dc = dc.substring(0, ( dc.length - 2 )/ 2);  
+    //   } else {
+    //     dc = '0';
+    //   }
+    // } else {
+    //   dc = '0';
+    // }
+    // dc = $(this).parent().find('div').eq(1).find('div').eq(0).attr('data-count');
+    // $('#edit_device_name').val(tmp);
+  });
+
+</script>

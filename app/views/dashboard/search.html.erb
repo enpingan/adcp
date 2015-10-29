@@ -1,0 +1,203 @@
+<!-- Right side column. Contains the navbar and content of the page -->
+<!-- Content Header (Page header) -->
+<div class="page-div">
+  <section class="content" style="padding: 0 0;">
+    <h1>
+      Search Results
+    </h1>
+    <br/>
+
+    
+    <div class="search-div" style="<%= !@verifieds.blank? ? raw('display:block;') : raw('display:none') %>">
+      <div class="small-box bg-green" style="margin-bottom:0px;">
+        <div class="inner">
+          <h3>
+            <%= !@verifieds.blank? ? @verifieds.count : 0 %>
+          </h3>
+          <p>
+            Administrators
+          </p>
+        </div>
+        <div class="icon">
+          <i class="fa fa-fw fa-user"></i>
+        </div>
+        <a href="/verifieds" class="small-box-footer">
+          View all Administrators <i class="fa fa-arrow-circle-right"></i>
+        </a>
+      </div>
+      <div class="box box-danger" style="border:none">
+        <div class="box-header" style="background-color:rgba(0, 0, 0, 0.19);padding:5px 0;">
+          <div class="pull-right box-tools">
+            
+          </div>
+          <i class="fa fa-fw fa-user" style="color:rgb(228, 217, 113);"></i>
+
+          <h3 class="box-title">Administrators</h3>
+        </div><!-- /.box-header -->
+        <div class="box-body" style="padding: 0 16px;">
+          <div class="row">
+            <div id="search_verified">
+              <%= render 'search_verified' %>
+            </div>
+          </div>
+        </div>
+
+        <div class="box-footer clearfix" style="text-align:right;">
+          
+        </div>
+      </div>
+    </div>
+
+  
+    <div class="search-div" style="<%= !@customers.blank? ? raw('display:block;') : raw('display:none') %>">
+      <div class="small-box bg-aqua" style="margin-bottom:0px;">
+        <div class="inner">
+          <h3>
+            <%= !@customers.blank? ? @customers.count : 0 %>
+          </h3>
+          <p>
+            Customers
+          </p>
+        </div>
+        <div class="icon">
+          <i class="fa fa-fw fa-shopping-cart"></i>
+        </div>
+        <a href="/customers" class="small-box-footer">
+          View all Customers <i class="fa fa-arrow-circle-right"></i>
+        </a>
+      </div>
+      <div class="box box-danger" style="border:none">
+        <div class="box-header" style="background-color:rgba(0, 0, 0, 0.19);padding:5px 0;">
+          <div class="pull-right box-tools">
+            
+          </div>
+          <i class="fa fa-fw fa-shopping-cart" style="color:rgb(228, 217, 113);"></i>
+
+          <h3 class="box-title">Customers</h3>
+        </div><!-- /.box-header -->
+        <div class="box-body" style="padding: 0 16px;">
+          <div class="row">
+            <div id="search_customer">
+              <%= render 'search_customer' %>
+            </div>
+          </div>
+        </div>
+
+        <div class="box-footer clearfix" style="text-align:right;">
+          
+        </div>
+      </div>
+    </div>
+
+    <div class="search-div" style="<%= !@devices.blank? ? raw('display:block;') : raw('display:none') %>">
+      <div class="small-box bg-yellow" style="margin-bottom:0px;">
+        <div class="inner">
+          <h3>
+            <%= !@devices.blank? ? @devices.count : 0 %>
+          </h3>
+          <p>
+            Devices
+          </p>
+        </div>
+        <div class="icon">
+          <i class="fa fa-fw fa-cog"></i>
+        </div>
+        <a href="/devices" class="small-box-footer">
+          View all Devices <i class="fa fa-arrow-circle-right"></i>
+        </a>
+      </div>
+      <div class="box box-danger" style="border:none">
+        <div class="box-header" style="background-color:rgba(0, 0, 0, 0.19);padding:5px 0;">
+          <div class="pull-right box-tools">
+            
+          </div>
+          <i class="fa fa-fw fa-cog" style="color:rgb(228, 217, 113);"></i>
+
+          <h3 class="box-title">Devices</h3>
+        </div><!-- /.box-header -->
+        <div class="box-body" style="padding: 0 16px;">
+          <div class="row">
+            <div id="search_customer">
+              <%= render 'search_device' %>
+            </div>
+          </div>
+        </div>
+
+        <div class="box-footer clearfix" style="text-align:right;">
+          
+        </div>
+      </div>
+    </div>
+
+    <div class="search-div" style="<%= @devices.blank? && @customers.blank? && @verifieds.blank? ? raw('display:block;') : raw('display:none') %>">
+      <div class="small-box bg-yellow" style="margin-bottom:0px;">
+        <div class="inner">
+          <h3>
+            Nothing found
+          </h3>
+          <p>
+            Please check search condition
+          </p>
+        </div>
+        <div class="icon">
+          <i class="fa fa-fw fa-exclamation-triangle"></i>
+        </div>
+        <a href="/" class="small-box-footer">
+          Back Home <i class="fa fa-arrow-circle-right"></i>
+        </a>
+      </div>
+      <div class="box box-danger" style="border:none">
+        <div class="box-header" style="background-color:rgba(0, 0, 0, 0.19);padding:5px 0;">
+          <div class="pull-right box-tools">
+            
+          </div>
+          <i class="fa fa-fw fa-search" style="color:rgb(228, 217, 113);"></i>
+
+          <h3 class="box-title">Search</h3>
+        </div><!-- /.box-header -->
+        <div class="box-body" style="padding: 0 16px;">
+          <div class="row">
+            <div id="search_customer">
+              <%= form_tag('/dashboard/search', method: :post, :id=>'form_global_search', :class=>'sidebar-form', :style=>'height:35px;margin: 0 0;', :autocomplete=>:off) do -%>
+                <%= hidden_field_tag "filter_word" %>
+                <%= hidden_field_tag "skey", nil, :required=>true, :value=>'All' %>
+                <div class="input-group" style="margin-top:-52px;width:100%;">
+                  <!-- <input type="text" name="q" class="form-control" placeholder="Search..."/> -->
+                  <%= text_field_tag "filter_word", nil, :class=>'form-control', autofocus: true, :style=>'color:palegoldenrod;font-size:16px;background-color:transparent;height:51px;padding-left:120px;' %>
+                  <%= button_tag(type:"submit", :class=>'form-control', :id=>'label_sgo', :style=>'font-size:28px;text-align:right;background-color:transparent;border:none;color:palegoldenrod;display:inline-block;width:10%;left:90%;margin-top:-50px;height:53px;') do %>
+                    <i class="fa fa-fw fa-arrow-circle-right" style="cursor:pointer;"></i>
+                  <% end %>
+                  <div class="ui selection dropdown devices" tabindex="0" style="overflow:visible;padding:0 0!important;width:32px;top:-34px;left:169px;;height:32px;display:none;z-index:99;" id="select_adsearch">
+                    <div class="default text" style="text-align:right;margin:7px;" id="text_sdefault">
+                      <i class="fa fa-search" style="color:palegoldenrod;"></i>
+                    </div>
+                    <!-- <input type="hidden" name="hidden-field"> -->
+                    <div class="menu" tabindex="-1" style="position:fixed;margin-right: -16px;width:220px;left:-177px;top:35px;overflow:visible;">
+                      <div class="item" data-value="All">&nbsp;&nbsp;<i class="fa fa-fw fa-globe"></i>&nbsp;&nbsp;All</div>
+                      <div class="item" data-value="Public IP">&nbsp;&nbsp;<i class="fa fa-fw fa-exclamation-circle"></i>&nbsp;&nbsp;Public IP</div>
+                      <div class="item" data-value="Private IP">&nbsp;&nbsp;<i class="fa fa-fw fa-exclamation-circle"></i>&nbsp;&nbsp;Private IP</div>
+                      <div class="item" data-value="Username">&nbsp;&nbsp;<i class="fa fa-fw fa-user"></i>&nbsp;&nbsp;Username</div>
+                      <div class="item" data-value="Email Address">&nbsp;&nbsp;<i class="fa fa-fw fa-envelope"></i>&nbsp;&nbsp;Email Address</div>
+                    </div>
+                  </div>    
+                </div>
+              <% end -%>
+            </div>
+          </div>
+        </div>
+
+        <div class="box-footer clearfix" style="text-align:right;">
+          
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+</div>
+
+<script>
+  _fix();
+  
+  $('#li_dashboard').attr('class', 'active');
+</script>

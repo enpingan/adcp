@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  device_id: MyString
+  device_name: MyString
+  device_status: MyString
+  request_order: MyString
+  is_checked: false
+
+two:
+  device_id: MyString
+  device_name: MyString
+  device_status: MyString
+  request_order: MyString
+  is_checked: false

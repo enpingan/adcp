@@ -1,0 +1,313 @@
+<%= form_for(@device) do |f| %>
+  <% if @device.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@device.errors.count, "error") %> prohibited this device from being saved:</h2>
+
+      <ul>
+      <% @device.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="show-border-div col-md-12">
+    <div class="col-md-2">
+      <%= image_tag('server1.png', size: "120") %>
+    </div>
+
+    <div class="col-md-4 field">
+      <%= f.label :public_ip, "Public IP: " %>
+      <%= f.text_field :public_ip, :class=>'form-control tform-control', :placeholder=>'255.255.255.255', :required=>true, :autocomplete=>:off %><br/>
+      <%= f.label :private_ip, "Private IP: " %>
+      <%= f.text_field :private_ip, :class=>'form-control tform-control', :placeholder=>'255.255.255.255' , :required=>true, :autocomplete=>:off %>
+    </div>
+
+    <div class="col-md-6 field">
+      <%= f.label :private_ip, "Assign To: " %><br>
+
+      <div class="ui selection dropdown devices" tabindex="0" style="overflow:visible;padding:0 0!important;width:100%!important;height:32px;" id="select_device_mailaddr">
+        <div class="default text" style="margin:7px;">
+          <% if !@device.owner.nil? %>
+            <i class="fa fa-fw fa-envelope-o" style="color:#f56954;font-size:14px;"></i>&nbsp;&nbsp;<%= @device.owner %>
+          <% else %>
+            Select Owner
+          <% end %>
+        </div>
+
+        <div class="menu" tabindex="-1" style="position:fixed;margin-right: -16px;">
+          <% if is_adminuser(current_user.username) || hp_device(current_user.username) %>
+            <% if !@customers.blank? %>
+              <% @customers.each do |a| %>
+                <div data-value="<%=a.username%>" class="item">
+                  <% if get_devicecount(a.username) == 0 %>
+                    <i class="fa fa-fw fa-envelope-o" style="color:white;font-size:14px;"></i>&nbsp;&nbsp;<%=a.username%>
+                  <% else %>
+                    <i class="fa fa-fw fa-gear" style="color:white;font-size:14px;"></i><span style="margin-top:4px;"><%= get_devicecount(a.username) %></span>&nbsp;&nbsp;<%=a.username%>
+                  <% end %>
+                </div>
+              <% end %>
+            <% end %>
+          <% else %>
+            <div data-value="<%=current_user.email%>" class="item"><i class="fa fa-fw fa-envelope-o" style="color:#f56954;font-size:14px;"></i>&nbsp;&nbsp;<%=current_user.username%></div>
+          <% end %>
+        </div>
+      </div>
+      <%= f.hidden_field :owner, :class=>'form-control tform-control', :required=>true %> 
+      <br/><br/>
+      <%= f.label :name, "Device Name: " %><br/>
+      <%# if !@customers.blank? || @device.id.nil? %>
+      <% if @device.id.nil? %>
+        <%= f.text_field :name, :class=>'form-control tform-control', :value=>'', :required=>true, :style=>'margin-top:2px;' , :id=>'edit_device_name', :autocomplete=>:off %>
+      <% else %>
+        <%= f.text_field :name, :class=>'form-control tform-control', :required=>true, :style=>'margin-top:2px;', :autocomplete=>:off  %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="show-border-div col-md-12">
+    <%= render 'adduser' %>
+  </div>
+
+  <div class="show-border-div col-md-12">
+    <div class="col-md-6 field">
+      <%= f.label :device_note, "Note: " %><br>
+      <%= f.text_field :device_note, :class=>'form-control tform-control', :required=>true, :autocomplete=>:off %>
+    </div>
+    <div class="col-md-6 field">
+      <%= f.label :addons, "Add-ons: " %><br>
+      <%= f.text_field :addons, :class=>'form-control tform-control', :required=>true, :autocomplete=>:off %>
+    </div>
+  </div>
+
+  <div class="show-border-div col-md-12">
+    <div class="col-md-6 field">
+      <h3>System Configuration</h3>
+      <br/>
+      <%= image_tag('os1.png', size: "273 87") %>
+    </div>
+    
+    <div class="col-md-6 field">
+      <%= f.label :osname, "OS Name" %><br>
+      <div class="ui selection dropdown devices" tabindex="0" style="overflow:visible;padding:0 0!important;width:100%!important;height:32px;" id="select_device_osname">
+        <div class="default text" style="margin:7px;">
+          <% if !@device.osname.nil? %>
+            <i class="fa fa-fw fa-desktop" style="color:#93EAFF;font-size:12px;"></i>&nbsp;&nbsp;<%= @device.osname %>
+          <% else %>
+            Server OS
+          <% end %>
+        </div>
+        <!-- <input type="hidden" name="hidden-field"> -->
+        <div class="menu" tabindex="-1" style="position:fixed;margin-right: -16px;">
+          <div class="item" data-value="Ubuntu"><i class="fa fa-fw fa-desktop" style="color:#93EAFF;font-size:12px;"></i>&nbsp;&nbsp;Ubuntu</div>
+          <div class="item" data-value="Red Hat Enterprise Linux"><i class="fa fa-fw fa-desktop" style="color:#93EAFF;font-size:12px;"></i>&nbsp;&nbsp;Red Hat Enterprise Linux</div>
+          <div class="item" data-value="SUSE Linux Enterprise Server"><i class="fa fa-fw fa-desktop" style="color:#93EAFF;font-size:12px;"></i>&nbsp;&nbsp;SUSE Linux Enterprise Server</div>
+          <div class="item" data-value="CentOS"><i class="fa fa-fw fa-desktop" style="color:#93EAFF;font-size:12px;"></i>&nbsp;&nbsp;CentOS</div>
+          <div class="item" data-value="Debian"><i class="fa fa-fw fa-desktop" style="color:#93EAFF;font-size:12px;"></i>&nbsp;&nbsp;Debian</div>
+          <div class="item" data-value="Oracle Linux"><i class="fa fa-fw fa-desktop" style="color:#93EAFF;font-size:12px;"></i>&nbsp;&nbsp;Oracle Linux</div>
+          <div class="item" data-value="Mageia / Mandriva"><i class="fa fa-fw fa-desktop" style="color:#93EAFF;font-size:12px;"></i>&nbsp;&nbsp;Mageia / Mandriva</div>
+          <div class="item" data-value="ClearOS"><i class="fa fa-fw fa-desktop" style="color:#93EAFF;font-size:12px;"></i>&nbsp;&nbsp;ClearOS</div>
+          <div class="item" data-value="Arch Linux"><i class="fa fa-fw fa-desktop" style="color:#93EAFF;font-size:12px;"></i>&nbsp;&nbsp;Arch Linux</div>
+          <div class="item" data-value="Slackware"><i class="fa fa-fw fa-desktop" style="color:#93EAFF;font-size:12px;"></i>&nbsp;&nbsp;Slackware</div>
+        </div>
+      </div>
+
+      <%= f.hidden_field :osname, :class=>'form-control tform-control', :required=>true %>
+      <%= f.label :osram, "RAM" %><br>
+      <div class="ui selection dropdown devices" tabindex="0" style="overflow:visible;padding:0 0!important;width:100%!important;height:32px;" id="select_device_osram">
+        <div class="default text" style="margin:7px;">
+          <% if !@device.osram.nil? %>
+            <i class="fa fa-fw fa-hdd-o" style="color:white;font-size:14px;"></i>&nbsp;&nbsp;<%= @device.osram %>
+          <% else %>
+            RAM Capacity
+          <% end %>
+        </div>
+        <!-- <input type="hidden" name="hidden-field"> -->
+        <div class="menu" tabindex="-1" style="position:fixed;margin-right: -16px;">
+          <div class="item" data-value="1024 MB"><i class="fa fa-fw fa-hdd-o" style="color:white;font-size:14px;"></i>&nbsp;&nbsp;1024 MB</div>
+          <div class="item" data-value="2048 MB"><i class="fa fa-fw fa-hdd-o" style="color:white;font-size:14px;"></i>&nbsp;&nbsp;2048 MB</div>
+          <div class="item" data-value="4096 MB"><i class="fa fa-fw fa-hdd-o" style="color:white;font-size:14px;"></i>&nbsp;&nbsp;4096 MB</div>
+          <div class="item" data-value="8192 MB"><i class="fa fa-fw fa-hdd-o" style="color:white;font-size:14px;"></i>&nbsp;&nbsp;8192 MB</div>
+        </div>
+      </div>
+      <%= f.hidden_field :osram, :class=>'form-control tform-control', :required=>true %>
+      <%= f.label :osprocessor, "Processor" %><br>
+      <div class="ui selection dropdown devices" tabindex="0" style="overflow:visible;padding:0 0!important;width:100%!important;height:32px;" id="select_device_oscore">
+        <div class="default text" style="margin:7px;">
+          <% if !@device.osprocessor.nil? %>
+            <i class="fa fa-fw fa-tasks" style="color:#B0F0B0;font-size:14px;"></i>&nbsp;&nbsp;<%= @device.osprocessor %>
+          <% else %>
+            Processor
+          <% end %>
+        </div>
+        <!-- <input type="hidden" name="hidden-field"> -->
+        <div class="menu" tabindex="-1" style="position:fixed;margin-right: -16px;">
+          <div class="item" data-value="Core 1"><i class="fa fa-fw fa-tasks" style="color:#B0F0B0;font-size:14px;"></i>&nbsp;&nbsp;Core 1</div>
+          <div class="item" data-value="Core 2"><i class="fa fa-fw fa-tasks" style="color:#B0F0B0;font-size:14px;"></i>&nbsp;&nbsp;Core 2</div>
+          <div class="item" data-value="Core 4"><i class="fa fa-fw fa-tasks" style="color:#B0F0B0;font-size:14px;"></i>&nbsp;&nbsp;Core 4</div>
+          <div class="item" data-value="Core 8"><i class="fa fa-fw fa-tasks" style="color:#B0F0B0;font-size:14px;"></i>&nbsp;&nbsp;Core 8</div>
+        </div>
+      </div>
+      <%= f.hidden_field :osprocessor, :class=>'form-control tform-control', :required=>true %>
+    </div>
+  </div>
+
+  <div class="show-border-div col-md-12">
+    <div class="col-md-12">
+      <h3>General</h3>
+      <br/>
+    </div>
+
+    <div class="col-md-6 field">
+      <%= f.label :device_type %><br>
+      <div class="ui selection dropdown devices" tabindex="0" style="overflow:visible;padding:0 0!important;width:100%!important;height:32px;" id="select_device_type">
+        <div class="default text" style="margin:7px;">
+          <% if !@device.device_type.nil? %>
+            <i class="fa fa-fw fa-cogs" style="color:orange;font-size:12px;"></i>&nbsp;&nbsp;<%= @device.device_type %>
+          <% else %>
+            Select Device Type
+          <% end %>
+        </div>
+        <!-- <input type="hidden" name="hidden-field"> -->
+        <div class="menu" tabindex="-1" style="position:fixed;margin-right: -16px;">
+          <div class="item" data-value="Bare Metal Server"><i class="fa fa-fw fa-cogs" style="color:orange;font-size:12px;"></i>&nbsp;&nbsp;Bare Metal Server</div>
+          <div class="item" data-value="Virtual Server"><i class="fa fa-fw fa-cogs" style="color:orange;font-size:12px;"></i>&nbsp;&nbsp;Virtual Server</div>
+          <div class="item" data-value="Firewall(Dedicated)"><i class="fa fa-fw fa-cogs" style="color:orange;font-size:12px;"></i>&nbsp;&nbsp;Firewall(Dedicated)</div>
+          <div class="item" data-value="Gateway Member"><i class="fa fa-fw fa-cogs" style="color:orange;font-size:12px;"></i>&nbsp;&nbsp;Gateway Member</div>
+          <div class="item" data-value="NetScaler"><i class="fa fa-fw fa-cogs" style="color:orange;font-size:12px;"></i>&nbsp;&nbsp;NetScaler</div>
+          <div class="item" data-value="KVM/IP"><i class="fa fa-fw fa-cogs" style="color:orange;font-size:12px;"></i>&nbsp;&nbsp;KVM/IP</div>
+        </div>
+      </div>
+      <%= f.hidden_field :device_type, :class=>'form-control tform-control', :required=>true %>
+      <%= f.label :location %><br>
+      <div class="ui selection dropdown devices" tabindex="0" style="overflow:visible;padding:0 0!important;width:100%!important;height:32px;" id="select_device_location">
+        <div class="default text" style="margin:7px;">
+          <% if !@device.location.nil? %>
+            <%= raw(getflag_floc(@device.location)) %>
+            <%= @device.location %>
+          <% else %>
+            Select Location
+          <% end %>
+        </div>
+        <!-- <input type="hidden" name="hidden-field"> -->
+        <div class="menu" tabindex="-1" style="position:fixed;margin-right: -16px;">
+          <div class="item" data-value="Amsterdam1"><i class="netherlands flag" style="font-size:20x;"></i>Amsterdam1</div>
+          <div class="item" data-value="Amsterdam2"><i class="netherlands flag" style="font-size:20x;"></i>Amsterdam2</div>
+          <div class="item" data-value="Frankfurt2"><i class="germany flag" style="font-size:20x;"></i>Frankfurt2</div>
+          <div class="item" data-value="HongKong2"><i class="hong kong flag"  style="font-size:20x;"></i>HongKong2</div>
+          <div class="item" data-value="Paris1"><i class="france flag"  style="font-size:20x;"></i>Paris1</div>
+          <div class="item" data-value="Washington1"><i class="united states flag"  style="font-size:20x;"></i>Washington1</div>
+        </div>
+      </div>
+      <%= f.hidden_field :location, :class=>'form-control tform-control', :required=>true %>
+    </div>
+    <div class="col-md-6 field">
+      <%= f.label :general_status, "Status" %><br>
+      <div class="ui selection dropdown devices" tabindex="0" style="overflow:visible;padding:0 0!important;width:100%!important;height:32px;" id="select_device_gstatus">
+        <div class="default text" style="margin:7px;">
+          <% if !@device.general_status.nil? %>
+            <% if @device.general_status == "Active" %>
+              <i class="fa fa-fw fa-check-circle" style="color:rgb(139, 255, 139);font-size:12px;"></i>
+            <% else %>
+              <i class="fa fa-fw fa-ban" style="font-size:12px;"></i>
+            <% end %>
+            &nbsp;&nbsp;<%= @device.general_status %>
+          <% else %>
+            Select
+          <% end %>
+        </div>
+        <!-- <input type="hidden" name="hidden-field"> -->
+        <div class="menu" tabindex="-1" style="position:fixed;margin-right: -16px;">
+          <div class="item" data-value="Active"><i class="fa fa-fw fa-check-circle" style="color:rgb(139, 255, 139);font-size:12px;"></i>&nbsp;&nbsp;Active</div>
+          <div class="item" data-value="Deactive"><i class="fa fa-fw fa-ban" style="font-size:12px;"></i>&nbsp;&nbsp;Deactive</div>
+        </div>
+      </div>
+      <%= f.hidden_field :general_status, :class=>'form-control tform-control', :required=>true %>
+      <%= f.label :general_reloaded, "Reloaded" %><br>
+      <div class="ui selection dropdown devices" tabindex="0" style="overflow:visible;padding:0 0!important;width:100%!important;height:32px;" id="select_device_greload">
+        <div class="default text" style="margin:7px;">
+          <% if !@device.general_reloaded.nil? %>
+            <% if @device.general_reloaded == "N/A" %>
+              <i class="fa fa-fw fa-ban" style="font-size:12px;"></i>
+            <% else %>
+              <i class="fa fa-fw fa-check-circle" style="color:rgb(139, 255, 139);font-size:12px;"></i>
+            <% end %>
+            &nbsp;&nbsp;<%= @device.general_reloaded %>
+          <% else %>
+            Select
+          <% end %>
+        </div>
+        <!-- <input type="hidden" name="hidden-field"> -->
+        <div class="menu" tabindex="-1" style="position:fixed;margin-right: -16px;">
+          <div class="item" data-value="N/A"><i class="fa fa-fw fa-ban" style="font-size:12px;"></i>&nbsp;&nbsp;N/A</div>
+          <div class="item" data-value="Reloadable"><i class="fa fa-fw fa-check-circle" style="color:rgb(139, 255, 139);font-size:12px;"></i>&nbsp;&nbsp;Reloadable</div>
+        </div>
+      </div>
+      <%= f.hidden_field :general_reloaded, :class=>'form-control tform-control', :required=>true %>
+      <%= f.hidden_field :detail, :class=>'form-control tform-control', :required=>true, :value=>false %>
+    </div>
+  </div>
+  
+  <div class="col-md-12 actions" style="text-align:center;padding-bottom:80px;">
+    <% if hp_device(current_user.username) || is_adminuser(current_user.username) %>
+      <%= button_tag(type:'submit', :class=>'btn btn-info btn-td', :id=>'btn_device_submit') do %>
+        <i class="fa fa-fw fa-gear"></i>&nbsp;
+        <% if @device.id.nil? %>
+          Create 
+        <% else %>
+          Update 
+        <% end %>
+        Device
+      <% end %>
+    <% end %>
+    <%= link_to(devices_path, :class=>'btn btn-default btn-td', :style=>'color:black;') do %>
+      <i class="fa fa-fw fa-arrow-circle-left"></i>&nbsp;Back
+    <% end %>
+  </div>
+<% end %>
+
+<script>
+  $('#select_device_mailaddr').dropdown();
+  $('#select_device_osname').dropdown();
+  $('#select_device_osram').dropdown();
+  $('#select_device_oscore').dropdown();
+  $('#select_device_type').dropdown();
+  $('#select_device_location').dropdown();
+  $('#select_device_gstatus').dropdown();
+  $('#select_device_greload').dropdown();
+
+  $('#device_public_ip').ipAddress();
+  $('#device_private_ip').ipAddress();
+
+  // add devise user
+  $(document).on('click', '#btn_add_duser', function(e) {
+
+    s1 = $('#username_dev').val();
+    s2 = $('#password_dev').val();
+    s3 = $('#edit_device_name').val();
+
+    if ( s1 != '' && s2 != '' && s3 != '' ) {
+      // $.post('/devices/add_user',
+      // { 
+      //   'username': s1,
+      //   'password': s2,
+      //   'device_name': s3
+      // });
+
+      $('#edit_device_name').attr('readonly', 'true');
+
+      $('#username_dev').attr('readonly', 'true');
+      $('#username_dev').css('background-color', 'white!important');
+      $('#username_dev').css('border', 'none');
+
+      $('#password_dev').attr('readonly', 'true');
+      $('#password_dev').css('background-color', 'white!important');
+      $('#password_dev').css('border', 'none');
+
+      $(this).addClass('disabled');
+      $(this).text('Added');
+    }
+
+  });
+
+</script>

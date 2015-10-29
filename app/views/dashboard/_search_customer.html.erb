@@ -1,0 +1,214 @@
+<table class="listing" id="table_customer">
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th>ID<%#= raw(get_sortdirection(@thd[0])) %></th>
+      <!-- <th>Email addr</th> -->
+      <th>Username<%#= raw(get_sortdirection(@thd[1])) %></th>
+      <th>Password</th>
+      <th>Read Ticket</th>
+      <th>Write Ticket</th>
+      <th>Delete Ticket</th>
+      <th>Saving Ticket</th>
+      <th>Create Device</th>
+      <th>Remove Device</th>
+      <th>Modify Device</th>
+      <% if is_adminuser(current_user.username) || hp_account(current_user.username) %>
+        <th colspan="3" style="text-align:center">Actions</th>
+      <% end %>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if @customers.blank? || @customers.nil? %>
+      <td colspan="16" style="text-align:center">No Customers</td>
+    <% else %>
+      <% @customers.each do |customer| %>
+        <tr class="real-tr">
+          <td class="td-clickable">
+            <!-- &#9658; -->
+            <i class="fa fa-fw fa-angle-right" style="font-size:18px;"></i>
+          </td>
+          <td class="td-clickable">
+            <% if get_devices(customer.username).count == 0 %>
+              <i class="fa fa-fw fa-user" style="font-size:18px;"></i>
+            <% else %>
+              <i class="fa fa-laptop" style="color:palegoldenrod;font-size:18px;"><span style="font-size:8px;margin-top:4px;"><%= get_devices(customer.username).count %></span></i>
+            <% end %>
+          </td>
+          <td class="td-clickable"><%= customer.id %></td>
+          <!-- <td class="td-clickable"><%#= customer.username %></td> -->
+          <td class="td-clickable" style="text-align:center;"><%= customer.username %></td>
+          <td class="td-clickable" style="text-align:center;"><%= customer.password %></td>
+          
+          <td class="td-clickable" style="text-align:center;"><%= raw(get_checkicon(customer.is_rticket)) %></td>
+          <td class="td-clickable" style="text-align:center;"><%= raw(get_checkicon(customer.is_wticket)) %></td>
+          <td class="td-clickable" style="text-align:center;"><%= raw(get_checkicon(customer.is_dticket)) %></td>
+          <td class="td-clickable" style="text-align:center;"><%= raw(get_checkicon(customer.is_sticket)) %></td>
+
+          <td class="td-clickable" style="text-align:center;"><%= raw(get_checkicon(customer.is_cdevice)) %></td>
+          <td class="td-clickable" style="text-align:center;"><%= raw(get_checkicon(customer.is_rdevice)) %></td>
+          <td class="td-clickable" style="text-align:center;"><%= raw(get_checkicon(customer.is_mdevice)) %></td>
+          <% if is_adminuser(current_user.username) || hp_account(current_user.username) %>
+            <%# if get_devicecount(customer.username) != 0 || is_adminuser(current_user.username) %>
+            <% if is_adminuser(current_user.username) %>
+              <td><%= link_to 'Review', customer, :class=>'btn btn-info btn-td'%></td>  
+            <% else %>
+              <td><%= link_to 'Review', customer, :class=>'btn btn-info btn-td', :disabled=>true %></td>  
+            <% end %>
+            <td><%= link_to 'Edit Permission', edit_customer_path(customer), :class=>'btn btn-success btn-td' %>
+            </td>
+            <td class="td-clickable">
+              <%= label_tag 'Suspend',nil, :class=>'btn btn-warning btn-td' %>
+            </td>
+          <% end %>
+        </tr>
+        <tr class="sub-tr" id="trcus_<%=customer.id%>" style="display:none;border:none;">
+          <td style="border:none;"></td>
+          <td style="border:none" colspan="10" style="padding-left:20px;">
+            <div style="content-div col-lg-12">
+              <% if get_devices(customer.username).blank? %>
+                <div style="content-div">
+                  <div class="col-lg-12" style="padding:15px 0;">
+                    <div class="col-lg-3">
+                      <i class="fa fa-fw fa-font" style="color:palegoldenrod;font-size:14px;margin:-2px 0;"></i>&nbsp;First Name: <%= customer.first_name %><br/><br/>
+                      <i class="fa fa-fw fa-bold" style="color:palegoldenrod;font-size:14px;margin:-2px 0;"></i>&nbsp;Last Name: <%= customer.last_name %><br/><br/>
+                    </div>
+                    <div class="col-lg-3">
+                      <i class="fa fa-fw fa-envelope" style="color:palegoldenrod;font-size:14px;margin:-2px 0;"></i>&nbsp;Email Address: <%= customer.pemail %><br/><br/>
+                      <i class="fa fa-fw fa-phone" style="color:palegoldenrod;font-size:18px;margin:-2px 0;"></i>&nbsp;Phone: <%= customer.number %><br/><br/>
+                    </div>
+                    <div class="col-lg-3">
+                      <i class="fa fa-fw fa-building-o" style="color:palegoldenrod;font-size:14px;margin:-2px 0;"></i>&nbsp;City: <%= customer.city %><br/><br/>
+                      <i class="fa fa-fw fa-home" style="color:palegoldenrod;font-size:14px;margin:-2px 0;"></i>&nbsp;State: <%= customer.state %><br/><br/>
+                    </div>
+                    <div class="col-lg-3">
+                      <i class="fa fa-fw fa-flag" style="color:palegoldenrod;font-size:14px;margin:-2px 0;"></i>&nbsp;Country: <%= raw(get_countryname(customer.country)) %><br/><br/>
+                    </div>
+                  </div>
+                </div>
+              <% else %>
+                <% dind = 0 %>
+                <% get_devices(customer.username).each do |d| %>
+                  <div class="col-lg-12" style="padding:15px 0;">
+                    <div class="col-lg-3">
+                      <%= image_tag('server1.png', size: "60") %>
+                      <br/><br/>
+                      <%= link_to( get_devices(customer.username)[dind], :style=>'background-color:transparent;' ) do %>
+                        <i class="fa fa-fw fa-eye" style="font-size:14px;color:palegoldenrod;"></i>
+                      <% end %>
+                      <%= link_to( edit_device_path(get_devices(customer.username)[dind]), :style=>'background-color:transparent;' ) do %>
+                        <i class="fa fa-fw fa-cog" style="font-size:14px;color:palegoldenrod;"></i>
+                      <% end %>
+                      <%= form_tag('/devices/resume', method: :post, :id=>'form_device_resume', :style=>'display:inline-block;') do -%>
+                        <%= hidden_field "did", "did", :value=>get_devices(customer.username)[dind].id.to_s %>
+                        <% if get_devices(customer.username)[dind].general_status == "Active" %>
+                          <%= button_tag(type:"submit", :style=>'background:transparent;border:none;padding:0 0;') do %>
+                            <i class="fa fa-fw fa-pause" style="font-size:14px;color:palegoldenrod;"></i>
+                          <% end %>
+                        <% else %>
+                          <%= button_tag(type:"submit", :style=>'background:transparent;border:none;padding:0 0;') do %>
+                            <i class="fa fa-fw fa-play" style="font-size:14px;color:palegoldenrod;"></i>
+                          <% end %>
+                        <% end %>
+                      <% end %>
+                      <% dind = dind + 1 %>
+                    </div>
+                    <div class="col-lg-3">
+                      Device Type : <%= d.device_type %><br/><br/>
+                      Location : <%= raw(getflag_floc(d.location)) %><%= d.location %>
+                    </div>
+                    <div class="col-lg-3">
+                      Public IP : <%= d.public_ip %><br/><br/>
+                      Private IP : <%= d.private_ip %>
+                    </div>
+                    <div class="col-lg-3">
+                      Processor : <%= d.osprocessor %><br/><br/>
+                      RAM : <%= d.osram %>
+                    </div>
+                  </div>
+                <% end %>
+              <% end %>
+            </div>
+          </td>
+          <td colspan="3" style="background-image:none!important;background;transparent!important;border:none!important;">
+            <div class="col-lg-12" style="text-align:center;display:none;" id="cd_customer_<%=customer.id%>">
+              <div class="sub-comment" style="margin:0 0;background-color:rgba(84, 130, 143, 0.4);padding:10px;">
+                <%= simple_form_for :delete_customer, :id=>'form_delete_customer', :method=>'get', :html=>{:style=>'display:inline-block'}, :remote=>true do |f| %>
+                  <%= hidden_field_tag "customer_id", nil, :value=>customer.id %>
+                  <div class="triangle-right">
+                  </div>
+                  <i class="fa fa-fw fa-exclamation-triangle" style="font-size:16px;color:white"></i>&nbsp;Are you sure removing this customer?<br/><br/>
+                  <%#= link_to(customer, method: :delete, :class=>'btn btn-warning btn-td', :style=>'padding:3px 4px;') do %>
+                  <%= button_tag(type:"submit", :class=>'btn btn-warning btn-td', :style=>'padding:3px 4px;') do %>
+                    <i class="fa fa-fw fa-check-circle" style="font-size:16px;color:white"></i>Yes<!-- Suspend -->
+                  <% end %>&nbsp;&nbsp;&nbsp;&nbsp;
+                  <%= label_tag(nil, :class=>'btn btn-info btn-td btn-tcc-close', :style=>'padding:3px 4px;font-weight:normal', :id=>'btn_tcc_close_'+customer.id.to_s) do %>
+                    <i class="fa fa-fw fa-times-circle" style="font-size:16px;color:white"></i>&nbsp;No
+                  <% end %>
+                <% end %>
+              </div>
+            </div>
+          </td>
+          </td>
+          <td colspan="3" class="hidden_" style="background-image:none!important;background;transparent!important;border:none!important;"> 
+            <%= label_tag(nil, method: :delete, :class=>'btn btn-warning btn-td btn-scc', :style=>'padding:3px 4px;', :id=>'btn_scc_'+customer.id.to_s) do %>
+              <i class="fa fa-fw fa-exclamation-triangle" style="font-size:16px;color:white"></i>Suspend<!-- Suspend -->
+            <% end %>
+            <span class="span_br"><br/><br/></span>
+            <%= label_tag(nil, :class=>'btn btn-info btn-td btn-tdclosecus', :style=>'padding:3px 4px;font-weight:normal', :id=>'btn_tdclosecus_'+customer.id.to_s) do %>
+              <i class="fa fa-fw fa-times-circle" style="font-size:16px;color:white"></i>&nbsp;Close
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>
+
+<script>
+  $(function() {
+    $('.pagination a').attr('data-remote', 'true');
+  });
+
+  $('#select_customer_rows').dropdown();
+
+  var headertext = [],
+  headers = document.querySelectorAll('#table_customer th'),
+  tablerows = document.querySelectorAll('#table_customer th'),
+  table_body = document.querySelector('#table_customer tbody');
+
+  for (var i = 0; i < headers.length; i++) {
+    var current = headers[i];
+
+    headertext.push(current.textContent.replace(/\r?\n|\r/,""));
+    // console.log(current.textContent);
+  }
+
+  for (var i = 0, row; row = table_body.rows[i]; i++) { 
+    for(var j = 3, col; col = row.cells[j]; j++) {
+      if ( headertext[j] && ( i%2 == 0 ) && (j != 12 ) )  {
+        col.setAttribute('data-th', headertext[j]);
+      }
+
+      if ( i%2 == 1 ) {
+        col.setAttribute('style', 'border:none;');  
+      }
+
+      if ( j != 3 ) {
+        col.setAttribute('style', 'text-align:left;');
+      }
+      // console.log(col);
+      // console.log(headertext[j]);
+    }
+
+    if ( i%2 == 1 ) {
+      col = row.cells[0];
+      col.setAttribute('data-th', 'Detail');  
+    }
+
+  }
+
+</script>
+

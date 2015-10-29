@@ -1,0 +1,29 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  device_type: MyString
+  location: MyString
+  public_ip: MyString
+  private_ip: MyString
+  device_note: MyString
+  addons: MyString
+  general_status: MyString
+  general_reloaded: MyString
+  osname: MyString
+  osram: MyString
+  osprocessor: MyString
+
+two:
+  name: MyString
+  device_type: MyString
+  location: MyString
+  public_ip: MyString
+  private_ip: MyString
+  device_note: MyString
+  addons: MyString
+  general_status: MyString
+  general_reloaded: MyString
+  osname: MyString
+  osram: MyString
+  osprocessor: MyString

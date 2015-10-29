@@ -1,0 +1,8 @@
+<%= form_tag(edit_ticket_path, method: :post, :id=>'form_add_comment') do -%>
+  <div class="col-md-11 field">
+    <%= text_area_tag :comment, nil, :class=>"form-control", :rows=>'6', :required => true%>
+  </div>
+  <div class="col-md-1 field" style="text-align:right;padding-right:18px;">
+    <%= button_tag 'Reply', :class=>"btn btn-warning" %>
+  </div>
+<% end -%>

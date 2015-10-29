@@ -1,0 +1,21 @@
+<div class="page-div">
+  <h1 style="color:transparent!important;">
+    &nbsp;&nbsp;<i class="fa fa-fw fa-cog" style="color:transparent;"></i><i class="fa fa-fw fa-pencil-square" style="font-size:14px;position:relative;top:6px;left:-6px;color:transparent;"></i>&nbsp;Editing Device
+  </h1>
+
+  <%= render 'form' %>
+
+  <%#= link_to 'Show', @device %> 
+  <%#= link_to 'Back', devices_path %>
+</div>
+
+
+<script>
+  $('#li_device').attr('class', 'treeview active');
+  $('#ul_device').css('display', 'block');
+
+  $('#ul_device').find('li').eq(2).css('background-color','#b1b1b1');
+  $('#ul_device').find('li').eq(2).find('a').css('color','#000');
+
+  hide_loading();
+</script>

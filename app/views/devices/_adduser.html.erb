@@ -1,0 +1,31 @@
+<!-- <form action='/devices/add_user' method='post' id='form_add_device_user'> -->
+  <div class="col-lg-6 field">
+    <!-- <%#= label_tag :device_note, "Username: " %><br> -->
+    <label><span style="color:red">*</span>&nbsp;Username:</label><br/>
+    <% if @device.id.nil? %>
+      <%= text_field :username, :dev, :class=>'form-control tform-control', :autocomplete=>:off %>
+    <% else %>
+      <%= text_field :username, :dev, :class=>'form-control tform-control', :autocomplete=>:off, :value=>get_duser(@device.name)[0].username %>
+    <% end %>
+  </div>
+  <div class="col-lg-6 field">
+    <!-- <%#= label_tag :addons, "Password: " %><br> -->
+    <label><span style="color:red">*</span>&nbsp;Password:</label><br/>
+    <% if @device.id.nil? %>
+      <%= text_field :password, :dev, :class=>'form-control tform-control', :autocomplete=>:off %>
+    <% else %>
+      <%= text_field :password, :dev, :class=>'form-control tform-control', :autocomplete=>:off, :value=>get_duser(@device.name)[0].password %>
+    <% end %>
+  </div>
+  <div class="col-md-offset-6 col-lg-6" style="text-align:right">
+    <% if @device.id.nil? %>
+      <%= label_tag(nil, :class=>'btn btn-success btn-td', :id=>'btn_add_duser', :style=>'color:white;') do %>
+        <i class="fa fa-fw fa-plus-circle"></i> Add 
+      <% end %>
+    <% else %>
+      <%= label_tag(nil, :class=>'btn btn-success btn-td', :id=>'btn_add_duser', :style=>'color:white;') do %>
+        <i class="fa fa-fw fa-pencil"></i> Modify
+      <% end %>
+    <% end %>
+  </div>
+<!-- </form> -->

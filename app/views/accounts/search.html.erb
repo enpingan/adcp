@@ -1,0 +1,424 @@
+<!-- Right side column. Contains the navbar and content of the page -->
+<!-- Content Header (Page header) -->
+<div class="page-div">
+<section class="content">
+  <h1>
+    Dashboard
+    <!-- <small>Control panel</small> -->
+  </h1>
+  <br/>
+  <!-- Small boxes (Stat box) -->
+  <div class="row">
+    <div class="col-lg-4">
+      <!-- small box -->
+      <%# if hp_device(current_user.email) || is_adminuser(current_user.username) || @device_count != 0 %>
+        <div class="small-box bg-green">
+          <div class="inner">
+            <h3>
+              <% if is_adminuser(current_user.username) %>
+                <%= Device.all.count %>
+              <% else %>
+                <%= @device_count %>
+              <% end %>
+            </h3>
+            <p>
+              <% if is_adminuser(current_user.username) %>
+                Current Devices
+              <% else %>
+                My Devices
+              <% end %>
+            </p>
+          </div>
+          <div class="icon">
+            <i class="fa fa-laptop"></i>
+          </div>
+          <a href="/devices" class="small-box-footer">
+            More info <i class="fa fa-arrow-circle-right"></i>
+          </a>
+        </div>
+      <%# end %>
+
+      <% if !@r_device1.nil? %>
+        <div class="box box-danger" id="loading-example">
+          <div class="box-header">
+            <!-- tools box -->
+            <div class="pull-right box-tools">
+              <button class="btn btn-success btn-sm btn-td refresh-btn" data-toggle="tooltip" title="Reload"><i class="fa fa-refresh"></i></button>
+              <button class="btn btn-success btn-sm btn-td" data-widget='collapse' data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+              <button class="btn btn-success btn-sm btn-td" data-widget='remove' data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
+            </div><!-- /. tools -->
+            <i class="fa fa-cloud" style="color:rgb(228, 217, 113);"></i>
+
+            <% if is_adminuser(current_user.username) %>
+              <h3 class="box-title">Recent Device</h3>
+            <% else %>
+              <h3 class="box-title">My Device</h3>
+            <% end %>
+
+          </div><!-- /.box-header -->
+          <div class="box-body no-padding">
+            <div class="row">
+              <div class="col-lg-12">
+                <div class="col-lg-4">
+                  <div class="chart" id="bar-chart" style="text-align:center;">
+                    <%= image_tag('server1.png', size: "80") %>
+                  </div>
+                </div>
+                <div class="col-lg-8">
+                  <div class="clearfix">
+                    <span class="pull-left" style="font-size:16px;">&nbsp;&nbsp;Device Name: </span>
+                    <span style="font-size:16px;color:rgb(228, 217, 113);;">&nbsp;&nbsp;<%= @r_device1.name %></small></span>
+                    <br/>
+                    <span class="pull-left" style="font-size:16px;">&nbsp;&nbsp;Device Owner: </span>
+                    <span style="font-size:16px;color:rgb(228, 217, 113);;">&nbsp;&nbsp;<%= @r_device1.owner %></small></span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-12">
+                <div class="pad">
+                  <!-- Progress bars -->
+                  <div class="clearfix">
+                    <span class="pull-left">Cores </span>
+                    <small class="pull-right"><%= @r_device1.osprocessor %></small>
+                  </div>
+                  <div class="progress xs">
+                    <div class="progress-bar progress-bar-green" style="width: <%= get_processor(@r_device1.osprocessor) %>%"></div>
+                  </div>
+
+                  <div class="clearfix">
+                    <span class="pull-left">RAM Capacity</span>
+                    <small class="pull-right"><%= @r_device1.osram %></small>
+                  </div>
+                  <div class="progress xs">
+                    <div class="progress-bar progress-bar-red" style="width: <%= get_ram(@r_device1.osram) %>%;"></div>
+                  </div>
+                  <div class="clearfix">
+                    <span class="pull-left">Created: </span>
+                    <small class="pull-right"><%= @r_device1.created_at %></small>
+                  </div>
+                  <div class="clearfix">
+                    <span class="pull-left">Updated: </span>
+                    <small class="pull-right"><%= @r_device1.updated_at %></small>
+                  </div>
+                  <br/>
+                  <p>
+                    <% if hp_device(current_user.email) || is_adminuser(current_user.username) %>
+                      <%= link_to edit_device_path(@r_device1), :class=>'btn btn-success btn-sm btn-td' do %>
+                        <i class="fa fa-cloud-download"></i> Upgrade
+                      <% end %>
+                    <% end %>
+                  </p>
+                </div><!-- /.pad -->
+              </div><!-- /.col -->
+            </div><!-- /.row - inside box -->
+          </div><!-- /.box-body -->
+        </div>
+      <% end %>
+
+      <% if !@r_device2.nil? %>
+        <div class="box box-danger" id="loading-example">
+          <div class="box-header">
+            <!-- tools box -->
+            <div class="pull-right box-tools">
+              <button class="btn btn-success btn-sm btn-td refresh-btn" data-toggle="tooltip" title="Reload"><i class="fa fa-refresh"></i></button>
+              <button class="btn btn-success btn-sm btn-td" data-widget='collapse' data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+              <button class="btn btn-success btn-sm btn-td" data-widget='remove' data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
+            </div><!-- /. tools -->
+            <i class="fa fa-cloud" style="color:rgb(228, 217, 113);"></i>
+
+            <% if is_adminuser(current_user.username) %>
+              <h3 class="box-title">Recent Device</h3>
+            <% else %>
+              <h3 class="box-title">My Device</h3>
+            <% end %>
+
+          </div><!-- /.box-header -->
+          <div class="box-body no-padding">
+            <div class="row">
+              <div class="col-lg-12">
+                <div class="col-lg-4">
+                  <div class="chart" id="bar-chart" style="text-align:center;">
+                    <%= image_tag('server1.png', size: "80") %>
+                  </div>
+                </div>
+                <div class="col-lg-8">
+                  <div class="clearfix">
+                    <span class="pull-left" style="font-size:16px;">&nbsp;&nbsp;Device Name: </span>
+                    <span style="font-size:16px;color:rgb(228, 217, 113);;">&nbsp;&nbsp;<%= @r_device2.name %></small></span>
+                    <br/>
+                    <span class="pull-left" style="font-size:16px;">&nbsp;&nbsp;Device Owner: </span>
+                    <span style="font-size:16px;color:rgb(228, 217, 113);;">&nbsp;&nbsp;<%= @r_device2.owner %></small></span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-12">
+                <div class="pad">
+                  <!-- Progress bars -->
+                  <div class="clearfix">
+                      <span class="pull-left">Cores </span>
+                      <small class="pull-right"><%= @r_device2.osprocessor %></small>
+                  </div>
+                  <div class="progress xs">
+                      <div class="progress-bar progress-bar-green" style="width: <%= get_processor(@r_device2.osprocessor) %>%;"></div>
+                  </div>
+
+                  <div class="clearfix">
+                      <span class="pull-left">RAM Capacity</span>
+                      <small class="pull-right"><%= @r_device2.osram %></small>
+                  </div>
+                  <div class="progress xs">
+                      <div class="progress-bar progress-bar-red" style="width: <%= get_ram(@r_device2.osram) %>%;"></div>
+                  </div>
+                  <div class="clearfix">
+                    <span class="pull-left">Created: </span>
+                    <small class="pull-right"><%= @r_device2.created_at %></small>
+                  </div>
+                  <div class="clearfix">
+                    <span class="pull-left">Updated: </span>
+                    <small class="pull-right"><%= @r_device2.updated_at %></small>
+                  </div>
+                  <br/>
+                  <p>
+                    <% if hp_device(current_user.email) || is_adminuser(current_user.username)  %>
+                      <%= link_to edit_device_path(@r_device2), :class=>'btn btn-success btn-sm btn-td' do %>
+                        <i class="fa fa-cloud-download"></i> Upgrade
+                      <% end %>
+                    <% end %>
+                  </p>
+                </div><!-- /.pad -->
+              </div><!-- /.col -->
+            </div><!-- /.row - inside box -->
+          </div><!-- /.box-body -->
+        </div>
+      <% end %>
+    </div><!-- ./col -->
+
+    <div class="col-lg-4">
+      <!-- small box -->
+      <%# if hp_ticket(current_user.email) || is_adminuser(current_user.username) || @ticket_count != 0%>
+        <div class="small-box bg-aqua">
+          <div class="inner">
+            <h3>
+              <% if is_adminuser(current_user.username) %>
+                <%= Ticket.all.count %>
+              <% else %>
+                <%= @ticket_count %>
+              <% end %>
+            </h3>
+            <p>
+              <% if is_adminuser(current_user.username) %>
+                Existing Tickets
+              <% else %>
+                My Tickets
+              <% end %>
+            </p>
+          </div>
+          <div class="icon">
+            <i class="fa fa-fw fa-ticket"></i>
+          </div>
+          <a href="/tickets" class="small-box-footer">
+            More info <i class="fa fa-arrow-circle-right"></i>
+          </a>
+        </div>
+      <%# end %>
+
+      <% if !@r_ticket1.nil? %>
+        <div class="box box-info">
+          <div class="box-header">
+            <i class="fa fa-fw fa-tag" style="color: rgba(255, 255, 214, 0.78);"></i>
+
+            <% if is_adminuser(current_user.username) %>
+              <h3 class="box-title">Recent Ticket</h3>
+            <% else %>
+              <h3 class="box-title">My Ticket</h3>
+            <% end %>
+            <!-- tools box -->
+            <div class="pull-right box-tools">
+              <button class="btn btn-info btn-sm btn-td" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
+            </div><!-- /. tools -->
+          </div>
+          <div class="box-body" style="padding-left:32px;">
+            <div class="row">
+              <span>ID: </span>
+              <span style="color:rgb(228, 217, 113);">#&nbsp;<%= @r_ticket1.id %>  </span>
+            </div>
+            <div class="row">
+              <span>Owner: </span>
+              <span style="color:rgb(228, 217, 113);"><%= @r_ticket1.owner %></span>
+            </div>
+            <div class="row">
+              <span>Title: </span>
+              <span style="color:rgb(228, 217, 113);">
+                <% if !@r_ticket1.ticket_group.nil? %>
+                  <%= @r_ticket1.ticket_group %>
+                <% end %>
+              </span>
+            </div>
+            <div class="row">
+              <span>Created: </span>
+              <span style="color:rgb(228, 217, 113);"><%= @r_ticket1.created_at %></span>
+            </div>
+          </div>
+          <div class="box-footer clearfix">
+            <% if hp_ticket(current_user.email) || is_adminuser(current_user.username) %>
+              <%= link_to ticket_path(@r_ticket1), :class=>'pull-right btn btn-info btn-td' do %>
+                Check now <i class="fa fa-fw fa-check"></i>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+
+      <% if !@r_ticket2.nil? %>
+        <div class="box box-info">
+          <div class="box-header">
+            <i class="fa fa-fw fa-tag" style="color: rgba(255, 255, 214, 0.78);"></i>
+
+            <% if is_adminuser(current_user.username) %>
+              <h3 class="box-title">Recent Ticket</h3>
+            <% else %>
+              <h3 class="box-title">My Ticket</h3>
+            <% end %>
+            <!-- tools box -->
+            <div class="pull-right box-tools">
+              <button class="btn btn-info btn-sm btn-td" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
+            </div><!-- /. tools -->
+          </div>
+          <div class="box-body" style="padding-left:32px;">
+            <div class="row">
+              <span>ID: </span>
+              <span style="color:rgb(228, 217, 113);">#&nbsp;<%= @r_ticket2.id %>  </span>
+            </div>
+            <div class="row">
+              <span>Owner: </span>
+              <span style="color:rgb(228, 217, 113);"><%= @r_ticket2.owner %></span>
+            </div>
+            <div class="row">
+              <span>Title: </span>
+              <span style="color:rgb(228, 217, 113);">
+                <% if !@r_ticket2.ticket_group.nil? %>
+                  <%= @r_ticket2.ticket_group %>
+                <% end %>
+              </span>
+            </div>
+            <div class="row">
+              <span>Created: </span>
+              <span style="color:rgb(228, 217, 113);"><%= @r_ticket2.created_at %></span>
+            </div>
+          </div>
+          <div class="box-footer clearfix">
+            <% if hp_ticket(current_user.email) || is_adminuser(current_user.username) %>
+              <%= link_to ticket_path(@r_ticket2), :class=>'pull-right btn btn-info btn-td' do %>
+                Check now <i class="fa fa-fw fa-check"></i>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+
+      <!-- quick email widget -->
+      <div class="box box-info">
+        <div class="box-header">
+          <i class="fa fa-envelope" style="color: rgba(255, 255, 214, 0.78);"></i>
+          <h3 class="box-title">Emergency Email System</h3>
+          <!-- tools box -->
+          <div class="pull-right box-tools">
+            <button class="btn btn-info btn-sm btn-td" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
+          </div><!-- /. tools -->
+        </div>
+        <%= form_tag('/accounts/quick_mail', :id=>'form_quick_email') do |f| %>
+          <div class="box-body">
+            <div class="form-group">
+              <input type="email" class="form-control tform-control" name="emailto" placeholder="Email to:"/>
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control tform-control" name="subject" placeholder="Subject"/>
+            </div>
+            <div>
+              <textarea class="textarea tform-control" placeholder="Message" name="content" style="width: 100%; height: 125px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
+            </div>
+          </div>
+          <div class="box-footer clearfix">
+            <%= button_tag(type:"submit", :class=>'pull-right btn btn-warning btn-td') do %>
+              Send <i class="fa fa-arrow-circle-right"></i>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div><!-- ./col -->
+
+    <div class="col-lg-4">
+      <!-- small box -->
+      <% if is_adminuser(current_user.username) %>
+        <div class="small-box bg-yellow">
+          <div class="inner">
+            <h3>
+              <%= User.all.count %>
+            </h3>
+            <p>
+              Administrators
+            </p>
+          </div>
+          <div class="icon">
+            <i class="ion ion-person-add"></i>
+          </div>
+          <a href="/verifieds" class="small-box-footer">
+            More info <i class="fa fa-arrow-circle-right"></i>
+          </a>
+        </div>
+      <% end %>
+
+      <div class="box box-warning">
+        <div class="box-header">
+          <!-- tools box -->
+          <div class="pull-right box-tools">                                        
+            <button class="btn btn-warning btn-sm btn-td pull-right" data-widget='collapse' data-toggle="tooltip" title="Collapse" style="margin-right: 5px;"><i class="fa fa-minus"></i></button>
+          </div><!-- /. tools -->
+
+          <i class="fa fa-map-marker" style="color:#f39c12"></i>
+          <h3 class="box-title">
+            Visiting History
+          </h3>
+        </div>
+        <div class="box-body no-padding">
+          <div class="table-responsive" style="border:none;">
+            <table class="listing" id="visiting_list">
+              <thead>
+                <tr>
+                  <th colspan="0">User</th>
+                  <th>Last Date</th>
+                  <th>Last IP</th>
+                  <th>Sign In count</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <% sc = 0 %>
+                <% if !@accounts.blank? %>
+                  <% @accounts.each do |a| %>
+                    <% if sc < 5 %>
+                      <tr>
+                        <td><%= processblank(a.email.split('@').first) %></td>
+                        <td><%= processblank(a.last_sign_in_at) %></td>
+                        <td><%= processblank(a.last_sign_in_ip) %></td>
+                        <td style="text-align:center;"><%= processblank(a.sign_in_count) %></td>
+                        <% sc = sc + 1 %>
+                      </tr>
+                    <% end %>
+                  <% end %>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div><!-- /.box-body-->
+      </div>
+    </div><!-- ./col -->
+  </div><!-- /.row -->
+</section>
+
+</div>
+
+<script>
+  $('#li_dashboard').attr('class', 'active');
+
+</script>

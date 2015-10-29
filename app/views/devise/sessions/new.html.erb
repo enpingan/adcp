@@ -1,0 +1,22 @@
+<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+  <div class="wrap" style="margin-top:250px;">
+    <div class="avatar" style="margin-top:-3px;margin-bottom:3px;">
+      <%= image_tag('favicon.png', size: "30", :class=>'image-logo') %>
+    </div>
+    <div class="inner-addon left-addon">
+      <i class="fa fa-fw fa-user" style="color:rgb(147, 183, 216);font-size:18px;margin:6px 2px;"></i>
+      <%#= f.text_field :email, autofocus: true,:class=>'glowing-border', :required=>true, :placeholder=>'SSL Name', :style=>'padding-left:38px;'%>
+      <%= f.text_field :username, autofocus: true,:class=>'glowing-border', :required=>true, :placeholder=>'SSL Name', :style=>'padding-left:38px;', :autocomplete=>:off %>
+      <%#= f.text_field :username, autofocus: true, :required=>true, :placeholder=>'SSL Name', :style=>'padding-left:38px;'%>
+    </div>
+    
+    <div class="bar">
+      <i></i>
+    </div>
+    <div class="inner-addon left-addon">
+      <i class="fa fa-fw fa-key" style="color:rgb(147, 183, 216);font-size:18px;margin:6px 2px;"></i>
+      <%= f.password_field :password, autocomplete: "off",:class=>'glowing-border', :required=>true, :placeholder=>'https://', :style=>'padding-left:38px;' %>
+    </div>
+  </div>
+  <%= f.submit "Sign In", :class=>'btn bg-olive', :style=>'width:100%;display:none' %>
+<% end %>

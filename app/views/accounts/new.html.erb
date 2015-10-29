@@ -1,0 +1,20 @@
+<div class="page-div">
+  <h1 style="padding-left:15px;color:transparent;"><i class="fa fa-fw fa-user"></i><i class="fa fa-fw fa-plus" style="position:relative;top:8px;left:-12px;font-size:18px;"></i>New Account</h1>
+  <br/>
+
+  <% if @retry.nil? %>
+    <%= render 'form' %>
+  <% else %>
+    <%= render 'retry_form' %>
+  <% end %>
+
+  <%#= link_to 'Back', accounts_path %>
+</div>
+
+<script>
+  $('#li_admin').attr('class', 'treeview active');
+  $('#ul_admin').css('display', 'block');
+
+  $('#ul_admin').find('li').eq(0).css('background-color','#b1b1b1');
+  $('#ul_admin').find('li').eq(0).find('a').css('color','#000');
+</script>

@@ -1,0 +1,63 @@
+
+<div class="box-header" style="padding: 0 0;">
+  <div class="col-lg-12 pull-right dash_pagination" style="text-align:right;margin-top:-42px;">
+    <% sal = will_paginate @accounts, :previous_label => '<', :next_label => '>'  %>
+    <%= sal %>
+  </div>  
+</div>
+
+
+<div class="table-responsive" style="border:none;">
+  <table class="listing" id="visiting_list">
+    <thead>
+      <tr>
+        <th></th>
+        <th colspan="0" style="text-align:left;"><i class="fa fa-fw fa-user"></i>&nbsp;User<%= raw(get_sortdirection(@thd[0])) %></th>
+        <th style="padding:0 0;width:28%;text-align:center;"><i class="fa fa-fw fa-sign-in"></i>&nbsp;Last Login<%= raw(get_sortdirection(@thd[2])) %></th>
+        <th style="padding:0 0;width:22%;"><i class="fa fa-fw fa-exclamation-circle"></i>&nbsp;Last IP<%= raw(get_sortdirection(@thd[3])) %></th>
+        <th style="padding:0 0;width:25%;text-align:left;"><!-- <i class="fa fa-fw fa-globe"></i> -->&nbsp;Detail</th>
+        <!-- <th>Sign In count</th> -->
+      </tr>
+    </thead>
+
+    <tbody>
+      <% sc = 0 %>
+      <% if !@accounts.blank? %>
+        <% @accounts.each do |a| %>
+          <% if sc < 5 %>
+            <tr>
+              <td class="clickable" data-id="<%=a.id%>">
+                <%= form_tag('/dashboard/show_userinfo', :id=>'form_show_userinfo_'+a.id.to_s) do %>
+                  <%= hidden_field_tag :id, nil, :value=>a.id %>
+                  <%= hidden_field_tag :name, nil, :value=>a.username %>
+                <% end %>
+              </td>
+              <td class="clickable"><%= processblank(a.username.upcase) %></td>
+              <td class="clickable" style="text-align:center;">
+                <% if processblank(a.last_sign_in_at) != "---" %>
+                  <%= time_ago_in_words(a.last_sign_in_at) %> ago
+                <% else %>
+                  <%= processblank(a.last_sign_in_at) %>
+                <% end %>
+              </td>
+              <td class="clickable"><%= a.last_sign_in_ip %></td>
+              <td>
+                <span class="span_readmore">More info >></span>
+                <%= form_tag('/dashboard/userinfo', :id=>'form_go_userinfo_'+a.id.to_s) do %>
+                  <%= hidden_field_tag :id, nil, :value=>a.id %>
+                <% end %>
+              </td>
+              <% sc = sc + 1 %>
+            </tr>
+          <% end %>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<script>
+  $(function() {
+    $('.pagination a').attr('data-remote', 'true');
+  });
+</script>

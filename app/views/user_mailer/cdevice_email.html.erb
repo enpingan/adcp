@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+  </head>
+  <body style="background-color:#b5b5b5;color:black;font-family:'lato';">
+    <div style="width:600px;margin:0 auto;background-color:#fefefe;">
+      <div style="background-color:#3FBCDC;text-align:center;padding:25px 0;">
+        <%= image_tag attachments["logo.png"].url, width:'135', alt: 'Logo' %>
+      </div>
+      <div style="padding:30px 25px;background-color:#f9f9f9;">
+        <h3 style="color:#3FBCDC;font-size:24px;">
+          Your order has been sent successfully.
+        </h3>
+        <p style="font-size:16px;line-height:24px;">
+          Your order <span style="color:green"># <%= @device_id %></span> has now been approved and your server is currently in the provisioning process.  
+          <br/><br/>
+          Standard delivery times are 1 to 4 hours.
+          <br/><br/>
+          Upon completion of the provisioning, you will receive an email notifying you that your server is available for use.
+          <br/><br/>
+          Your invoice is available within the CyberAdvance Holding E.P. support portal at <a href="https://my.cyberadvance.com">https://my.cyberadvance.com</a>.
+          <br/><br/>
+          If you need further sales assistance, please open a ticket via the CyberAdvance Holding E.P. customer portal or contact us directly at <a href="support@cyberadvance.com">support@cyberadvance.com</a>.
+        </p>
+      </div>
+      <div style="background-color:#A0A0A0;width:550px;margin:0 auto;height:2px;">
+      </div>
+      <div style="padding:20px 25px;background-color:#f9f9f9;">
+        Thanks,<br/>
+        CyberAdvance Holding E.P.
+      </div>
+      <div style="background-color:#3FBCDC;height:45px;">
+      </div>
+    </div>
+  </body>
+</html>

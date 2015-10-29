@@ -1,0 +1,33 @@
+
+jQuery('#scustomer').html("<%= j(render 'scustomer') %>");
+
+$('.pagination a').attr('data-remote', 'true');
+
+// if ( $('.right-side').height() >= $('.left-side').height() ) {
+//   $('.left-side').height();
+// } else {
+//   $('.right-side').height();
+// }
+
+// function _fix() {
+//   var height = $(window).height() - $("body > .header").height();
+//   $(".wrapper").css("min-height", height + "px");
+//   var content = $(".wrapper").height();
+
+//   if (content > height) {
+
+//     $(".left-side, html, body").css("min-height", content + "px");
+    
+//     if (content <= 500 ) {
+//       $('.row-offcanvas-left').css('height', '100%');
+//       $(".left-side").css("min-height", content + "px");  
+//     }           
+//   } else {
+//     $(".left-side, html, body").css("min-height", height + "px");
+
+//     if ( height <= 500 ) {
+//       $('.row-offcanvas-left').css('height', '100%');
+//       $(".left-side").css("min-height", height + "px");  
+//     }
+//   }
+// }

@@ -1,0 +1,8 @@
+<% if !params[:delete_log].nil? || !params[:request_order].nil? %>
+  <% device = Device.find_by_id(params[:device_id]) %>
+  jQuery('#respond_drequest_<%=device.id%>').html("<%= j(render 'respond_drequest', :device=> device) %>");
+<% else %>
+  jQuery('#configure').html("<%= j(render 'configure') %>");
+<% end %>
+
+$('.pagination a').attr('data-remote', 'true');

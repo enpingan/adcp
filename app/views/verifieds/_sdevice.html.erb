@@ -1,0 +1,83 @@
+<div class="form-div">
+  <div class="col-md-12">
+    <h3 style="text-align:center;color:#00a65a;font-size:36px;">Device Info</h3>
+    <p id="notice"><%= notice %></p>
+
+      <div class="show-border-div col-md-12">
+
+        <!-- <div class="col-md-12" style="text-align:center;">
+          <span style="font-size:36px;color:#AB6F6F;">Device Info</span>
+        </div> -->
+        <div class="col-md-3">
+          <%= image_tag('server1.png', size: "120") %>
+        </div>
+
+        <div class="col-md-9" style="text-align:left;padding:15px 0;">
+          <span class="span-show">Owner: </span>
+          <span class="span-show"><%= @device.owner %></span><br/>
+          <span class="span-show">Device Name: </span>
+          <span class="span-show"><%= @device.name %></span><br/>
+          <span class="span-show">Public IP: </span>
+          <span class="span-show"><%= @device.public_ip %></span></br>
+          <span class="span-show">Private IP: </span>
+          <span class="span-show"><%= @device.private_ip %></span>
+        </div>
+      </div>
+
+      <div class="show-border-div col-md-12">
+        <div class="col-md-3">
+          <%= image_tag('os1.png', size: "273 87") %>
+        </div>
+        <div class="col-md-9">
+          <span class="span-show">OS Name: </span>
+          <span class="span-show"><%= @device.osname %></span><br/>
+          <span class="span-show">OS RAM: </span>
+          <span class="span-show"><%= @device.osram %></span><br/>
+          <span class="span-show">Processor: </span>
+          <span class="span-show"><%= @device.osprocessor %></span><br/>
+        </div>
+      </div>
+
+      <div class="show-border-div col-md-12">
+        <div class="col-md-6">
+          <span class="span-show">Note: </span>
+          <span class="span-show"><%= @device.device_note %></span><br/>
+        </div>
+        <div class="col-md-6">
+          <span class="span-show">Add-ons: </span>
+          <span class="span-show"><%= @device.addons %></span>
+        </div>
+      </div>
+
+      <div class="show-border-div col-md-12">
+        <div class="col-md-6">
+          <span class="span-show">Device Type: </span>
+          <span class="span-show"><%= @device.device_type %></span><br/>
+          <span class="span-show">Location: </span>
+          <span class="span-show"><%= @device.location %></span><br/>
+        </div>
+        <div class="col-md-6">
+          <span class="span-show">General Status: </span>
+          <span class="span-show"><%= @device.general_status %></span><br/>
+          <span class="span-show">Reloaded: </span>
+          <span class="span-show"><%= @device.general_reloaded %></span><br/>
+        </div>
+      </div>
+      
+
+    <div class="col-md-12" style="text-align:center;">
+      <% if hp_device(current_user.username) || is_adminuser(current_user.username) %>
+        <%= link_to(edit_device_path(@device), :class=>'btn btn-info btn-td') do %> 
+          <i class="fa fa-fw fa-edit"></i>&nbsp;Edit
+        <% end %>
+      <% else %>
+        <%= link_to(edit_device_path(@device), :class=>'btn btn-default btn-td', :disabled=>true) do %> 
+          <i class="fa fa-fw fa-edit"></i>&nbsp;Edit
+        <% end %>
+      <% end %>
+      <%= link_to(devices_path, :class=>'btn btn-default btn-td', :style=>'color:black') do %>
+        <i class="fa fa-fw fa-arrow-circle-left"></i>&nbsp;Back
+      <% end %>
+    </div>
+  </div>
+</div>

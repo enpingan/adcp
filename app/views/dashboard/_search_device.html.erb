@@ -1,0 +1,165 @@
+<table class="listing" id="table_devices">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Name<%#= raw(get_sortdirection(@thd[0])) %></th>
+      <th>Device Type<%#= raw(get_sortdirection(@thd[1])) %></th>
+      <th>Location<%#= raw(get_sortdirection(@thd[2])) %></th>
+      <th>Public IP<%#= raw(get_sortdirection(@thd[3])) %></th>
+      <th>Private IP<%#= raw(get_sortdirection(@thd[4])) %></th>
+      <th>Note<%#= raw(get_sortdirection(@thd[5])) %></th>
+      <th>Addons<%#= raw(get_sortdirection(@thd[6])) %></th>
+      <!-- <th>Status</th>
+      <th>Reloaded</th> -->
+      <th>OS Name<%#= raw(get_sortdirection(@thd[7])) %></th>
+      <th>OS RAM<%#= raw(get_sortdirection(@thd[8])) %></th>
+      <th>OS Processor<%#= raw(get_sortdirection(@thd[9])) %></th>
+      <% if hp_device(current_user.username) || is_adminuser(current_user.username) %>
+        <th colspan="3" style="text-align:center;">Actions</th>
+      <% end %>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if @devices.blank? || @devices.nil? %>
+      <td colspan="16" style="text-align:center">No Devices</td>
+    <% else %>
+      <% @devices.each do |device| %>
+        <tr class="real-tr">
+          <td><i class="fa fa-fw fa-gear" style="font-size:18px;"></i></td>
+          <td class="td-clickable" style="text-align:center;"><%= device.name %></td>
+          <td class="td-clickable" style="text-align:center;"><%= device.device_type %></td>
+          <td class="td-clickable" style="text-align:center;"><%= raw(getflag_floc(device.location)) + ' ' + device.location %></td>
+          <td class="td-clickable" style="text-align:center;"><%= device.public_ip %></td>
+          <td class="td-clickable" style="text-align:center;"><%= device.private_ip %></td>
+          <td class="td-clickable" style="text-align:center;"><%= device.device_note %></td>
+          <td class="td-clickable" style="text-align:center;"><%= device.addons %></td>
+          <!-- <td><%= device.general_status %></td>
+          <td><%= device.general_reloaded %></td> -->
+          <td class="td-clickable"><%= device.osname %></td>
+          <td class="td-clickable" style="text-align:center;"><%= device.osram %></td>
+          <td class="td-clickable" style="text-align:center;"><%= device.osprocessor %></td>
+          <% if hp_device(current_user.username) || is_adminuser(current_user.username) %>
+            <td><%= link_to 'Detail', device, :class=>'btn btn-info btn-td' %></td>
+            <td><%= link_to 'Configure', edit_device_path(device), :class=>'btn btn-success btn-td' %></td>
+            <td class="td-clickable">
+              <%#= button_tag 'Remove', :class=>'btn btn-warning btn-td' %>
+              <%= label_tag 'Remove', nil, :class=>'btn btn-warning btn-td', :style=>'text-decoration:none;' %>
+            </td>
+          <% end %>
+        </tr>
+        <tr class="sub-tr" id="dlist_<%=device.name%>" style="display:none;border:none;">
+          <td colspan="10" style="border:none;padding:20px;color:palegoldenrod;">
+            <div class="col-lg-12">
+              <div class="col-lg-3">
+                Owner: &nbsp;<i class="fa fa-fw fa-user" style="font-size:16px;color:white"></i>&nbsp;<%= device.owner %><br/><br/>
+              </div>
+
+              <div class="col-lg-3">
+                <% if DeviceUser.where(:device_name=>device.name).count > 0 %>
+                  Username: <%= processblank(get_duser(device.name)[0].username) %><br/><br/>
+                  Password: <%= processblank(get_duser(device.name)[0].password) %><br/><br/>
+                <% end %>
+              </div>
+
+              <div class="col-lg-3">
+                Status: 
+                <% if device.general_status == "Active" %>
+                  <i class="fa fa-fw fa-check-circle" style="color:rgb(139, 255, 139);font-size:12px;"></i>
+                <% else %>
+                  <i class="fa fa-fw fa-ban" style="font-size:12px;"></i>
+                <% end %>
+                <%= device.general_status %><br/><br/>
+
+                Reloaded: 
+                <% if device.general_reloaded == "N/A" %>
+                  <i class="fa fa-fw fa-ban" style="font-size:12px;"></i>
+                <% else %>
+                  <i class="fa fa-fw fa-check-circle" style="color:rgb(139, 255, 139);font-size:12px;"></i>
+                <% end %>
+                <%= device.general_reloaded %><br/><br/>
+              </div>
+              <div class="col-lg-3">
+                From when: <%= device.created_at.to_date.strftime('%Y-%m-%d %H:%M:%S') %><br/><br/>
+                Last used: <%= device.updated_at.to_date.strftime('%Y-%m-%d %H:%M:%S') %><br/><br/>
+              </div>
+              
+            </div>
+          </td>
+          <td class="hidden_" colspan="3" style="border:none;">
+            <div class="col-lg-12" style="text-align:center;display:none;" id="cd_device_<%=device.id%>">
+              <div class="sub-comment" style="margin:0 0;background-color:rgba(84, 130, 143, 0.4);color:palegoldenrod;padding:10px;">
+                <%= simple_form_for :delete_device, :id=>'form_delete_device', :method=>'get', :html=>{:style=>'display:inline-block'}, :remote=>true do |f| %>
+                  <%= hidden_field_tag "device_id", nil, :value=>device.id %>
+                  <div class="triangle-right">
+                  </div>
+                  <i class="fa fa-fw fa-exclamation-triangle" style="font-size:16px;color:palegoldenrod;"></i>&nbsp;Are you sure removing this device?<br/><br/>
+                  <%#= link_to(device, method: :delete, :class=>'btn btn-warning btn-td', :style=>'padding:3px 4px;') do %>
+                  <%= button_tag(type:"submit", method: :delete, :class=>'btn btn-warning btn-td', :style=>'padding:3px 4px;color:palegoldenrod;') do %>
+                    <i class="fa fa-fw fa-check-circle" style="font-size:16px;color:palegoldenrod;"></i>&nbsp;Yes<!-- Suspend -->
+                  <% end %>&nbsp;&nbsp;&nbsp;&nbsp;
+                  <%= label_tag(nil, :class=>'btn btn-info btn-td btn-tdc-close', :style=>'padding:3px 4px;color:palegoldenrod;font-weight:normal', :id=>'btn_tdc_close_'+device.id.to_s) do %>
+                    <i class="fa fa-fw fa-times-circle" style="font-size:16px;color:palegoldenrod;"></i>&nbsp;No
+                  <% end %>
+                <% end %>
+              </div>
+            </div>
+          </td>
+          <td class="hidden_" colspan="3" style="padding-left:20px;text-align:left;">
+            <%= label_tag(nil, method: :delete, :class=>'btn btn-warning btn-td btn-sc-device', :style=>'padding:3px 4px;', :id=>'btn_scd_'+device.id.to_s) do %>
+              <i class="fa fa-fw fa-trash-o" style="font-size:16px;color:white"></i>&nbsp;Remove<!-- Suspend -->
+            <% end %>
+            <span class="span_br"><br/><br/></span>
+            <%= label_tag(nil, :class=>'btn btn-info btn-td btn-tdclosedev', :style=>'padding:3px 4px;font-weight:normal', :id=>'btn_tdclosedev_' + device.name.to_s) do %>
+              <i class="fa fa-fw fa-times-circle" style="font-size:16px;color:white"></i>&nbsp;Close
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>
+
+<script>
+  $(function() {
+    $('.pagination a').attr('data-remote', 'true');
+  });
+
+  $('#select_device_rows').dropdown();
+
+  var headertext = [],
+  headers = document.querySelectorAll('#table_devices th'),
+  tablerows = document.querySelectorAll('#table_devices th'),
+  table_body = document.querySelector('#table_devices tbody');
+
+  for (var i = 0; i < headers.length; i++) {
+    var current = headers[i];
+
+    headertext.push(current.textContent.replace(/\r?\n|\r/,""));
+    // console.log(current.textContent);
+  }
+
+  for (var i = 0, row; row = table_body.rows[i]; i++) { 
+    for(var j = 1, col; col = row.cells[j]; j++) {
+      if ( headertext[j] && ( i%2 == 0 ) && (j != 11)) {
+        col.setAttribute('data-th', headertext[j]);
+      }
+
+      if ( i%2 == 1 ) {
+        col.setAttribute('style', 'border:none;');
+      }
+
+      if (!( i%2 == 1 && j == 2)) {
+        col.setAttribute('style', 'text-align:left;');
+      }
+
+      // console.log(col);
+      // console.log(headertext[j]);
+    }
+
+    if ( i%2 == 1 ) {
+      col = row.cells[0];
+    }
+  }
+
+</script>

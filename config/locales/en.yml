@@ -1,0 +1,105 @@
+# Files in the config/locales directory are used for internationalization
+# and are automatically loaded by Rails. If you want to use locales other
+# than English, add the necessary files in this directory.
+#
+# To use the locales, use `I18n.t`:
+#
+#     I18n.t 'hello'
+#
+# In views, this is aliased to just `t`:
+#
+#     <%= t('hello') %>
+#
+# To use a different locale, set it with `I18n.locale`:
+#
+#     I18n.locale = :es
+#
+# This would use the information in config/locales/es.yml.
+#
+# To learn more, please read the Rails Internationalization guide
+# available at http://guides.rubyonrails.org/i18n.html.
+
+en:
+  hello: "Hello world"
+
+  ramsize_1: "1 GB"
+  ramsize_2: "2 GB"
+  ramsize_3: "4 GB"
+  ramsize_4: "6 GB"
+  ramsize_5: "8 GB"
+  ramsize_6: "12 GB"
+  ramsize_7: "16 GB"
+  ramsize_8: "32 GB"
+  ramsize_9: "48 GB"
+  ramsize_10: "64 GB"
+
+  core_1: "1 x 2.0 GHz Core"
+  core_2: "2 x 2.0 GHz Cores"
+  core_3: "4 x 2.0 GHz Cores"
+  core_4: "8 x 2.0 GHz Cores"
+  core_5: "12 x 2.0 GHz Cores"
+  core_6: "16 x 2.0 GHz Cores"
+
+  osname_1: "CentOS 7.x - Minimal Install (64 bit)"
+  osname_2: "CentOS 7.x - LAMP Install (64 bit)"
+  osname_3: "CentOS 6.x - Minimal Install (64 bit)"
+  osname_4: "CentOS 6.x - LAMP Install (64 bit)"
+  osname_5: "CentOS 6.x - Minimal Install (32 bit)"
+  osname_6: "CentOS 6.x - LAMP Install (32 bit)"
+  osname_7: "CentOS 5.x - Minimal Install (64 bit)"
+  osname_8: "CentOS 5.x - LAMP Install (64 bit)"
+  osname_9: "CentOS 5.x - Minimal Install (32 bit)"
+  osname_10: "CentOS 5.x - LAMP Install (32 bit)"
+  osname_11: "Debian GNU/Linux 8.x jessie/Stable - Minimal Install (64 bit)"
+  osname_12: "Debian GNU/Linux 8.x jessie/Stable - LAMP Install (64 bit)"
+  osname_13: "Debian GNU/Linux 8.x jessie/Stable - Minimal Install (32 bit)"
+  osname_14: "Debian GNU/Linux 8.x jessie/Stable - LAMP Install (32 bit)"
+  osname_15: "Debian GNU/Linux 7.x Wheezy/Stable - Minimal Install (64 bit)"
+  osname_16: "Debian GNU/Linux 7.x Wheezy/Stable - LAMP Install (64 bit)"
+  osname_17: "Debian GNU/Linux 7.x Wheezy/Stable - Minimal Install (32 bit)"
+  osname_18: "Debian GNU/Linux 7.x Wheezy/Stable - LAMP Install (32 bit)"
+  osname_19: "Debian GNU/Linux 6.x Squeeze/Stable - Minimal Install (64 bit)"
+  osname_20: "Debian GNU/Linux 6.x Squeeze/Stable - LAMP Install (64 bit)"
+  osname_21: "Debian GNU/Linux 6.x Squeeze/Stable - Minimal Install (32 bit)"
+  osname_22: "Debian GNU/Linux 6.x Squeeze/Stable - LAMP Install (32 bit)"
+  osname_23: "Windows Server 2012 Standard Edition (64 bit)"
+  osname_24: "Windows Server 2012 R2 Standard Edition (64 bit)"
+  osname_25: "Windows Server 2012 Datacenter Edition (64bit)"
+  osname_26: "Windows Server 2008 R2 Standard Edition (64bit) (1 Processor)"
+  osname_27: "Windows Server 2008 Standard Edition SP2 (64bit)"
+  osname_28: "Windows Server 2008 Standard Edition SP2 (32bit)"
+  osname_29: "Windows Server 2008 Enterprise Edition SP2 (64bit)"
+  osname_30: "Windows Server 2008 Enterprise Edition SP2 (32bit)"
+  osname_31: "Windows Server 2008 R2 Datacenter Edition (64bit)"
+  osname_32: "Windows Server 2008 Datacenter Edition SP2 (64bit)"
+  osname_33: "Windows Server 2012 R2 Datacenter Edition (64bit)"
+  osname_34: "Red Hat Enterprise Linux 7.x - LAMP Install (64 bit) (1-4 Core)"
+  osname_35: "Red Hat Enterprise Linux 7.x - Minimal Install (64 bit) (1-4 Core)"
+  osname_36: "Red Hat Enterprise Linux 6.x - Minimal Install (64 bit) (1-4 Core)"
+  osname_37: "Red Hat Enterprise Linux 6.x - LAMP Install (64 bit) (1-4 Core)"
+  osname_38: "Red Hat Enterprise Linux 6.x - Minimal Install (32 bit) (1-4 Core)"
+  osname_39: "Red Hat Enterprise Linux 6.x - LAMP Install (32 bit) (1-4 Core)"
+  osname_40: "Red Hat Enterprise Linux 5.x - Minimal Install (64 bit) (1-4 Core)"
+  osname_41: "Red Hat Enterprise Linux 5.x - LAMP Install (64 bit) (1-4 Core)"
+  osname_42: "Red Hat Enterprise Linux 5.x - Minimal Install (32 bit) (1-4 Core)"
+  osname_43: "Red Hat Enterprise Linux 5.x - LAMP Install (32 bit) (1-4 Core)"
+  osname_44: "Ubuntu Linux 14.04 LTS Trusty Tahr - Minimal Install (64 bit)"
+  osname_45: "Ubuntu Linux 14.04 LTS Trusty Tahr - Minimal Install (32 bit)"
+  osname_46: "Ubuntu Linux 12.04 LTS Precise Pangolin - Minimal Install (64 bit)"
+  osname_47: "Ubuntu Linux 12.04 LTS Precise Pangolin - Minimal Install (32 bit)"
+  osname_48: "Ubuntu Linux 14.04 LTS Trusty Tahr - LAMP Install (64 bit)"
+  osname_49: "Ubuntu Linux 14.04 LTS Trusty Tahr - LAMP Install (32 bit)"
+  osname_50: "Ubuntu Linux 12.04 LTS Precise Pangolin - LAMP Install (64 bit)"
+  osname_51: "Ubuntu Linux 12.04 LTS Precise Pangolin - LAMP Install (32 bit)"
+  osname_52: "Vyatta 6.6 Community Edition (64 bit)"
+
+  # Ubuntu
+  # Red Hat Enterprise Linux
+  # SUSE Linux Enterprise Server
+  # CentOS
+  # Debian
+  # Oracle Linux
+  # Mageia / Mandriva
+  # ClearOS
+  # Arch Linux
+  # Slackware

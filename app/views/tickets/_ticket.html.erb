@@ -1,0 +1,290 @@
+<div class="col-lg-12">
+  <h1>
+    <i class="fa fa-fw fa-ticket" style="color:palegoldenrod;"></i>&nbsp;Listing Tickets
+  </h1>
+  <br/>
+</div>
+<script>
+  show_loading();
+</script>
+<!-- <div class="row col-lg-12" style="min-width:1000px;"> -->
+<div class="row col-lg-12" style="padding:0 0;">
+  <div class="col-lg-4 table_nav1" style="display:inline-block;">
+    <div class="col-lg-5" style="margin-top:5px">
+      <% if @tickets.nil? || @tickets.blank? %>
+        <span>Viewing 0 to 0 of 0 </span>
+      <% else %>
+        <span>
+          Viewing 
+          <% if @page_number == 1 %> 
+            <%= 1 %>
+          <% else %>
+            <%= 1 + (@page_number.to_i - 1) * @rows.to_i %>
+          <% end %>
+          to 
+          <% if @rows.to_i*@page_number.to_i > @tickets.count %>
+            <%= @tickets.count %> 
+          <% else %>
+            <%= @rows.to_i*@page_number.to_i %> 
+          <% end %>
+          of 
+          <% if @filter_word.nil? %>
+            <%= Ticket.all.count%> 
+          <% else %>
+            <%=@tickets.count%> 
+          <% end %>
+        </span>
+      <% end %>&nbsp;&nbsp;
+    </div>
+    <div class="col-lg-7">
+      Displaying&nbsp;&nbsp;
+      <div class="ui selection dropdown rows" tabindex="0" style="overflow:visible;padding:0 0!important;height:28px;" id="select_ticket_rows">
+        <div class="default text" style="margin:6px;">
+          <% if !@rows.nil? %>
+            <%= @rows %>
+          <% else %>
+            Select
+          <% end %>
+        </div>
+        <!-- <input type="hidden" name="hidden-field"> -->
+        <div class="menu" tabindex="-1" style="position:fixed;margin-right: -16px;">
+          <div data-value="5" class="item">5</div>
+          <div data-value="10" class="item">10</div>
+          <div data-value="20" class="item">20</div>
+          <div data-value="50" class="item">50</div>
+        </div>
+      </div>
+      &nbsp;&nbsp;per page
+      <%#= form_tag('/tickets/setrows', method: :post, :id=>'form_ticket_setrows', :style=>'display:none') do -%>
+        <%= hidden_field_tag "ticket_rows" %>
+      <%# end -%>
+    </div>
+  </div>
+  <div class="col-lg-4 table_nav2" style="text-align:right;display:inline-block;">
+    <% sal = will_paginate @tickets, :previous_label => '<', :next_label => '>' %>
+    <%= sal %>
+  </div>
+
+  <% if !sal.nil? %>
+    <div class="col-lg-4 table_nav3"  style="text-align:right;display:inline-block;">
+  <% else %>
+    <div class="col-lg-offset-4 col-lg-4 table_nav3"  style="text-align:right;display:inline-block;">
+  <% end %>
+
+    <%#= simple_form_tag(tickets_url, method: :get, :id=>'form_filter_tickets', :style=>'display:inline-block', :remote=>true) do -%>
+    <%= simple_form_for :search, :id=>'form_filter_tickets', :method=>'get', :html=>{:style=>'display:inline-block'}, :remote=>true do |f| %>
+      <%= text_field_tag "search", nil, :style=>'width:180px;height:33px;padding-left:11px;', :value=>@filter_word, :autocomplete=>:off %>
+      <%= button_tag(type: "submit", class:'btn btn-info btn-td', :style=>'padding: 6px 8px;marign-left:-3px;position:relative;left:-3px;') do %>
+        <i class="fa fa-fw fa-search"></i>
+      <% end %>          
+    <% end %>
+    <% if hp_ticket(current_user.username) || is_adminuser(current_user.username) %>
+      <%= link_to new_ticket_path, :class=>'btn btn-info btn-td a_loading', :style=>'padding: 6px 8px;marign-left:-3px;position:relative;left:-3px;' do %>
+        <i class="fa fa-fw fa-tag">+</i>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+
+
+<!-- <table class="table-responsive listing" id="table_ticket" style="min-width:100vh;"> -->
+<div class="row">
+  <table class="listing" id="table_ticket">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Ticket ID<%= raw(get_sortdirection(@thd[0]))%></th>
+        <th>Group<%= raw(get_sortdirection(@thd[1]))%></th>
+        <th>Subject<%= raw(get_sortdirection(@thd[2]))%></th>
+        <th>Owner<%= raw(get_sortdirection(@thd[3]))%></th>
+        <th>Last replied<%= raw(get_sortdirection(@thd[4]))%></th>
+        <th>Device<%= raw(get_sortdirection(@thd[5]))%></th>
+        <th>Updated<%= raw(get_sortdirection(@thd[6]))%></th>
+        <!-- <th>User</th> -->
+        <% if hp_ticket(current_user.username) || is_adminuser(current_user.username) %>
+          <th colspan="3" style="text-align:center;">Action</th>
+        <% end %>
+
+        <!-- <th colspan="3"></th> -->
+      </tr>
+    </thead>
+
+    <tbody>
+      <% if @tickets.blank? || @tickets.nil? %>
+        <td colspan="16" style="text-align:center">No Tickets</td>
+      <% else %>
+        <% @tickets.each do |ticket| %>
+          <tr class="real-tr">
+            <td class="td-clickable" style="text-align:center">
+              <% form_id = 'show_ticket_' + ticket.id.to_s %>
+              <%= form_tag(ticket, method: :get, :id=>form_id, :style=>'height:3px;') do -%>
+
+                <% if ticket.is_read %>
+                  <i class="fa fa-fw fa-tag" style="color:#f39c12;top:-7px;position:relative;font-size:14px;"></i>
+                <% else %>
+                  <i class="fa fa-fw fa-tag" style="top:-7px;position:relative;font-size:14px;"></i>
+                <% end %>
+
+                <%= submit_tag 'Reply', :class=>'btn btn-primary btn-reply', :style=>'display:none' %>
+              <% end -%>
+            </td>
+            <td class="td-clickable">
+              <%= raw(get_colorspan_ticket(ticket.is_read, processblank(ticket.id))) %>
+            </td>
+            <td class="td-clickable">
+              <%= raw(get_colorspan_ticket(ticket.is_read, processblank(ticket.ticket_group))) %>
+            </td>
+            <td class="td-clickable">
+              <%= raw(get_colorspan_ticket(ticket.is_read, processblank(ticket.subject))) %>
+            </td>
+            <td class="td-clickable">
+              <%= raw(get_colorspan_ticket(ticket.is_read, processblank(ticket.owner))) %>
+            </td>
+            <td class="td-clickable">
+              <%#= raw(get_colorspan_ticket(ticket.is_read, processblank(ticket.last_replied))) %>
+              <% if Comment.where(:ticket_id=>ticket.id).last.nil? %>
+                <%= raw(get_colorspan_ticket(ticket.is_read, "---")) %>
+              <% else %>
+                <%= raw(get_colorspan_ticket(ticket.is_read, Comment.where(:ticket_id=>ticket.id).last.ticket_owner).split('@').first) %>
+              <% end %>
+            </td>
+            <td class="td-clickable">
+              <%= raw(get_colorspan_ticket(ticket.is_read, processblank(ticket.device))) %>
+            </td>
+            <td class="td-clickable">
+              <%= raw(get_colorspan_ticket(ticket.is_read, processblank(ticket.updated_at.strftime('%Y-%m-%d %H:%M:%S')))) %>
+            </td>
+
+            <% if hp_ticket(current_user.username) || is_adminuser(current_user.username) %>
+              <td style="">
+                <%= link_to 'Check', ticket_path(ticket), :class=>'btn btn-info btn-td'%>
+              </td>
+              <td style="">
+                <%= link_to 'Update', edit_ticket_path(ticket), :class=>'btn btn-success btn-td'%>
+              </td>
+              <td style="padding-right:20px;">
+                <%= label_tag nil, 'Delete', :class=>'btn btn-warning btn-td btn-stt', :id=>'btn_stt_'+ticket.id.to_s %>
+              </td>
+            <% end %>
+          </tr>
+          <tr id="ticket_<%=ticket.id%>" class="sub-tr" style="display:none;border:none;">
+            <td class="hidden_" colspan="10">
+              <div class="col-lg-9" style="padding:12px;color:palegoldenrod;">
+                <div class="col-lg-12">
+                  <div class="col-lg-4">
+                    Subject : <%= ticket.subject %><br/><br/>
+                    Owner : <i class="fa fa-fw fa-user"></i>&nbsp;<%= ticket.owner %><br/><br/>
+                    Full name : <%= Customer.find_by_username(ticket.owner).nil? ? '---' : Customer.find_by_username(ticket.owner).first_name + ' ' + Customer.find_by_username(ticket.owner).last_name %><br/><br/>
+                  </div>
+                  <div class="col-lg-4">
+                    Email : <i class="fa fa-fw fa-envelope"></i>&nbsp;<%= Customer.find_by_username(ticket.owner).nil? ? '---' : Customer.find_by_username(ticket.owner).pemail %><br/><br/>
+                    Last Replied : <%#= processblank(ticket.last_replied) %><%= Comment.find_by_ticket_id(ticket.id).nil? ? '---' : Comment.find_by_ticket_id(ticket.id).ticket_owner %><br/><br/>
+                  </div>
+
+                  <div class="col-lg-4">
+                    Device : <i class="fa fa-fw fa-cog"></i>&nbsp;<%= ticket.device %><br/><br/>
+                    Updated : <i class="fa fa-fw fa-clock-o"></i>&nbsp;<%= ticket.updated_at.strftime('%Y-%m-%d %H:%M:%S')%><br/><br/>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-3" style="text-align:center;display:none;" id="cd_ticket_<%=ticket.id%>">
+                <div class="sub-comment" style="background-color:rgba(84, 130, 143, 0.4);padding:10px;color:palegoldenrod;margin-top:25px;">
+                  <%= simple_form_for :delete_ticket, :id=>'form_delete_ticket', :method=>'get', :html=>{:style=>'display:inline-block'}, :remote=>true do |f| %>
+                    <%= hidden_field_tag "ticket_id", nil, :value=>ticket.id.to_s %>
+                    <i class="fa fa-fw fa-exclamation-triangle" style="font-size:16px;color:palegoldenrod;"></i>&nbsp;Are you sure deleting this ticket?<br/><br/>
+                    <%= button_tag(type:"submit", :class=>'btn btn-warning btn-td', :style=>'padding:3px 4px;color:palegoldenrod;') do %>
+                      <i class="fa fa-fw fa-check-circle" style="font-size:16px;color:palegoldenrod;"></i>Yes<!-- Suspend -->
+                    <% end %>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <%= label_tag(nil, :class=>'btn btn-info btn-td btn-tdclose btn-tit-close', :style=>'padding:3px 4px;color:palegoldenrod;font-weight:normal', :id=>'btn_titclose_'+ticket.id.to_s) do %>
+                      <i class="fa fa-fw fa-times-circle" style="font-size:16px;color:palegoldenrod;"></i>&nbsp;No
+                    <% end %>
+                  <% end %>
+                </div>
+
+              </div>
+            </td>
+            <td class="hidden_ btgroup" style="padding-left:20px;">
+              <%= label_tag(nil, :class=>'btn btn-warning btn-td btn-sc-ticket', :style=>'padding:3px 4px;width:78px;;display:inline-block;', :id=>'btn_sct_'+ticket.id.to_s) do %>
+                <i class="fa fa-fw fa-trash-o" style="font-size:16px;color:white"></i>&nbsp;Delete
+              <% end %>
+              <span class="span_br"><br/></span>
+              <%= label_tag(nil, :class=>'btn btn-info btn-td btn-ticlose', :style=>'padding:3px 4px;font-weight:normal;margin-top:12px;width:78px;;display:inline-block', :id=>'btn_ticlose_'+ticket.id.to_s) do %>
+                <i class="fa fa-fw fa-times-circle" style="font-size:16px;color:white"></i>&nbsp;Close
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<script>
+  _fix();
+  $(function() {
+    $('.pagination a').attr('data-remote', 'true');
+  });
+
+  $('#select_ticket_rows').dropdown();
+
+  $('#li_ticket').attr('class', 'active');
+
+  var headertext = [],
+  headers = document.querySelectorAll('#table_ticket th'),
+  tablerows = document.querySelectorAll('#table_ticket th'),
+  table_body = document.querySelector('#table_ticket tbody');
+
+  for (var i = 0; i < headers.length; i++) {
+    var current = headers[i];
+
+    headertext.push(current.textContent.replace(/\r?\n|\r/,""));
+    // console.log(current.textContent);
+  }
+
+  for (var i = 0, row; row = table_body.rows[i]; i++) { 
+    for(var j = 1, col; col = row.cells[j]; j++) {
+      if ( headertext[j] && ( i%2 == 0 ) && j < 8 ) {
+        col.setAttribute('data-th', headertext[j]);
+      }
+
+      if ( i%2 == 1 ) {
+        col.setAttribute('style', 'border:none;');
+      }
+
+      if ( i%2 == 0 && j != 1 && j != 0) {
+        // col.setAttribute('style', 'text-align:left;');  
+      }
+      
+      // console.log(col);
+      // console.log(headertext[j]);
+    }
+
+    if ( i%2 == 1 ) {
+      col = row.cells[0];
+      // col.setAttribute('data-th', 'Confirm');  
+    }
+
+  }
+
+  function reset_fields() {
+    $('#id_sort').val('');
+    $('#group_sort').val('');
+    $('#subject_sort').val('');
+    $('#owner_sort').val('');
+    $('#replied_sort').val('');
+    $('#device_sort').val('');
+    $('#updated_sort').val('');
+  }
+
+  function remove_direction(str) {
+    
+    if ( str.indexOf('▽') != -1 || str.indexOf('△') != -1 ) {
+      return str.substring(0, str.length-2);
+    } else {
+      return str;
+    }
+  }
+
+  hide_loading();
+
+</script>

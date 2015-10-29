@@ -1,0 +1,21 @@
+default: &default
+  adapter: mysql2
+  encoding: utf8
+  pool: 5
+  username: root
+  password:
+  socket: /tmp/mysql.sock
+
+development:
+  <<: *default
+  database: adcpcyber_development
+
+test:
+  <<: *default
+  database: adcpcyber_test
+
+production:
+  <<: *default
+  database: cyberadv_adcpcyber_production
+  username: cyberadv_pro
+  password: dir123123

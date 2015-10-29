@@ -1,0 +1,357 @@
+
+
+<body class="skin-black" style="">
+  <header class="header" style="z-index:999;">
+    
+    <nav class="navbar navbar-static-top" role="navigation" style="border:none;background:transparent;">
+
+      <a href="#" class="navbar-btn sidebar-toggle" data-toggle="offcanvas" role="button" style="display:none;">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
+
+      <% dv1 = Account.count %>
+      <% dv2 = Dnote.where(:is_checked=>'0').count %>
+      <% dv3 = Ticket.where(:is_read=>'1').count %>
+      <% dv4 = Pcustomer.count %>
+
+      <div class="navbar-left" style="display:inline-block;margin-top:8px;">
+        <ul class="nav navbar-nav" style="margin-right:25px;margin-top:8px;color:palegoldenrod">
+          <% if dv1 != 0 && is_adminuser(current_user.username) %>
+            <li>
+              <span id="span_top_admin" class="label label-success ctopvar" style="font-size:10px;background-color:rgba(71, 181, 71, 0.54);">
+                <i class="fa fa-fw fa-users" style="color:palegoldenrod;font-size:16px;"></i>
+                <%= dv1 %>
+              </span>
+            </li>
+          <% end %>
+          <% if dv2 != 0 || hp_device(current_user.username) %>
+            <li>
+              <span id="span_top_device" class="label label-warning ctopvar" style="font-size:10px;background-color:rgba(240, 173, 78, 0.49);">
+                <i class="fa fa-fw fa-tasks" style="color:palegoldenrod;font-size:16px;"></i>
+                <%= dv2 %>
+              </span>
+            </li>
+          <% end %>
+          <% if dv3 != 0 || hp_ticket(current_user.username) %>
+            <li>
+              <span id="span_top_ticket" class="label label-info ctopvar" style="font-size:10px;background-color:rgba(91, 192, 222, 0.55);">
+                <i class="fa fa-fw fa-ticket" style="color:palegoldenrod;font-size:16px;"></i>
+                <%= dv3 %>
+              </span>
+            </li>
+          <% end %>
+          <% if dv4 != 0 && is_adminuser(current_user.username) %>
+            <li>
+              <span id="span_top_customer" class="label label-default ctopvar" style="font-size:10px;background-color:rgba(152, 149, 149, 0.57);">
+                <i class="fa fa-fw fa-shopping-cart" style="color:palegoldenrod;font-size:16px;"></i>
+                <%= dv4 %>
+              </span>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+
+      <div class="navbar-left" id="res_menu" >
+        <div class="ui pointing dropdown link item" tabindex="-1" style="border:none;background-color:transparent;overflow:visible;" id="res_menu2">
+          <!-- <i class="dropdown icon" tabindex="0"></i> -->
+          <span class="span_expand">
+            <i class="fa fa-fw fa-bars pull-left"></i>&nbsp;Primary Menu
+          </span>
+          <div class="menu navbar-fixed-top">
+            <%= dv3 + dv2 > 0 ? raw('<div class="header">'+ (dv3+dv2).to_s + '&nbsp;&nbsp;&nbsp;Notifications</div>') : raw('') %>
+            <%= dv3 > 0 ? raw('
+            <div class="item" onclick="window.location=\'&#47;tickets\'"> 
+              New Tickets
+              <span style="display:inline-block;position:relative;left:37%;">' + dv3.to_s + '</span>
+            </div>
+            ') : raw('') %>
+            <%= dv2 > 0 ? raw('
+            <div class="item" onclick="window.location="\'&#47;devices&#47;configure\'"> 
+              Device Requests
+              <span style="display:inline-block;position:relative;left:37%;">' + dv2.to_s + '</span>
+            </div>
+            ') : raw('') %>            
+
+            <div class="divider"></div>
+            <div class="header">Primary Item</div>
+            <div class="item" onclick="window.location='/'"><i class="fa fa-fw fa-dashboard"></i>&nbsp;&nbsp;Dashboard</div>
+            <div class="item">
+              <i class="fa fa-fw fa-angle-right pull-right" tabindex="0"></i>
+              <span class="text"><i class="fa fa-fw fa-users"></i>&nbsp;&nbsp;Admin Users</span>
+              <div class="menu">
+                <div class="item" onclick="window.location='/accounts/new'"><i class="fa fa-fw fa-plus"></i>&nbsp;&nbsp;New Account</div>
+                <div class="item" onclick="window.location='/accounts'"><i class="fa fa-fw fa-spinner"></i>&nbsp;&nbsp;Pending Accounts</div>
+                <div class="item" onclick="window.location='/sadmins'"><i class="fa fa-fw fa-arrow-circle-down"></i>&nbsp;&nbsp;Suspended Admins</div>
+                <div class="item" onclick="window.location='/verifieds'"><i class="fa fa-fw fa-check-square-o"></i>&nbsp;&nbsp;Administrators</div>
+              </div>
+            </div>
+            <div class="item">
+              <i class="fa fa-fw fa-angle-right pull-right" tabindex="1"></i>
+              <span class="text"><i class="fa fa-fw fa-shopping-cart"></i>&nbsp;&nbsp;Customers</span>
+              <div class="menu">
+                <div class="item" onclick="window.location='/customers/new'"><i class="fa fa-fw fa-plus"></i>&nbsp;&nbsp;Create a Customer</div>
+                <div class="item" onclick="window.location='/pcustomers'"><i class="fa fa-fw fa-spinner"></i>&nbsp;&nbsp;New Customers</div>
+                <div class="item" onclick="window.location='/customers'"><i class="fa fa-fw fa-user"></i>&nbsp;&nbsp;Customers</div>
+                <div class="item" onclick="window.location='/scustomers'"><i class="fa fa-fw fa-arrow-circle-down"></i>&nbsp;&nbsp;Suspended</div>
+              </div>
+            </div>
+            <div class="item">
+              <i class="fa fa-fw fa-angle-right pull-right" tabindex="2"></i>
+              <span class="text"><i class="fa fa-laptop"></i>&nbsp;&nbsp;Devices</span>
+              <div class="menu">
+                <div class="item" onclick="window.location='/devices/new'"><i class="fa fa-fw fa-plus"></i>&nbsp;&nbsp;New Device</div>
+                <div class="item" onclick="window.location='/devices/configure'"><i class="fa fa-fw fa-pencil-square"></i>&nbsp;&nbsp;Control Request</div>
+                <div class="item" onclick="window.location='/devices'"><i class="fa fa-fw fa-cog"></i>&nbsp;&nbsp;Device List</div>
+              </div>
+            </div>
+            <div class="item" onclick="window.location='/tickets'"><i class="fa fa-fw fa-ticket"></i>&nbsp;&nbsp;Tickets</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="navbar-right">
+        <ul class="nav navbar-nav" style="margin-right:25px;margin-top:12px;color:palegoldenrod" id="ul_logout">
+          <% if user_signed_in? %>
+            <!-- Logged in as &nbsp; -->
+            <i class="fa fa-user" style="color:palegoldenrod;font-size:16px;"></i>&nbsp;
+            <strong><%= current_user.username %> </strong>
+            <%#= link_to "Edit_Profile", edit_user_registration_path, :class=>'navbar-link' %> |
+            <%= link_to "Logout", destroy_user_session_path, method: :delete, :class=>'btn btn-warning btn-sm btn-td', :style=>'color:white' %>
+          <% else %>
+            <%= link_to "Sign up", new_user_registration_path, :class => 'navbar-link' %> |
+            <%= link_to "Login", new_user_session_path, :class => 'navbar-link' %>
+          <% end %>
+        </ul>
+      </div>
+    </nav>
+  </header>
+  
+  <!-- <div class="wrapper row-offcanvas row-offcanvas-left" style="background-color:#3a3738;height:500px;!important"> -->
+  <div class="wrapper row-offcanvas row-offcanvas-left" style="background-color:#3a3738;">
+    <aside class="left-side sidebar-offcanvas">
+      <section class="sidebar">
+        <div class="user-panel" style="margin-top:-52px;background-color:#272727;text-align:center;z-index:1000;">
+          <a href="/">
+            <%= image_tag('logo3.png', alt: 'Logo Image', width: '135') %>
+          </a>
+        </div>
+        
+        <%= form_tag('/dashboard/search', method: :post, :id=>'form_global_search', :class=>'sidebar-form', :style=>'height:35px;', :autocomplete=>:off) do -%>
+          <%= hidden_field_tag "filter_word" %>
+          <%= hidden_field_tag "skey", nil, :required=>true, :value=>'All' %>
+          <div class="input-group">
+            <!-- <input type="text" name="q" class="form-control" placeholder="Search..."/> -->
+            <%= text_field_tag "filter_word", nil, :class=>'form-control', :placeholder=>'Search...', :style=>'color:white' %>
+            <div class="ui selection dropdown devices" tabindex="0" style="overflow:visible;padding:0 0!important;width:32px;top:-34px;left:169px;;height:32px;display:inline-block;z-index:99;" id="select_adsearch">
+              <div class="default text" style="text-align:right;margin:7px;" id="text_sdefault">
+                <i class="fa fa-search" style="color:palegoldenrod;"></i>
+              </div>
+              <!-- <input type="hidden" name="hidden-field"> -->
+              <div class="menu" tabindex="-1" style="position:fixed;margin-right: -16px;width:220px;left:-177px;top:35px;overflow:visible;">
+                <div class="item" data-value="All">&nbsp;&nbsp;<i class="fa fa-fw fa-globe"></i>&nbsp;&nbsp;All</div>
+                <div class="item" data-value="Public IP">&nbsp;&nbsp;<i class="fa fa-fw fa-exclamation-circle"></i>&nbsp;&nbsp;Public IP</div>
+                <div class="item" data-value="Private IP">&nbsp;&nbsp;<i class="fa fa-fw fa-exclamation-circle"></i>&nbsp;&nbsp;Private IP</div>
+                <div class="item" data-value="Username">&nbsp;&nbsp;<i class="fa fa-fw fa-user"></i>&nbsp;&nbsp;Username</div>
+                <div class="item" data-value="Email Address">&nbsp;&nbsp;<i class="fa fa-fw fa-envelope"></i>&nbsp;&nbsp;Email Address</div>
+              </div>
+            </div>    
+          </div>
+        <% end -%>
+        <!-- /.search form -->
+        <!-- sidebar menu: : style can be found in sidebar.less -->
+        <ul class="sidebar-menu">
+          <li id="li_dashboard">
+            <a href="/dashboard">
+              <i class="fa fa-fw fa-dashboard" style="color:palegoldenrod;"></i> <span>Dashboard</span>
+            </a>
+          </li>
+          <% if is_adminuser(current_user.username) || hp_account(current_user.username) %>
+            <li class="treeview" id="li_admin">
+              <a href="#">
+                <i class="fa fa-fw fa-users" style="color:palegoldenrod;"></i> <span>Admin Users</span>
+                <small class="badge pull-right bg-light-blue"><%= dv1 + Verified.count + Sadmin.count %></small>
+              </a>
+              <ul class="treeview-menu" id="ul_admin">
+                <li><a href="/accounts/new" onclick="show_loading();">&nbsp;<i class="fa fa-fw fa-user" style="color:palegoldenrod;"></i><span style="margin-top:4px;margin-left:-4px;font-weight:bold;font-size:10px;position:relative;top:4px;">+</span>&nbsp; Create an Account</a></li>
+                <li>
+                  <a href="/accounts" onclick="show_loading();">&nbsp;<i class="fa fa-fw fa-spinner" style="color:palegoldenrod;"></i>&nbsp; Pending Accounts
+                    <small class="badge pull-right bg-info"><%= dv1 %></small>
+                  </a>
+                </li>
+                <li>
+                  <a href="/sadmins" onclick="show_loading();">&nbsp;<i class="fa fa-fw fa-arrow-circle-down" style="color:palegoldenrod;"></i>&nbsp; Suspended Admins
+                    <small class="badge pull-right bg-info"><%= Sadmin.count %></small>
+                  </a>
+                </li>
+                <li>
+                  <a href="/verifieds" onclick="show_loading();">&nbsp;<i class="fa fa-fw fa-check-square-o" style="color:palegoldenrod;"></i>&nbsp; Administrators
+                    <small class="badge pull-right bg-green"><%= Verified.count %></small>
+                  </a>
+                </li>
+              </ul>
+            </li>
+          <% end %>
+          <% if is_adminuser(current_user.username) || hp_customer(current_user.username) %>
+            <li class="treeview" id="li_customer">
+              <a href="#">
+                <i class="fa fa-fw fa-shopping-cart" style="color:palegoldenrod;font-size:15px;"></i>&nbsp;Customers
+                <small class="badge pull-right bg-green"><%= Customer.count + dv4 + Scustomer.count %></small>
+              </a>
+              <ul class="treeview-menu" id="ul_customer">
+                <li>
+                  <a href="/customers/new" onclick="show_loading();">&nbsp;<i class="fa fa-fw fa-shopping-cart" style="color:palegoldenrod;"></i><span style="margin-top:4px;margin-left:-4px;font-weight:bold;font-size:10px;position:relative;top:4px;">+</span>&nbsp; Create a Customer</a>
+                </li>
+                <li>
+                  <a href="/pcustomers" onclick="show_loading();">&nbsp;<i class="fa fa-fw fa-user-md" style="color:palegoldenrod;"></i><span style="margin-top:4px;margin-left:-4px;font-weight:bold;font-size:10px;position:relative;top:4px;">+</span>&nbsp; New Customers
+                    <small class="badge pull-right bg-yellow"><%= dv4 %></small>
+                  </a>
+                </li>
+                <li>
+                  <a href="/customers" onclick="show_loading();">&nbsp;<i class="fa fa-fw fa-user" style="color:palegoldenrod;"></i><i class="fa fa-fw fa-shopping-cart" style="margin-left:-10px;font-weight:bold;font-size:10px;position:relative;top:4px;;color:palegoldenrod"></i>&nbsp;Customers
+                    <small class="badge pull-right bg-yellow"><%= Customer.count %></small>
+                  </a>
+                </li>
+                <li>
+                  <a href="/scustomers" onclick="show_loading();">&nbsp;<i class="fa fa-fw fa-exclamation-circle" style="color:palegoldenrod;"></i><i class="fa fa-fw fa-shopping-cart" style="margin-left:-10px;font-weight:bold;font-size:10px;position:relative;top:4px;;color:palegoldenrod"></i>&nbsp;Suspended 
+                    <small class="badge pull-right bg-olive"><%= Scustomer.count %></small>
+                  </a>
+                </li>
+              </ul>
+            </li>
+          <% end %>
+          <% if is_adminuser(current_user.username) || hp_device(current_user.username) %>
+            <li class="treeview" id="li_device">
+              <a href="#">
+                <i class="fa fa-laptop" style="color:palegoldenrod;margin-left:3px;"></i>
+                <span style="margin-left:-2px;">Device</span>
+                <small class="badge pull-right bg-purple">
+                  <%= Device.count %>
+                </small>
+              </a>
+              <ul class="treeview-menu" id="ul_device">
+                <li>
+                  <a href="/devices/new" onclick="show_loading();">&nbsp;<i class="fa fa-fw fa-cog" style="color:palegoldenrod;"></i><span style="top:4px;margin-left:-4px;font-weight:bold;font-size:10px;position:relative">+</span>&nbsp; Add Device</a>
+                </li>
+                <li>
+                  <a href="/devices/configure" onclick="show_loading();">
+                    &nbsp;<i class="fa fa-fw fa-pencil-square" style="color:palegoldenrod;"></i>&nbsp; Control Request
+                    <% if Dnote.where(:is_checked=>'0').count > 0 %>
+                      <small class="badge pull-right bg-olive"><%= Dnote.where(:is_checked=>'0').count %></small>
+                    <% end %>
+                  </a>
+                </li>
+                <li><a href="/devices" onclick="show_loading();">&nbsp;<i class="fa fa-fw fa-columns" style="color:palegoldenrod;"></i>&nbsp; Device List</a></li>
+              </ul>
+            </li>
+          <% else %>
+            <%# cuser = User.where(:username=>current_user.username) %>
+            <% cuser = User.find_by_username(current_user.username) %>
+
+            <% if cuser.is_cdevice || cuser.is_rdevice || cuser.is_mdevice %>
+              <li class="treeview" id="li_device">
+                <a href="#">
+                  <i class="fa fa-laptop" style="color:palegoldenrod;margin-left:3px;"></i>
+                  <span style="margin-left:-2px;">Device</span>
+                  <small class="badge pull-right bg-purple">
+                    <% if is_adminuser(current_user.username) %>
+                      <%= Device.count %>
+                    <% else %>
+                      <%= get_devicecount(current_user.username) %>
+                    <% end %>
+                  </small>
+                </a>
+                <ul class="treeview-menu" id="ul_device">
+                  <li><a href="/devices/new"><i class="fa fa-angle-double-right" style="color:palegoldenrod;"></i> Add Device</a></li>
+                  <li><a href="/devices"><i class="fa fa-angle-double-right" style="color:palegoldenrod;"></i> Configure Device</a></li>
+                  <li><a href="/devices"><i class="fa fa-angle-double-right" style="color:palegoldenrod;"></i> Device List</a></li>
+                </ul>
+              </li>
+            <% end %>
+          <% end %>
+
+          <% if is_adminuser(current_user.username) || hp_ticket(current_user.username) %>
+            <li id="li_ticket">
+              <a href="/tickets" onclick="show_loading();">
+                <i class="fa fa-fw fa-ticket" style="color:palegoldenrod;"></i> <span>Tickets</span>
+                <% if Ticket.count > 0 %>
+                  <small class="badge pull-right bg-yellow"><%= Ticket.count %></small>
+                <% end %>
+              </a>
+            </li>
+          <% else %>
+            <%# cuser = User.where(:username=>current_user.username) %>
+            <% cuser = User.find_by_username(current_user.username) %>
+
+            <% if cuser.is_rticket || cuser.is_dticket || cuser.is_cticket %>
+              <li id="li_ticket">
+                <a href="/tickets" onclick="show_loading();">
+                  <i class="fa fa-fw fa-ticket" style="color:palegoldenrod;"></i> <span>Tickets</span>
+                  <small class="badge pull-right bg-yellow">
+                    <% if is_adminuser(current_user.username) %>
+                      <%= Ticket.count %>
+                    <% else %>
+                      <%= get_ticketcount(current_user.username)%>
+                    <% end %>
+                  </small>
+                </a>
+              </li>
+            <% end %>
+          <% end %>
+          <li class="treeview" id="li_vhistory">
+            <a href="#">
+              <i class="fa fa-eye" style="color:palegoldenrod;margin-left:3px;"></i>
+              <span style="margin-left:-2px;">Monitor</span>
+              <small class="badge pull-right bg-purple">
+                <%= User.where('last_sign_in_ip > 0').count + Visitor.count %>
+              </small>
+            </a>
+            <ul class="treeview-menu" id="ul_vhistory">
+              <li>
+                <%= form_tag('/dashboard/userinfo', :id=>'form_gouserinfo') do %>
+                  <%= hidden_field_tag :gokey, nil, :value=>'' %>
+                <% end %>
+                <a class="a_gouserinfo" id="a_gouserinfo_admin" href="">&nbsp;<i class="fa fa-fw fa-user" style="color:palegoldenrod;"></i>&nbsp; Administrator
+                  <small class="badge pull-right bg-green"><%= User.where('last_sign_in_ip > 0').where('NOT ISNULL(account_type) ').count %></small>
+                </a>
+              </li>
+              <li>
+                <a class="a_gouserinfo" id="a_gouserinfo_customer" href="">&nbsp;<i class="fa fa-fw fa-shopping-cart" style="color:palegoldenrod;"></i>&nbsp;Customer
+                  <small class="badge pull-right bg-yellow"><%= User.where('last_sign_in_ip > 0').where('ISNULL(account_type)').count %></small>
+                </a>
+              </li>
+              <li>
+                <a class="a_gouserinfo" id="a_gouserinfo_visitor" href="" onclick="show_loading();">&nbsp;<i class="fa fa-fw fa-globe" style="color:palegoldenrod;"></i>&nbsp;Visitor
+                  <small class="badge pull-right bg-yellow"><%= Visitor.count %></small>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="">
+            <a href="https://my.cyberadvance.com">
+              <i class="fa fa-fw fa-qrcode" style="color:palegoldenrod;"></i> <span>User Panel</span>
+              <i class="fa fa-angle-right pull-right" style="color:palegoldenrod;"></i>
+            </a>
+          </li>
+        </ul>
+      </section>
+        <!-- /.sidebar -->
+    </aside>
+
+<script>
+  if ( $('#select_adsearch').length > 0 ) {
+    $('#select_adsearch').dropdown();
+  }
+
+  $('#form_global_search').keypress(function(e) {
+    var code = (e.keyCode ? e.keyCode : e.which);
+    if (code == 13) {
+      return false;
+    }
+  });
+
+</script>
+  <aside class="right-side">
+

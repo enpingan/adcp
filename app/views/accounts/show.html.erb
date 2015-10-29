@@ -1,0 +1,618 @@
+<div class="form-div">
+  <br/><br/>
+  <div class="col-md-12">
+    <p id="notice">
+      <%= notice %>
+    </p>
+
+    <div class="small-box bg-green" style="margin-bottom:0px;">
+      <div class="inner">
+        <h3>
+          Pending Account
+        </h3>
+        <p>
+          &nbsp;ID: #<%= @account.id %>
+        </p>
+      </div>
+      <div class="icon">
+        <i class="fa fa-fw fa-user"></i>
+      </div>
+      <a href=<%= edit_account_path(@account) %> class="small-box-footer">
+        Edit Account <i class="fa fa-fw fa-pencil"></i>
+      </a>
+    </div>
+
+    <div class="box box-success col-lg-6 slist_prev" style="padding: 0 0;">
+      <div class="box-header">
+        <i class="fa fa-fw fa-paperclip" style="color: rgb(163, 231, 200)"></i>
+
+        <h3 class="box-title">General Info</h3>
+        <!-- tools box -->
+        <div class="pull-right box-tools">
+          <!-- <button class="btn btn-success btn-sm btn-td" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button> -->
+        </div><!-- /. tools -->
+      </div>
+      <%= hidden_field_tag "id_edit", nil, :value=>@account.id %>
+      <div class="box-body" style="padding-left:32px;padding-right:32px;">
+        <div class="clearfix">
+          <span class="pull-left"><i class="fa fa-fw fa-user" style="color:rgb(228, 217, 113);"></i>&nbsp;Username: </span>
+          <small class="pull-right" style="color:palegoldenrod;width:35%;text-align:right;">
+            <%= text_field_tag "username_edit", nil, :class=>'quickedit_control', :value=>@account.ssl_name , :style=>'background-color:transparent;text-align:right;border:none;width:80%;', :readonly=>true %>
+          </small>
+        </div>
+        <div class="clearfix">
+          <span class="pull-left"><i class="fa fa-fw fa-key" style="color:rgb(228, 217, 113);"></i>&nbsp;Password: </span>
+          <small class="pull-right" style="color:palegoldenrod;width:35%;text-align:right;">
+            <%= text_field_tag "password_edit", nil, :class=>'quickedit_control', :value=>@account.hs_pwd , :style=>'background-color:transparent;text-align:right;border:none;width:80%;', :readonly=>true %>
+          </small>
+          <i class="fa fa-fw fa-copy i_copy" style="color:rgb(163, 231, 200);font-size:14px;cursor:pointer;position:relative;left:87%;"></i>
+        </div>
+        <div class="clearfix">
+          <span class="pull-left"><i class="fa fa-fw fa-calendar" style="color:rgb(228, 217, 113);"></i>&nbsp;Created at: </span>
+          <small class="pull-right" style="color:palegoldenrod"><%= @account.created_at.to_date %></small>
+        </div>
+      </div>
+      <div class="box-footer clearfix" style="padding-left:20px;">
+        <span class="flat_span" id="block_span1">
+          Edit now <i class="fa fa-fw fa-pencil"></i>
+        </span>
+        &nbsp;&nbsp;&nbsp;
+        <span class="flat_span" id="cancel_span1" style="display:none;">
+          Cancel <i class="fa fa-fw fa-times-circle"></i>
+        </span>
+      </div>
+    </div>
+
+    <div class="box box-success col-lg-6 slist_next" style="padding: 0 0;">
+      <div class="box-header">
+        <i class="fa fa-fw fa-home" style="color: rgb(163, 231, 200)"></i>
+
+        <h3 class="box-title">Contact Info</h3>
+        <!-- tools box -->
+        <div class="pull-right box-tools">
+          <!-- <button class="btn btn-info btn-sm btn-td" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button> -->
+        </div><!-- /. tools -->
+      </div>
+      <div class="box-body row" style="margin:0 0;">
+        <div class="col-lg-6" style="padding-left:32px;padding-right:32px;">
+          <div class="clearfix">
+            <span class="pull-left"><i class="fa fa-fw fa-font" style="color:rgb(228, 217, 113);"></i>&nbsp;First name: </span>
+            <small class="pull-right" style="color:palegoldenrod;text-align:right;width:35%;">
+              <%= text_field_tag "first_name_edit", nil, :class=>'quickedit_control', :value=>@account.first_name , :style=>'background-color:transparent;text-align:right;border:none;width:100%;', :readonly=>true %>
+            </small>
+          </div>
+          <div class="clearfix">
+            <span class="pull-left"><i class="fa fa-fw fa-bold" style="color:rgb(228, 217, 113);"></i>&nbsp;Last name: </span>
+            <small class="pull-right" style="color:palegoldenrod;text-align:right;width:35%;">
+              <%= text_field_tag "last_name_edit", nil, :class=>'quickedit_control', :value=>@account.last_name , :style=>'background-color:transparent;text-align:right;border:none;width:100%;', :readonly=>true %>
+            </small>
+          </div>
+          <div class="clearfix">
+            <span class="pull-left"><i class="fa fa-fw fa-envelope" style="color:rgb(228, 217, 113);"></i>&nbsp;Email address: </span>
+            <small class="pull-right" style="color:palegoldenrod;text-align:right;width:35%;">
+              <%= text_field_tag "pemail_edit", nil, :class=>'quickedit_control', :value=>@account.pemail , :style=>'background-color:transparent;text-align:right;border:none;width:100%;', :readonly=>true %>
+            </small>
+          </div>
+          <div class="clearfix">
+            <span class="pull-left"><i class="fa fa-fw fa-phone" style="color:rgb(228, 217, 113);"></i>&nbsp;Phone number: </span>
+            <small class="pull-right" style="color:palegoldenrod;text-align:right;width:35%;">
+              <%= text_field_tag "number_edit", nil, :class=>'quickedit_control', :value=>@account.number , :style=>'background-color:transparent;text-align:right;border:none;width:100%;', :readonly=>true %>
+            </small>
+          </div>
+        </div>
+        <div class="col-lg-6" style="padding-left:32px;padding-right:32px;">
+          <div class="clearfix">
+            <span class="pull-left"><i class="fa fa-fw fa-building-o" style="color:rgb(228, 217, 113);"></i>&nbsp;City: </span>
+            <small class="pull-right" style="color:palegoldenrod;text-align:right;width:35%;">
+              <%= text_field_tag "city_edit", nil, :class=>'quickedit_control', :value=>@account.city , :style=>'background-color:transparent;text-align:right;border:none;width:100%;', :readonly=>true %>
+            </small>
+          </div>
+          <div class="clearfix">
+            <span class="pull-left"><i class="fa fa-fw fa-home" style="color:rgb(228, 217, 113);"></i>&nbsp;State: </span>
+            <small class="pull-right" style="color:palegoldenrod;text-align:right;width:35%;">
+              <%= text_field_tag "state_edit", nil, :class=>'quickedit_control', :value=>@account.state , :style=>'background-color:transparent;text-align:right;border:none;width:100%;', :readonly=>true %>
+            </small>
+          </div>
+          <div class="clearfix">
+            <span class="pull-left"><i class="fa fa-fw fa-flag" style="color:rgb(228, 217, 113);"></i>&nbsp;Country: </span>
+            <small class="pull-right" style="color:palegoldenrod;text-align:right;">
+              <%= raw(get_countryname(@account.country)) %>
+            </small>
+          </div>
+        </div>
+      </div>
+      <div class="box-footer clearfix" style="padding-left:20px;">
+        <span class="flat_span" id="block_span2">
+          Edit now <i class="fa fa-fw fa-pencil"></i>
+        </span>
+        &nbsp;&nbsp;&nbsp;
+        <span class="flat_span" id="cancel_span2" style="display:none;">
+          Cancel <i class="fa fa-fw fa-times-circle"></i>
+        </span>
+      </div>
+    </div>
+
+    <div class="box box-success col-lg-12" style="padding: 0 0;">
+      <div class="box-header">
+        <i class="fa fa-fw fa-lock" style="color: rgb(163, 231, 200)"></i>
+
+        <h3 class="box-title">Permission Info</h3>
+        <!-- tools box -->
+        <div class="pull-right box-tools">
+          <!-- <button class="btn btn-info btn-sm btn-td" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button> -->
+        </div><!-- /. tools -->
+      </div>
+      <div class="box-body row">
+        <div class="col-lg-3" style="padding-left:32px;padding-right:32px;">
+          <% if @account.is_caccount %>
+            <i class="fa fa-fw fa-check-circle" style="color:#a3e7c8"></i>&nbsp;&nbsp;Create Account<br/>
+          <% else %>
+            <i class="fa fa-fw fa-ban"></i>&nbsp;&nbsp;Create Account<br/>
+          <% end %>
+          <% if @account.is_daccount %>
+            <i class="fa fa-fw fa-check-circle" style="color:#a3e7c8"></i>&nbsp;&nbsp;Delete Account<br/>
+          <% else %>
+            <i class="fa fa-fw fa-ban"></i>&nbsp;&nbsp;Delete Account<br/>
+          <% end %>
+          <% if @account.is_maccount %>
+            <i class="fa fa-fw fa-check-circle" style="color:#a3e7c8"></i>&nbsp;&nbsp;Modify Account<br/>
+          <% else %>
+            <i class="fa fa-fw fa-ban"></i>&nbsp;&nbsp;Modify Account<br/>
+          <% end %>
+        </div>
+        <div class="col-lg-3" style="padding-left:32px;padding-right:32px;">
+          <% if @account.is_ccustomer %>
+            <i class="fa fa-fw fa-check-circle" style="color:#a3e7c8"></i>&nbsp;&nbsp;Create Customer<br/>
+          <% else %>
+            <i class="fa fa-fw fa-ban"></i>&nbsp;&nbsp;Create Customer<br/>
+          <% end %>
+          <% if @account.is_rcustomer %>
+            <i class="fa fa-fw fa-check-circle" style="color:#a3e7c8"></i>&nbsp;&nbsp;Remove Customer<br/>
+          <% else %>
+            <i class="fa fa-fw fa-ban"></i>&nbsp;&nbsp;Remove Customer<br/>
+          <% end %>
+          <% if @account.is_mcustomer %>
+            <i class="fa fa-fw fa-check-circle" style="color:#a3e7c8"></i>&nbsp;&nbsp;Update Customer<br/>
+          <% else %>
+            <i class="fa fa-fw fa-ban"></i>&nbsp;&nbsp;Update Customer<br/>
+          <% end %>
+        </div>
+        <div class="col-lg-3" style="padding-left:32px;padding-right:32px;">
+          <% if @account.is_cdevice %>
+            <i class="fa fa-fw fa-check-circle" style="color:#a3e7c8"></i>&nbsp;&nbsp;Create Device<br/>
+          <% else %>
+            <i class="fa fa-fw fa-ban"></i>&nbsp;&nbsp;Create Device<br/>
+          <% end %>
+          <% if @account.is_rdevice %>
+            <i class="fa fa-fw fa-check-circle" style="color:#a3e7c8"></i>&nbsp;&nbsp;Remove Device<br/>
+          <% else %>
+            <i class="fa fa-fw fa-ban"></i>&nbsp;&nbsp;Remove Device<br/>
+          <% end %>
+          <% if @account.is_mdevice %>
+            <i class="fa fa-fw fa-check-circle" style="color:#a3e7c8"></i>&nbsp;&nbsp;Update Device<br/>
+          <% else %>
+            <i class="fa fa-fw fa-ban"></i>&nbsp;&nbsp;Update Device<br/>
+          <% end %>
+        </div>
+        <div class="col-lg-3" style="padding-left:32px;padding-right:32px;">
+          <% if @account.is_cticket %>
+            <i class="fa fa-fw fa-check-circle" style="color:#a3e7c8"></i>&nbsp;&nbsp;Create Ticket<br/>
+          <% else %>
+            <i class="fa fa-fw fa-ban"></i>&nbsp;&nbsp;Create Ticket<br/>
+          <% end %>
+          <% if @account.is_rticket %>
+            <i class="fa fa-fw fa-check-circle" style="color:#a3e7c8"></i>&nbsp;&nbsp;Modify Ticket<br/>
+          <% else %>
+            <i class="fa fa-fw fa-ban"></i>&nbsp;&nbsp;Modify Ticket<br/>
+          <% end %>
+          <% if @account.is_dticket %>
+            <i class="fa fa-fw fa-check-circle" style="color:#a3e7c8"></i>&nbsp;&nbsp;Delete Ticket<br/>
+          <% else %>
+            <i class="fa fa-fw fa-ban"></i>&nbsp;&nbsp;Delete Ticket<br/>
+          <% end %>
+        </div>
+      </div>
+      <div class="box-footer clearfix" style="padding-left:20px;color:transparent;">
+        Edit now <i class="fa fa-fw fa-pencil"></i>
+      </div>
+    </div>
+
+    <div class="box box-success col-lg-offset-4 col-lg-4" id="div_confirm" style="padding: 0 0;display:none">
+      <div class="box-header col-lg-12" style="text-align:center;background-color:rgba(30, 29, 29, 0.49)!important;">
+        <div class="col-lg-offset-1 col-lg-10">
+          <i class="fa fa-fw fa-lock" style="color: rgb(163, 231, 200);width:100%;padding:9px 0;">&nbsp;&nbsp;Please confirm your password</i>
+        </div>
+      </div>
+
+      <div class="box-body" id="box_confirm" style="padding:20px 32px;padding-top:60px;">
+        <div class="clearfix">
+          <span class="pull-left" style="top:4px;position:relative;"><i class="fa fa-fw fa-user" style="color:rgb(228, 217, 113);"></i>&nbsp;Username: </span>
+          <small class="pull-right" style="color:palegoldenrod;width:65%;text-align:left;">
+            <%= text_field_tag "username_edit2", nil, :class=>'form-control quickedit_control', :value=>current_user.username , :style=>'background-color:rgba(89, 87, 87, 0.64);border:none;text-align:left;width:100%;color:palegoldenrod' %>
+          </small>
+        </div>
+        <br/>
+        <div class="clearfix">
+          <span class="pull-left" style="top:4px;position:relative;"><i class="fa fa-fw fa-key" style="color:rgb(228, 217, 113);"></i>&nbsp;Password: </span>
+          <small class="pull-right" style="color:palegoldenrod;width:65%;text-align:left;">
+            <%= password_field_tag "password_edit2", nil, :class=>'form-control quickedit_control', :style=>'background-color:rgba(89, 87, 87, 0.64);border:none;text-align:left;width:100%;color:palegoldenrod' %>
+          </small>
+        </div>
+      </div>
+
+      <div class="box-footer clearfix" style="padding-left:20px;text-align:center;">
+        <span class="flat_span" id="confirm_span1">
+          Confirm <i class="fa fa-fw fa-check-circle"></i>
+        </span>
+      </div>
+    </div>
+
+    <div class="col-md-12" style="text-align:center;pading:15px 0;">
+      <%#= link_to 'Edit', edit_account_path(@account), :class=>'btn btn-success' %>
+      <%= form_tag('/accounts/verify', method: :post, :id=>'form_verify_accounts', :style=>'display:inline-block') do -%>
+        <%= hidden_field_tag "vid", nil, :style=>'width:180px;height:33px;padding-left:11px;', :value=>@account.id %>
+        <% if !is_adminuser(current_user.username) %>
+          <% bd = true %>
+        <% else %>
+          <% bd = false %>
+        <% end %>
+        <%= button_tag(type: "submit", class:'btn btn-success btn-td', :style=>'padding: 6px 8px;marign-left:-3px;position:relative;left:-3px;', :disabled=>bd) do %>
+          <i class="fa fa-fw fa-check-square-o"></i> Register
+        <% end %>          
+      <% end -%>
+      
+      <%= link_to( accounts_path, :class=>'btn btn-default btn-td', :style=>'color:black') do %>
+        <i class="fa fa-fw fa-arrow-circle-left"></i>&nbsp;Back
+      <% end %>
+    </div>
+    <% sd = 1 %>
+    <% @devices.each do |device| %>
+      <div class="col-md-12">
+        <h3 style="text-align:center;color:#00a65a;font-size:36px;">Device <%= sd %></h3>
+        <p id="notice"><%= notice %></p>
+        <% sd = sd + 1 %>
+        <div class="show-border-div col-md-12">
+
+          <!-- <div class="col-md-12" style="text-align:center;">
+            <span style="font-size:36px;color:#AB6F6F;">Device Info</span>
+          </div> -->
+          <div class="col-md-3">
+            <%= image_tag('server1.png', size: "120") %>
+          </div>
+
+          <div class="col-md-9" style="text-align:left;padding:15px 0;">
+            <span class="span-show">Owner: </span>
+            <span class="span-show2"><%= device.owner %></span><br/>
+            <span class="span-show">Device Name: </span>
+            <span class="span-show2"><%= device.name %></span><br/>
+            <span class="span-show">Public IP: </span>
+            <span class="span-show2"><%= device.public_ip %></span></br>
+            <span class="span-show">Private IP: </span>
+            <span class="span-show2"><%= device.private_ip %></span>
+          </div>
+        </div>
+
+        <div class="show-border-div col-md-12">
+          <div class="col-md-6">
+            <%= image_tag('os1.png', size: "273 87") %>
+          </div>
+          <div class="col-md-6">
+            <span class="span-show">OS Name: </span>
+            <span class="span-show2"><%= device.osname %></span><br/>
+            <span class="span-show">OS RAM: </span>
+            <span class="span-show2"><%= device.osram %></span><br/>
+            <span class="span-show">Processor: </span>
+            <span class="span-show2"><%= device.osprocessor %></span><br/>
+          </div>
+        </div>
+
+        <div class="show-border-div col-md-12">
+          <div class="col-md-6">
+            <span class="span-show">Note: </span>
+            <span class="span-show2"><%= device.device_note %></span><br/>
+          </div>
+          <div class="col-md-6">
+            <span class="span-show">Add-ons: </span>
+            <span class="span-show2"><%= device.addons %></span>
+          </div>
+        </div>
+
+        <div class="show-border-div col-md-12">
+          <div class="col-md-6">
+            <span class="span-show">Device Type: </span>
+            <span class="span-show2"><%= device.device_type %></span><br/>
+            <span class="span-show">Location: </span>
+            <span class="span-show2"><%= device.location %></span><br/>
+          </div>
+          <div class="col-md-6">
+            <span class="span-show">General Status: </span>
+            <span class="span-show2"><%= device.general_status %></span><br/>
+            <span class="span-show">Reloaded: </span>
+            <span class="span-show2"><%= device.general_reloaded %></span><br/>
+          </div>
+        </div>
+          
+
+        <div class="col-md-12" style="text-align:center;">
+          <% if hp_device(current_user.username) || is_adminuser(current_user.username) %>
+            <%= link_to(edit_device_path(device), :class=>'btn btn-info btn-td') do %> 
+              <i class="fa fa-fw fa-edit"></i>&nbsp;Edit
+            <% end %>
+          <% else %>
+            <%= link_to(edit_device_path(device), :class=>'btn btn-default btn-td', :disabled=>true) do %> 
+              <i class="fa fa-fw fa-edit"></i>&nbsp;Edit
+            <% end %>
+          <% end %>
+          <%= link_to(devices_path, :class=>'btn btn-default btn-td', :style=>'color:black') do %>
+            <i class="fa fa-fw fa-arrow-circle-left"></i>&nbsp;Back
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<script>
+  $('#li_admin').attr('class', 'treeview active');
+  $('#ul_admin').css('display', 'block');
+
+  $('#ul_admin').find('li').eq(1).css('background-color','#b1b1b1');
+  $('#ul_admin').find('li').eq(1).find('a').css('color','#000');
+
+  var bf = 0;
+
+  function after_sending1() {
+    $('#username_edit').attr('readonly', 'readonly');
+    $('#password_edit').attr('readonly', 'readonly');
+    $('#username_edit').css('background-color', 'transparent');
+    $('#password_edit').css('background-color', 'transparent');
+
+    $('#block_span1').html('Edit now <i class="fa fa-fw fa-pencil"></i>');
+    $('#cancel_span1').css('display', 'none');
+  }
+
+  function after_sending2() {
+    $('#first_name_edit').attr('readonly', 'readonly');
+    $('#last_name_edit').attr('readonly', 'readonly');
+    $('#pemail_edit').attr('readonly', 'readonly');
+    $('#number_edit').attr('readonly', 'readonly');
+    $('#city_edit').attr('readonly', 'readonly');
+    $('#state_edit').attr('readonly', 'readonly');
+
+    $('#first_name_edit').css('background-color', 'transparent');
+    $('#last_name_edit').css('background-color', 'transparent');
+    $('#pemail_edit').css('background-color', 'transparent');
+    $('#number_edit').css('background-color', 'transparent');
+    $('#city_edit').css('background-color', 'transparent');
+    $('#state_edit').css('background-color', 'transparent');
+
+    $('#block_span2').html('Edit now <i class="fa fa-fw fa-pencil"></i>');
+    $('#cancel_span2').css('display', 'none');
+
+  }
+
+  $('.quickedit_control').keypress(function(e) {
+    var code = (e.keyCode ? e.keyCode : e.which);
+    if (code == 13) {
+      if ($('#div_confirm').css('display') == 'none')  {
+        $('#div_confirm').css('display', 'block');
+        $('#password_edit2').focus();
+        return false;
+      } else {
+        e.preventDefault();
+        if ($('#password_edit2').val() == "")  {
+          $('#password_edit2').focus();
+        }
+
+        if ( bf == 1 ) {
+          $.post('/accounts/quick_edit',
+          {
+            'id': cache1['id'],
+            'username': $('#username_edit').val(),
+            'password': $('#password_edit').val(),
+            'username2': $('#username_edit2').val(),
+            'password2': $('#password_edit2').val()
+          });
+        } else {
+          $.post('/accounts/quick_edit',
+          {
+            'id': cache1['id'],
+            'first_name': $('#first_name_edit').val(),
+            'last_name': $('#last_name_edit').val(),
+            'pemail': $('#pemail_edit').val(),
+            'number': $('#number_edit').val(),
+            'city': $('#city_edit').val(),
+            'state': $('#state_edit').val(),
+            'username2': $('#username_edit2').val(),
+            'password2': $('#password_edit2').val()
+          });
+        }
+
+        $('#div_confirm').css('display', 'none');
+        after_sending1();
+        after_sending2();
+      }
+    }
+  });
+
+  $('#confirm_span1').on('click', function() {
+    if ( bf == 1 ) {
+      $.post('/accounts/quick_edit',
+      {
+        'id': cache1['id'],
+        'username': $('#username_edit').val(),
+        'password': $('#password_edit').val(),
+        'username2': $('#username_edit2').val(),
+        'password2': $('#password_edit2').val()
+      });
+    } else {
+      $.post('/accounts/quick_edit',
+      {
+        'id': cache1['id'],
+        'first_name': $('#first_name_edit').val(),
+        'last_name': $('#last_name_edit').val(),
+        'pemail': $('#pemail_edit').val(),
+        'number': $('#number_edit').val(),
+        'city': $('#city_edit').val(),
+        'state': $('#state_edit').val(),
+        'username2': $('#username_edit2').val(),
+        'password2': $('#password_edit2').val()
+      });
+    }
+  });
+
+  var div_longer, div_shorter = null;
+
+  function diff_ver() {
+
+    div_longer = $('.slist_next');
+    div_shorter = $('.slist_prev');
+
+    div_shorter.height(div_longer.height());
+
+    diff_height = div_longer.find('.box-body').height() - div_shorter.find('.box-body').height();
+    
+    diff_str = diff_height + "px";
+    div_shorter.find('.box-footer').css('margin-top', diff_str);
+
+    if ($('#password_edit').position() ) {
+      tmp = $('#password_edit').position().left + $('#password_edit').width() - 115;
+      tmp = tmp + 'px';
+      $('.i_copy').css('left', tmp);  
+    }
+  }
+
+  diff_ver();
+
+  $(window).on('resize', function() {
+    var win = $(this);
+
+    diff_ver();
+  });
+
+  $('.i_copy').zclip({
+    path:'/ZeroClipboard.swf',
+    copy: function() {
+      var tmp = $(this).parent().find('.pull-right input').val();
+      return tmp;
+    }
+  });
+
+  var cache1 = [], cache2 = [];
+  cache1['id'] = $('#id_edit').val();
+
+  $('#block_span1').on('click', function() {
+    tmp = $.trim($(this).text());
+
+    if (tmp == "Edit now") {
+      $(this).html('Modify <i class="fa fa-fw fa-check-circle"></i>');  
+      $('#cancel_span1').css('display', 'inline-block');
+
+      $('#username_edit').removeAttr('readonly');
+      $('#password_edit').removeAttr('readonly');
+
+      cache1['username'] = $('#username_edit').val();
+      cache1['password'] = $('#password_edit').val();
+
+      $('#username_edit').css('background-color', 'rgba(98, 141, 152, 0.46)');
+      $('#password_edit').css('background-color', 'rgba(98, 141, 152, 0.46)');
+    } else {
+      $(this).html('Edit now <i class="fa fa-fw fa-pencil"></i>');
+      $('#cancel_span1').css('display', 'none');
+
+      after_sending1();
+
+      $('#div_confirm').css('display', 'block');
+      $('#password_edit2').focus();
+    }   
+
+    bf = 1; 
+  });
+
+  $('#cancel_span1').on('click', function() {
+    $('#username_edit').val(cache1['username']);
+    $('#password_edit').val(cache1['password']);
+
+    $('#block_span1').html('Edit now <i class="fa fa-fw fa-pencil"></i>');
+    $('#cancel_span1').css('display', 'none');
+    
+    $('#username_edit').attr('readonly', 'readonly');
+    $('#password_edit').attr('readonly', 'readonly');
+    $('#username_edit').css('background-color', 'transparent');
+    $('#password_edit').css('background-color', 'transparent');
+  });
+
+  $('#block_span2').on('click', function() {
+    tmp = $.trim($(this).text());
+
+    if (tmp == "Edit now") {
+      $(this).html('Modify <i class="fa fa-fw fa-check-circle"></i>');  
+      $('#cancel_span2').css('display', 'inline-block');
+
+      $('#first_name_edit').removeAttr('readonly');
+      $('#last_name_edit').removeAttr('readonly');
+      $('#pemail_edit').removeAttr('readonly');
+      $('#number_edit').removeAttr('readonly');
+      $('#city_edit').removeAttr('readonly');
+      $('#state_edit').removeAttr('readonly');
+
+      cache2['first_name'] = $('#first_name_edit').val();
+      cache2['last_name'] = $('#last_name_edit').val();
+      cache2['pemail'] = $('#pemail_edit').val();
+      cache2['number'] = $('#number_edit').val();
+      cache2['city'] = $('#city_edit').val();
+      cache2['state'] = $('#state_edit').val();      
+
+      $('#first_name_edit').css('background-color', 'rgba(98, 141, 152, 0.46)');
+      $('#last_name_edit').css('background-color', 'rgba(98, 141, 152, 0.46)');
+      $('#pemail_edit').css('background-color', 'rgba(98, 141, 152, 0.46)');
+      $('#number_edit').css('background-color', 'rgba(98, 141, 152, 0.46)');
+      $('#city_edit').css('background-color', 'rgba(98, 141, 152, 0.46)');
+      $('#state_edit').css('background-color', 'rgba(98, 141, 152, 0.46)');
+    } else {
+      after_sending2();
+    }    
+
+    bf = 2;
+  });
+
+  $('#cancel_span2').on('click', function() {
+    $('#block_span2').html('Edit now <i class="fa fa-fw fa-pencil"></i>');
+    $('#cancel_span2').css('display', 'none');
+
+    $('#first_name_edit').val(cache2['first_name']);
+    $('#last_name_edit').val(cache2['last_name']);
+    $('#pemail_edit').val(cache2['pemail']);
+    $('#number_edit').val(cache2['number']);
+    $('#city_edit').val(cache2['city']);
+    $('#state_edit').val(cache2['state']);
+
+    $('#first_name_edit').attr('readonly', 'readonly');
+    $('#last_name_edit').attr('readonly', 'readonly');
+    $('#pemail_edit').attr('readonly', 'readonly');
+    $('#number_edit').attr('readonly', 'readonly');
+    $('#city_edit').attr('readonly', 'readonly');
+    $('#state_edit').attr('readonly', 'readonly');
+
+    $('#first_name_edit').css('background-color', 'transparent');
+    $('#last_name_edit').css('background-color', 'transparent');
+    $('#pemail_edit').css('background-color', 'transparent');
+    $('#number_edit').css('background-color', 'transparent');
+    $('#city_edit').css('background-color', 'transparent');
+    $('#state_edit').css('background-color', 'transparent');
+  });
+
+  $('#block_span3').on('click', function() {
+    tmp = $.trim($(this).text());
+
+    if (tmp == "Edit now") {
+      $(this).html('Modify <i class="fa fa-fw fa-check-circle"></i>');  
+      $('#cancel_span3').css('display', 'inline-block');
+    } else {
+      $(this).html('Edit now <i class="fa fa-fw fa-pencil"></i>');
+      $('#cancel_span3').css('display', 'none');
+    }    
+  });
+
+  hide_loading();
+</script>

@@ -1,0 +1,108 @@
+<!-- comments list -->
+<div class="col-lg-6 comment_listbox" style="padding-right: 0;">
+  <% if @comments.blank? %>
+    <div class="box box-info col-lg-12">
+      <div class="box-header">
+        <h3 class="box-title">No Comment</h3>
+        <div class="box-tools pull-right">
+          <button class="btn btn-info btn-sm btn-td" data-widget="collapse"><i class="fa fa-minus"></i></button>
+          <button class="btn btn-info btn-sm btn-td" data-widget="remove"><i class="fa fa-times"></i></button>
+        </div>
+      </div>
+      <div class="box-body">
+      </div>
+    </div>
+  <% else %>
+    <% up_ind = 0 %>
+    <% @comments.each do |c| %>
+
+      <% if up_ind != 0 %>
+        <div class="box box-info col-lg-12 collapsed-box" style="padding:0 0;margin-bottom:2px;border:none;">
+      <% else %>
+        <div class="box box-info col-lg-12" style="padding:0 0;margin-bottom:2px;border:none;">
+      <% end %>
+        <div class="box-header" style="padding:0 0;padding-left:15px;background-color:rgba(68, 187, 201, 0.64)" data-widget="collapse">
+          <% if is_account(c.ticket_owner) %>
+            <%= image_tag('logo1.png', height:'38') %><!-- &nbsp;&nbsp;CyberAdvance -->
+          <% else %>
+            <i class="fa fa-fw fa-user" style="font-size:18px;color:palegoldenrod"></i>
+            &nbsp;&nbsp;
+            <span style="position:relative;top:8px;color:palegoldenrod"><%= c.ticket_owner%></span>
+          <% end %>
+        </div>
+        <div class="box-header pull-right" style="display:inline-block;padding:0 0;padding-left:15px;margin-top:-38px;background-color:transparent;">
+          <div class="box-tools pull-right">
+            <i class="fa fa-fw fa-clock-o" style="font-size:16px;position:relative;top:5px;"></i>
+            <span style="position:relative;top:4px;color:black"><%= time_ago_in_words(c.updated_at) %> ago</span>
+            <%#= form_tag('/tickets/delete_comment', :class=>'btn', :style=>'background-color:transparent;display:inline-block;padding:0 0;') do -%>
+            <%= simple_form_for @ticket, :id=>'form_delete_comment', :method=>'get', :html=>{:class=>'btn', :style=>'background-color:transparent;display:inline-block;padding:0 0;'}, :remote=>true do |f| %>
+              <%= hidden_field_tag :comment_id, nil, :value=>c.id %>
+              <%= button_tag(type:"submit", :style=>'background-color:transparent;border:none;') do %>
+                <i class="fa fa-fw fa-trash-o i_delete_comment" style="font-size:16px;position:relative;top:5px;cursor:pointer;"></i>
+              <% end %>
+            <% end -%>
+          </div>
+        </div>
+        <% if up_ind != 0 %>
+          <div class="box-body" style="overflow:hidden;display:none;">
+        <% else %>
+          <div class="box-body" style="overflow:hidden;">
+        <% end %>
+          <% if is_account(c.ticket_owner) %>
+            <div class="col-lg-12 sub-comment" style="margin-left:0px!important;background-color:rgba(53, 103, 71, 0.41);padding:10px 16px;">
+              <div class="triangle">
+              </div>
+          <% else %>
+            <div class="col-lg-12 sub-comment" style="margin-left:0px!important;background-color:rgba(157, 119, 67, 0.6);padding:10px 16px;">
+              <div class="triangle2">
+              </div>
+          <% end %>
+
+            <%= c.comment %>
+            <br/>
+            <% if is_account(c.ticket_owner) %>
+              <% if !is_adminuser(c.ticket_owner) %>
+                <br/>
+              <% end %>
+              <%= get_accounttype(c.ticket_owner) == "god" ? '' : get_accounttype(c.ticket_owner) %>
+            <% end %>
+
+            <% if is_account(c.ticket_owner) %>
+              <br/>
+              Thank you for choosing CyberAdvance
+              <br/>
+            <% end %>
+
+            <br/>
+
+            [Update <%= comments_by_ticketid(c.ticket_id)-up_ind %>]
+            <% up_ind = up_ind + 1 %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+</div>
+
+<script>
+  // $.function() {
+  $("[data-widget='collapse']").click(function() {
+    //Find the box parent        
+    var box = $(this).parents(".box").first();
+    //Find the body and the footer
+    var bf = box.find(".box-body, .box-footer");
+    if (!box.hasClass("collapsed-box")) {
+        box.addClass("collapsed-box");
+        bf.slideUp();
+    } else {
+        box.removeClass("collapsed-box");
+        bf.slideDown();
+    }
+  });  
+
+  $('box-header form').click(function() {
+    return false;
+  });
+  // }
+  
+</script>

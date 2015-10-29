@@ -1,0 +1,51 @@
+# user_paenl:
+#   adapter: mysql2
+#   encoding: utf8
+#   pool: 5
+#   username: root
+#   password:
+#   socket: /tmp/mysql.sock
+
+# user_panel_default: &user_panel_default
+#   adapter: mysql2
+#   encoding: utf8
+#   pool: 5
+#   username: root
+#   password:
+
+# user_panel_development:
+#   <<: *user_panel_default
+#   database: mycyber_development
+
+# user_panel_test:
+#   <<: *user_panel_default
+#   database: mycyber_test
+
+# user_panel_production:
+#   <<: *user_panel_default
+#   database: cyberadv_adcpcyber_production
+#   username: root
+#   password: 
+
+default: &default
+  adapter: mysql2
+  encoding: utf8
+  pool: 5
+  username: root
+  password:
+  socket: /tmp/mysql.sock
+
+development:
+  <<: *default
+  database: adcpcyber_development
+
+test:
+  <<: *default
+  database: adcpcyber_test
+
+production:
+  <<: *default
+  database: cyberadv_adcpcyber_production
+  username: root
+  password: 
+

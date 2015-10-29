@@ -1,0 +1,36 @@
+<div class="page-div">
+  <section class="content">
+    <div class="col-md-offset-3 col-md-6" style="text-align:center;margin-top:12%;">
+      <div class="avatar" style="margin-top:-3px;margin-bottom:3px;">
+        <%= image_tag('favicon.png', size: "30", :class=>'image-logo') %>
+      </div>
+      <div class="small-box bg-yellow" style="margin-bottom:0px;background-color:rgba(50, 76, 102, 0.5) !important">
+        <div class="inner">
+          <h2 style="color:palegoldenrod;">Sorry, Internal Server Problem</h2>
+        </div>
+        <a href="/" class="small-box-footer">
+          <!-- <i class="fa fa-arrow-circle-left"></i>&nbsp;&nbsp;Back -->
+        </a>
+      </div>
+
+      <div class="box box-info" style="border-top-color: #6F88A3">
+        <div class="box-header" style="text-align:center;">
+          <br/>
+          <!-- <i class="fa fa-fw fa-tag" style="color: rgba(255, 255, 214, 0.78);"></i> -->
+        </div>
+        <div class="box-body" style="padding-left:32px;font-weight:100">
+          <h3 class="box-title" style="font-weight:200;">
+            You can back to the first page. <br/>Please leave your problem by emergency email system
+          </h3>  
+          <br/>
+          <br/>
+        </div>
+        <div class="box-footer clearfix">
+          <%= link_to('/', :class=>'btn btn-default btn-td', :style=>'color:black') do %>
+            <i class="fa fa-fw fa-arrow-circle-left"></i>&nbsp;Back
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

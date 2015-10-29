@@ -1,0 +1,69 @@
+<div class="show-border-div col-md-12">
+  <div class="col-md-12 field">
+
+    <% if @comments.blank? %>
+      <h4>&nbsp;&nbsp;No Comment</h4>
+    <% else %>
+      <% up_ind = 0 %>
+      <% @comments.each do |c| %>
+        <div class="col-md-12" style="padding:0 0;">
+
+          <div class="col-lg-2 sub-comment" style="margin-left:0px!important;padding-top:10px;overflow:hidden">
+            <% if is_account(c.ticket_owner) %>
+              <%= image_tag('logo1.png', height:'38') %><!-- &nbsp;&nbsp;CyberAdvance -->
+            <% else %>
+              <i class="fa fa-fw fa-user" style="font-size:18px;color:#FDC16E"></i>&nbsp;&nbsp;<%= c.ticket_owner%>
+            <% end %>
+            <br/><br/>
+          </div>
+          <% if is_account(c.ticket_owner) %>
+            <div class="col-lg-9 sub-comment" style="margin-left:0px!important;background-color:rgba(53, 103, 71, 0.41);padding:10px 16px;">
+              <div class="triangle">
+              </div>
+          <% else %>
+            <div class="col-lg-9 sub-comment" style="margin-left:0px!important;background-color:rgba(157, 119, 67, 0.6);padding:10px 16px;">
+              <div class="triangle2">
+              </div>
+          <% end %>
+
+            <%= c.comment %>
+            <br/>
+            <% if is_account(c.ticket_owner) %>
+              <% if !is_adminuser(c.ticket_owner) %>
+                <br/>
+              <% end %>
+              <%= get_accounttype(c.ticket_owner) %>
+            <% end %>
+
+            <% if is_account(c.ticket_owner) %>
+              <br/>
+              Thank you for choosing CyberAdvance
+              <br/>
+            <% end %>
+
+            <br/>
+
+            [Update <%= comments_by_ticketid(c.ticket_id)-up_ind %>]
+            <% up_ind = up_ind + 1 %>
+          </div>
+          <div class="col-lg-1 sub-comment" style="text-align:right;" style="padding-left:0px;padding-right:0px;text-align:right">
+            <%= time_ago_in_words(c.updated_at) %> ago
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+  <%= form_tag('/tickets/add_comment', method: :post, :id=>'form_add_comment') do -%>
+    <div class="col-lg-11 field">
+      <%= text_area_tag :comment, nil, :class=>"form-control tform-control", :rows=>'6', :required => true%>
+    </div>
+    <% tmp= @ticket.id %>
+    <%= hidden_field :tid, "tid", :value=>@ticket.id %>
+    <%= hidden_field :lre, "lre", :value=>current_user.email %>
+    <div class="col-lg-1 field" style="text-align:right;padding-right:18px;">
+      <%= button_tag(:class=>"btn btn-warning btn-td") do %>
+        <i class="fa fa-fw fa-mail-reply"></i>&nbsp;Reply
+      <% end %>
+    </div>
+  <% end -%>
+</div>

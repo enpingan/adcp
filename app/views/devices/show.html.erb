@@ -1,0 +1,386 @@
+<div class="form-div">
+  <%# if !notice.nil? || !notice.blank? %>
+    <!-- <div class="div-notice col-lg-12">
+      <div class="col-lg-10" id="dev_note1">
+        <%= notice %>
+      </div>
+      <div class="col-lg-2" id="dev_note2" style="text-align:right;">
+        <span class="span-close" style="cursor:pointer;"><i class="glyphicon glyphicon-remove" style="position:relative;top:2px;"></i></span>
+      </div>
+    </div> -->
+  <%# end %>
+  
+  <br/><br/>
+  <div class="col-lg-12">
+    <div class="small-box bg-yellow" style="margin-bottom:0px;">
+      <div class="inner">
+        <h3>
+          Device Info
+        </h3>
+        <p>
+          &nbsp;ID: #<%= @device.id %>
+        </p>
+      </div>
+      <div class="icon">
+        <i class="fa fa-fw fa-cogs"></i>
+      </div>
+      <a href=<%= edit_device_path(@device) %> class="small-box-footer">
+        Edit Device <i class="fa fa-fw fa-pencil"></i>
+      </a>
+    </div>
+
+    <div class="box box-warning col-lg-6 slist_prev" style="padding: 0 0;">
+      <div class="box-header">
+        <i class="fa fa-fw fa-paperclip" style="color: rgb(222, 173, 100)"></i>
+
+        <h3 class="box-title">General Info</h3>
+        <!-- tools box -->
+        <div class="pull-right box-tools">
+          <!-- <button class="btn btn-info btn-sm btn-td" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button> -->
+        </div><!-- /. tools -->
+      </div>
+      <%= hidden_field_tag "id_edit", nil, :value=>@device.id %>
+      <div class="box-body" style="padding-left:32px;padding-right:32px;">
+        <%#= image_tag('server1.png', size: "120") %>
+        <div class="clearfix">
+          <span class="pull-left"><i class="fa fa-fw fa-user" style="color:rgb(228, 217, 113);"></i>&nbsp;Owner: </span>
+          <small class="pull-right" style="color:palegoldenrod"><%= @device.owner %></small>
+        </div>
+        <div class="clearfix">
+          <span class="pull-left"><i class="fa fa-fw fa-laptop" style="color:rgb(228, 217, 113);"></i>&nbsp;Device name: </span>
+          <small class="pull-right" style="color:palegoldenrod;width:35%;text-align:right;">
+            <%= text_field_tag "devicename_edit", nil, :value=>@device.name , :style=>'background-color:transparent;text-align:right;border:none;width:80%;', :readonly=>true %>
+          </small>
+          <i class="fa fa-fw fa-copy i_copy" style="color:rgb(163, 231, 200);font-size:14px;cursor:pointer;position:relative;left:87%;"></i>
+        </div>
+        <div class="clearfix">
+          <span class="pull-left"><i class="fa fa-fw fa-warning" style="color:rgb(228, 217, 113);"></i>&nbsp;Public IP: </span>
+          <small class="pull-right" style="color:palegoldenrod;width:35%;text-align:right;">
+            <%= text_field_tag "publicip_edit", nil, :value=>@device.public_ip , :style=>'background-color:transparent;text-align:right;border:none;width:80%;', :readonly=>true %>
+          </small>
+        </div>
+        <div class="clearfix">
+          <span class="pull-left"><i class="fa fa-fw fa-warning" style="color:rgb(228, 217, 113);"></i>&nbsp;Private IP: </span>
+          <small class="pull-right" style="color:palegoldenrod;width:35%;text-align:right;">
+            <%= text_field_tag "privateip_edit", nil, :value=>@device.private_ip , :style=>'background-color:transparent;text-align:right;border:none;width:80%;', :readonly=>true %>
+          </small>
+        </div>
+      </div>
+      <div class="box-footer clearfix" style="padding-left:20px;">
+        <span class="flat_span" id="block_span1">
+          Edit now <i class="fa fa-fw fa-pencil"></i>
+        </span>
+        &nbsp;&nbsp;&nbsp;
+        <span class="flat_span" id="cancel_span1" style="display:none;">
+          Cancel <i class="fa fa-fw fa-times-circle"></i>
+        </span>
+      </div>
+    </div>
+
+    <div class="box box-warning col-lg-6 slist_next" style="padding: 0 0;">
+      <div class="box-header">
+        <i class="fa fa-fw fa-linux" style="color: rgb(222, 173, 100)"></i>
+
+        <h3 class="box-title">Device OS Info</h3>
+        <!-- tools box -->
+        <div class="pull-right box-tools">
+          <!-- <button class="btn btn-info btn-sm btn-td" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button> -->
+        </div><!-- /. tools -->
+      </div>
+
+      <div class="box-body" style="padding-left:32px;padding-right:32px;">
+        <%#= image_tag('server1.png', size: "120") %>
+        <div class="clearfix">
+          <span class="pull-left"><i class="fa fa-fw fa-windows" style="color:rgb(228, 217, 113);"></i>&nbsp;OS Name: </span>
+          <small class="pull-right" style="color:palegoldenrod"><%= @device.osname %></small>
+        </div>
+        <br/>
+        <div class="clearfix">
+          <span class="pull-left"><i class="fa fa-fw fa-hdd-o" style="color:rgb(228, 217, 113);"></i>&nbsp;OS RAM: </span>
+          <small class="pull-right" style="color:palegoldenrod"><%= @device.osram %></small>
+        </div>
+        <div class="progress xs">
+          <div class="progress-bar progress-bar-green" style="background-color:#EDBD74;width: <%= get_ram(@device.osram) %>%"></div>
+        </div>
+        <div class="clearfix">
+          <span class="pull-left"><i class="fa fa-fw fa-apple" style="color:rgb(228, 217, 113);"></i>&nbsp;Processor: </span>
+          <small class="pull-right" style="color:palegoldenrod"><%= @device.osprocessor %></small>
+        </div>
+        <div class="progress xs">
+          <div class="progress-bar progress-bar-green" style="background-color:#EDBD74;width: <%= get_processor(@device.osprocessor) %>%"></div>
+        </div>
+      </div>
+      <div class="box-footer clearfix" style="padding-left:20px;">
+        <span style="color:transparent;">Edit now<i class="fa fa-fw fa-pencil"></i></span> 
+      </div>
+    </div>
+
+    <div class="box box-warning col-lg-6 slist_prev2" style="padding: 0 0;">
+      <div class="box-header">
+        <i class="fa fa-fw fa-comments" style="color: rgb(222, 173, 100)"></i>
+
+        <h3 class="box-title">Device note</h3>
+        <!-- tools box -->
+        <div class="pull-right box-tools">
+          <!-- <button class="btn btn-info btn-sm btn-td" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button> -->
+        </div><!-- /. tools -->
+      </div>
+
+      <div class="box-body" style="padding-left:32px;padding-right:32px;">
+        <%#= image_tag('server1.png', size: "120") %>
+        <div class="clearfix">
+          <span class="pull-left"><i class="fa fa-fw fa-comment" style="color:rgb(228, 217, 113);"></i>&nbsp;Note: </span>
+          <small class="pull-right" style="color:palegoldenrod;width:35%;text-align:right;">
+            <%= text_field_tag "devicenote_edit", nil, :value=>@device.device_note , :style=>'background-color:transparent;text-align:right;border:none;width:80%;', :readonly=>true %>
+          </small>
+        </div>
+        <div class="clearfix">
+          <span class="pull-left"><i class="fa fa-fw fa-tablet" style="color:rgb(228, 217, 113);"></i>&nbsp;Add-ons: </span>
+          <small class="pull-right" style="color:palegoldenrod;width:35%;text-align:right;">
+            <%= text_field_tag "addons_edit", nil, :value=>@device.addons , :style=>'background-color:transparent;text-align:right;border:none;width:80%;', :readonly=>true %>
+          </small>
+        </div>
+      </div>
+      <div class="box-footer clearfix" style="padding-left:20px;">
+        <span class="flat_span" id="block_span2">
+          Edit now <i class="fa fa-fw fa-pencil"></i>
+        </span>
+        &nbsp;&nbsp;&nbsp;
+        <span class="flat_span" id="cancel_span2" style="display:none;">
+          Cancel <i class="fa fa-fw fa-times-circle"></i>
+        </span>
+      </div>
+    </div>
+
+    <div class="box box-warning col-lg-6 slist_next2" style="padding: 0 0;">
+      <div class="box-header">
+        <i class="fa fa-fw fa-folder" style="color: rgb(222, 173, 100)"></i>
+
+        <h3 class="box-title">Extra Info</h3>
+        <!-- tools box -->
+        <div class="pull-right box-tools">
+          <!-- <button class="btn btn-info btn-sm btn-td" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button> -->
+        </div><!-- /. tools -->
+      </div>
+
+      <div class="box-body" style="padding-left:32px;padding-right:32px;">
+        <%#= image_tag('server1.png', size: "120") %>
+        <div class="clearfix">
+          <span class="pull-left"><i class="fa fa-fw fa-gear" style="color:rgb(228, 217, 113);"></i>&nbsp;Device Type: </span>
+          <small class="pull-right" style="color:palegoldenrod"><%= @device.device_type %></small>
+        </div>
+        <div class="clearfix">
+          <span class="pull-left"><i class="fa fa-fw fa-home" style="color:rgb(228, 217, 113);"></i>&nbsp;Location: </span>
+          <small class="pull-right" style="color:palegoldenrod"><%= raw(getflag_floc(@device.location)) %><%= @device.location %></small>
+        </div>
+
+        <div class="clearfix">
+          <span class="pull-left"><i class="fa fa-fw fa-info-circle" style="color:rgb(228, 217, 113);"></i>&nbsp;General Status: </span>
+          <small class="pull-right" style="color:palegoldenrod">
+            <% if @device.general_status == 'Active' %>
+              <i class="fa fa-fw fa-check-circle" style="color:rgb(228, 217, 113);"></i>&nbsp;
+            <% else %>
+              <i class="fa fa-fw fa-ban" style="color:white;"></i>&nbsp;
+            <% end %>
+            <%= @device.general_status %>
+          </small>
+        </div>
+        <div class="clearfix">
+          <span class="pull-left"><i class="fa fa-fw fa-refresh" style="color:rgb(228, 217, 113);"></i>&nbsp;Reloaded: </span>
+          <small class="pull-right" style="color:palegoldenrod">
+            <% if @device.general_reloaded == 'Reloadable' %>
+              <i class="fa fa-fw fa-check-circle" style="color:rgb(228, 217, 113);"></i>&nbsp;
+            <% else %>
+              <i class="fa fa-fw fa-ban" style="color:white"></i>&nbsp;
+            <% end %>
+            <%= @device.general_reloaded %>
+          </small>
+        </div>
+      </div>
+
+      <div class="box-footer clearfix" style="padding-left:20px;">
+        <span style="color:transparent;">Edit now <i class="fa fa-fw fa-pencil"></i></span>
+      </div>
+    </div>          
+
+    <div class="col-lg-12" style="text-align:center;">
+      <% if hp_device(current_user.username) || is_adminuser(current_user.username) %>
+        <%= link_to(edit_device_path(@device), :class=>'btn btn-warning btn-td') do %> 
+          <i class="fa fa-fw fa-edit"></i>&nbsp;Edit
+        <% end %>
+      <% else %>
+        <%= link_to(edit_device_path(@device), :class=>'btn btn-warning btn-td', :disabled=>true) do %> 
+          <i class="fa fa-fw fa-edit"></i>&nbsp;Edit
+        <% end %>
+      <% end %>
+      <%= link_to(devices_path, :class=>'btn btn-default btn-td', :style=>'color:black') do %>
+        <i class="fa fa-fw fa-arrow-circle-left"></i>&nbsp;Back
+      <% end %>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  _fix();
+  
+  $('#li_device').attr('class', 'treeview active');
+  $('#ul_device').css('display', 'block');
+
+  $('#ul_device').find('li').eq(2).css('background-color','#b1b1b1');
+  $('#ul_device').find('li').eq(2).find('a').css('color','#000');
+
+  var div_longer, div_shorter = null;
+
+  function diff_ver() {
+    div_longer = $('.slist_next');
+    div_shorter = $('.slist_prev');
+    div_shorter.height(div_longer.height());
+
+    diff_height = div_longer.find('.box-body').height() - div_shorter.find('.box-body').height();
+    
+    diff_str = diff_height + "px";
+    div_shorter.find('.box-footer').css('margin-top', diff_str);
+
+    div_longer = $('.slist_next2');
+    div_shorter = $('.slist_prev2');
+    div_shorter.height(div_longer.height());
+
+    diff_height = div_longer.find('.box-body').height() - div_shorter.find('.box-body').height();
+    
+    diff_str = diff_height + "px";
+    div_shorter.find('.box-footer').css('margin-top', diff_str);
+
+    if ( $('#devicename_edit').position() ) {
+      tmp = $('#devicename_edit').position().left + $('#devicename_edit').width() - 130;
+      tmp = tmp + 'px';
+      $('.i_copy').css('left', tmp);  
+    }
+  }
+
+  diff_ver();
+
+  $(window).on('resize', function() {
+    var win = $(this);
+
+    diff_ver();
+  });
+
+  $('.i_copy').zclip({
+    path:'/ZeroClipboard.swf',
+    copy: function() {
+      var tmp = $(this).parent().find('.pull-right input').val();
+      return tmp;
+    }
+  });
+
+  var cache1 = [], cache2 = [];
+  cache1['id'] = $('#id_edit').val();
+
+  $('#block_span1').on('click', function() {
+    tmp = $.trim($(this).text());
+
+    if (tmp == "Edit now") {
+      $(this).html('Modify <i class="fa fa-fw fa-check-circle"></i>');  
+      $('#cancel_span1').css('display', 'inline-block');
+
+      $('#devicename_edit').removeAttr('readonly');
+      $('#publicip_edit').removeAttr('readonly');
+      $('#privateip_edit').removeAttr('readonly');
+
+      $('#publicip_edit').ipAddress();
+      $('#privateip_edit').ipAddress();
+
+      cache1['devicename'] = $('#devicename_edit').val();
+      cache1['publicip'] = $('#publicip_edit').val();
+      cache1['privateip'] = $('#privateip').val();
+
+      $('#devicename_edit').css('background-color', 'rgba(98, 141, 152, 0.46)');
+      $('#publicip_edit').css('background-color', 'rgba(98, 141, 152, 0.46)');
+      $('#privateip_edit').css('background-color', 'rgba(98, 141, 152, 0.46)');
+    } else {
+      $(this).html('Edit now <i class="fa fa-fw fa-pencil"></i>');
+      $('#cancel_span1').css('display', 'none');
+
+      $('#devicename_edit').attr('readonly', 'readonly');
+      $('#publicip_edit').attr('readonly', 'readonly');
+      $('#privateip_edit').attr('readonly', 'readonly');
+      $('#devicename_edit').css('background-color', 'transparent');
+      $('#publicip_edit').css('background-color', 'transparent');
+      $('#privateip_edit').css('background-color', 'transparent');
+
+      $.post('/devices/quick_edit',
+      {
+        'id': cache1['id'],
+        'devicename': $('#devicename_edit').val(),
+        'publicip': $('#publicip_edit').val(),
+        'privateip': $('#privateip_edit').val()
+      });
+
+    }    
+  });
+
+  $('#cancel_span1').on('click', function() {
+    $('#devicename_edit').val(cache1['devicename']);
+    $('#publicip_edit').val(cache1['publicip']);
+    $('#privateip').val(cache1['privateip']);
+
+    $('#block_span1').html('Edit now <i class="fa fa-fw fa-pencil"></i>');
+    $('#cancel_span1').css('display', 'none');
+    
+    $('#devicename_edit').attr('readonly', 'readonly');
+    $('#publicip_edit').attr('readonly', 'readonly');
+    $('#privateip').attr('readonly', 'readonly');
+
+    $('#devicename_edit').css('background-color', 'transparent');
+    $('#publicip_edit').css('background-color', 'transparent');
+    $('#privateip_edit').css('background-color', 'transparent');
+  });
+
+  $('#block_span2').on('click', function() {
+    tmp = $.trim($(this).text());
+
+    if (tmp == "Edit now") {
+      $(this).html('Modify <i class="fa fa-fw fa-check-circle"></i>');  
+      $('#cancel_span2').css('display', 'inline-block');
+
+      $('#devicenote_edit').removeAttr('readonly');
+      $('#addons_edit').removeAttr('readonly');
+
+      cache1['note'] = $('#devicenote_edit').val();
+      cache1['addons'] = $('#addons_edit').val();
+
+      $('#devicenote_edit').css('background-color', 'rgba(98, 141, 152, 0.46)');
+      $('#addons_edit').css('background-color', 'rgba(98, 141, 152, 0.46)');
+    } else {
+      $(this).html('Edit now <i class="fa fa-fw fa-pencil"></i>');
+      $('#cancel_span2').css('display', 'none');
+
+      $('#devicenote_edit').attr('readonly', 'readonly');
+      $('#addons_edit').attr('readonly', 'readonly');
+
+      $.post('/devices/quick_edit',
+      {
+        'id': cache1['id'],
+        'note': cache1['devicenote'],
+        'addons': cache1['addons']
+      });
+    }    
+  });
+
+  $('#cancel_span2').on('click', function() {
+    $('#block_span2').html('Edit now <i class="fa fa-fw fa-pencil"></i>');
+    $('#cancel_span2').css('display', 'none');
+
+    $('#devicenote_edit').val(cache2['devicename']);
+    $('#addons_edit').val(cache2['publicip']);
+
+    $('#devicenote_edit').attr('readonly', 'readonly');
+    $('#addons_edit').attr('readonly', 'readonly');
+
+    $('#devicenote_edit').css('background-color', 'transparent');
+    $('#addons_edit').css('background-color', 'transparent');
+  });
+
+  hide_loading();
+</script>

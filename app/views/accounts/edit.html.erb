@@ -1,0 +1,23 @@
+<div class="page-div">
+  <h1 style="color:transparent!important;">
+    <i class="fa fa-fw fa-user"></i><i class="fa fa-fw fa-edit" style="position:relative;top:8px;left:-12px;font-size:18px;"></i>Editing Account
+  </h1>
+  <br/>
+  
+  <% if @retry.nil? %>
+    <%= render 'form' %>
+  <% else %>
+    <%= render 'retry_form' %>
+  <% end %>
+
+  <%#= link_to 'Show', @account %> 
+  <%#= link_to 'Back', accounts_path %>
+</div>
+
+<script>
+  $('#li_admin').attr('class', 'treeview active');
+  $('#ul_admin').css('display', 'block');
+
+  $('#ul_admin').find('li').eq(1).css('background-color','#b1b1b1');
+  $('#ul_admin').find('li').eq(1).find('a').css('color','#000');
+</script>
