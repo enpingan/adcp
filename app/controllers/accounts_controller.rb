@@ -180,7 +180,7 @@ class AccountsController < ApplicationController
 
           @account.email_addr = @account.id.to_s + '@ad.com'
           @new_user = User.new(:id=>@account.id, :email =>@account.email_addr, :password => tmp[:hs_pwd], :password_confirmation => tmp[:hs_pwd], :username=>tmp[:ssl_name], :pwd=>tmp[:pwd], :is_rticket=>tmp[:is_rticket], :is_dticket=>tmp[:is_dticket], :is_cticket=>tmp[:is_cticket], :is_cdevice=>tmp[:is_cdevice], :is_rdevice=>tmp[:is_rdevice], :is_mdevice=>tmp[:is_mdevice], :is_caccount=>tmp[:is_caccount], :is_daccount=>tmp[:is_daccount], :is_maccount=>tmp[:is_maccount],:first_name=>tmp[:first_name], :last_name=>tmp[:last_name], :city=>tmp[:city], :state=>tmp[:state], :country=>tmp[:country], :pemail=>tmp[:pemail], :number=>tmp[:number], :account_type=>tmp[:account_type], :is_mcustomer=>tmp[:is_mcustomer], :is_dcustomer=>tmp[:is_rcustomer], :is_ccustomer=>tmp[:is_ccustomer])
-
+          @new_user.save
           # if @new_user.save
           #   UserMailer.register_email(@new_user).deliver
           # end

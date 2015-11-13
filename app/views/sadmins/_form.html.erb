@@ -605,6 +605,8 @@
   $('#select_sadmin_country').dropdown();
   $('#select_sadmin_type').dropdown();
 
+  _fix();
+
   $('.form-control').keypress(function(e) {
     var code = (e.keyCode ? e.keyCode : e.which);
     if (code == 13) {

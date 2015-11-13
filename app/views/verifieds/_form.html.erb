@@ -665,6 +665,8 @@
   $('#select_verified_country').dropdown();
   $('#select_vaccount_type').dropdown();
 
+  _fix();
+
   $('.form-control').keypress(function(e) {
     var code = (e.keyCode ? e.keyCode : e.which);
     if (code == 13) {

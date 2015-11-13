@@ -26,17 +26,23 @@ function trimLeadZero(s) {
 }
 
 function _fix() {
+  //Get window height and the wrapper height
   var height = $(window).height() - $("body > .header").height();
   $(".wrapper").css("min-height", height + "px");
   var content = $(".wrapper").height();
 
+  // var tmp = $('.left-side.sidebar-offcanvas').height() + $('.left-side').offset().length > 0 ? $('.left-side').offset().top : 0;
   var tmp_pad = $('.left-side').length > 0 ? $('.left-side').offset().top : 0;
   var tmp = $('.left-side.sidebar-offcanvas').height() + tmp_pad;
   var tmp2 = $('.left-side.sidebar-offcanvas').height();
   var tmp3 = content + 50;
   var tmp4 = height + 50;
+
+  // console.log(tmp3, tmp);
   
+  //If the wrapper height is greater than the window
   if (content > height) {
+    //then set sidebar height to the wrapper
     if ( $(window).height() < 500 ) {
       if ( $(document).height() < 507 ) {
         $('.left-side').css('min-height', tmp3 - 50 );
@@ -46,11 +52,16 @@ function _fix() {
         $('.right-side').css('min-height', $('.left-side').height() + 50 );
         
         if ( window.location.href.indexOf('new') > 0 || window.location.href.indexOf('edit') > 0 ) {
+          // $('.right-side').css('min-height', tmp3);  
           $('.right-side').css('min-height', $('.box.box-info').length >= 2 ? $('.box.box-info').eq($('.box.box-info').length-1).offset().top + 25+ $('.box.box-info').eq($('.box.box-info').length-1).outerHeight() : tmp3 );
         } else {
           if ( $('.listing').length > 0 && window.location.href.indexOf('search') == -1 ) {
             $('.left-side').css('min-height', $('.listing').offset().top + $('.listing').outerHeight() );
             $('.right-side').css('min-height', $('.left-side').height() + 50 );
+
+            if ( $('#qmail_notice').length > 0 ) {
+              $('.left-side').css('min-height', content );
+            }
           } else {
             if ( window.location.href.indexOf('search') > 0 ) {
               $('.left-side').css('min-height', $('.listing').eq($('.listing').length - 1).offset().top + $('.listing').eq($('.listing').length - 1).outerHeight() + 50 );
@@ -74,7 +85,8 @@ function _fix() {
       } else {
         if ( $('.listing').length > 0 ) {
 
-        } else if ( window.location.href.indexOf('tickets/') > 0 || window.location.href.indexOf('scustomers/') > 0) {
+        // } else if ( window.location.href.indexOf('tickets/') > 0 || window.location.href.indexOf('scustomers/') > 0) {
+        } else if ( window.location.href.indexOf('tickets/') > 0 ) {
 
         } else {
           $('.left-side').css('min-height', $('.btn.btn-default.btn-td').offset().top + $('.btn.btn-default.btn-td').outerHeight() + 50 );
@@ -83,6 +95,7 @@ function _fix() {
       }
     }
   } else {
+    //Otherwise, set the sidebar to the height of the window
     $(".left-side").css("min-height", height + "px");
 
     if ( $(window).height() < 500 ) {
